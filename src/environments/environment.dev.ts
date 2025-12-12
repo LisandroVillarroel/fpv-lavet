@@ -1,6 +1,5 @@
-import { environment as base } from './environment';
-
 export const environment = {
-  ...base,
   production: false,
-} as const;
+  apiBaseUrl: 'http://localhost:4000/api/veterinaria',
+  portalUrl: 'http://localhost:4200/auth/login',
+};

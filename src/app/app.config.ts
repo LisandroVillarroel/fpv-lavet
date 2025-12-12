@@ -4,10 +4,6 @@ import {
   provideZoneChangeDetection,
 } from '@angular/core';
 import { provideRouter, withViewTransitions } from '@angular/router';
-import {
-  provideClientHydration,
-  withEventReplay,
-} from '@angular/platform-browser';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import {
   provideHttpClient,
@@ -23,7 +19,6 @@ export const appConfig: ApplicationConfig = {
     provideBrowserGlobalErrorListeners(),
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes, withViewTransitions()),
-    provideClientHydration(withEventReplay()),
     provideAnimationsAsync(),
     provideHttpClient(withFetch(), withInterceptors([authInterceptor])),
   ],

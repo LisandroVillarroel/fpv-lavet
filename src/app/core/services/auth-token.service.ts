@@ -1,4 +1,5 @@
-import { Injectable, inject, signal } from '@angular/core';
+import { Injectable, inject, signal, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { Router } from '@angular/router';
 import { DOCUMENT } from '@angular/common';
 
@@ -20,28 +21,33 @@ interface AuthSession {
 export class AuthTokenService {
   private readonly _router = inject(Router);
   private readonly _document = inject(DOCUMENT);
+  private readonly _platformId = inject(PLATFORM_ID);
+  private readonly _isBrowser = isPlatformBrowser(this._platformId);
 
   private readonly _token = signal<string | null>(this.restoreToken());
 
   readonly token = this._token.asReadonly();
 
   initializeFromRoute(): void {
-    // Primero intenta leer el token del sessionStorage compartido
-    const sharedSession = this.getSharedSession();
-    if (sharedSession?.tokens?.accessToken) {
-      this.persistToken(sharedSession.tokens.accessToken);
+    if (!this._isBrowser) {
       return;
     }
 
-    // Si no existe, intenta obtenerlo de los query params (compatibilidad)
-    const maybeToken =
-      this._router.routerState.snapshot.root.queryParamMap.get('token');
-    if (maybeToken) {
-      this.persistToken(maybeToken);
-      void this._router.navigate([], {
-        queryParams: { token: null },
-        replaceUrl: true,
-      });
+    // Ya se inicializó el token en restoreToken() desde la URL
+    // Solo necesitamos persistir si viene del sessionStorage compartido
+    const sharedSession = this.getSharedSession();
+    if (sharedSession?.tokens?.accessToken && !this._token()) {
+      this.persistToken(sharedSession.tokens.accessToken);
+    }
+
+    // Limpia el token del URL después de que la navegación inicial complete
+    if (this._document.defaultView?.location.search.includes('token=')) {
+      setTimeout(() => {
+        void this._router.navigate([], {
+          queryParams: { token: null },
+          replaceUrl: true,
+        });
+      }, 100);
     }
   }
 
@@ -56,16 +62,45 @@ export class AuthTokenService {
   }
 
   private restoreToken(): string | null {
+    if (!this._isBrowser) {
+      return null;
+    }
+
     // Primero intenta leer de la sesión compartida
     const sharedSession = this.getSharedSession();
     if (sharedSession?.tokens?.accessToken) {
+      // Guarda en localStorage para uso futuro
+      this.storage?.setItem(TOKEN_KEY, sharedSession.tokens.accessToken);
       return sharedSession.tokens.accessToken;
     }
-    // Si no, lee del storage local
-    return this.storage?.getItem(TOKEN_KEY) ?? null;
+
+    // Intenta leer del storage local
+    const storedToken = this.storage?.getItem(TOKEN_KEY);
+    if (storedToken) {
+      return storedToken;
+    }
+
+    // Como último recurso, intenta leer de los query params (para primera carga)
+    if (this._isBrowser && this._document.defaultView?.location) {
+      const urlParams = new URLSearchParams(
+        this._document.defaultView.location.search
+      );
+      const tokenFromUrl = urlParams.get('token');
+      if (tokenFromUrl) {
+        // Guarda en localStorage para uso futuro
+        this.storage?.setItem(TOKEN_KEY, tokenFromUrl);
+        return tokenFromUrl;
+      }
+    }
+
+    return null;
   }
 
   private getSharedSession(): AuthSession | null {
+    if (!this._isBrowser) {
+      return null;
+    }
+
     const sessionData = this.storage?.getItem(SESSION_KEY);
     if (!sessionData) {
       return null;
@@ -78,7 +113,10 @@ export class AuthTokenService {
   }
 
   private get storage(): Storage | null {
-    return this._document.defaultView?.localStorage ?? null; // Cambiado a localStorage
+    if (!this._isBrowser) {
+      return null;
+    }
+    return this._document.defaultView?.localStorage ?? null;
   }
 
   getAuthorizationHeader(): string | null {

@@ -1,5 +1,5 @@
 export const environment = {
   production: true,
-  apiBaseUrl: 'https://api.lavetonline.cl/api/veterinaria',
-  portalUrl: 'https://portal.lavetonline.cl/auth/login',
-} as const;
+  apiBaseUrl: 'https://api.lavet.com/api/veterinaria',
+  portalUrl: 'https://portal.lavet.com/auth/login',
+};
