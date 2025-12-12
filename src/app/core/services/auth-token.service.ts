@@ -5,6 +5,16 @@ import { DOCUMENT } from '@angular/common';
 import { environment } from '../../../environments/environment';
 
 const TOKEN_KEY = 'fpv-lavet/token';
+const SESSION_KEY = 'fpi-lavet/session'; // Llave compartida del login
+
+interface AuthSession {
+  user: any;
+  tokens: {
+    accessToken: string;
+    refreshToken?: string;
+    expiresIn?: number;
+  };
+}
 
 @Injectable({ providedIn: 'root' })
 export class AuthTokenService {
@@ -16,6 +26,14 @@ export class AuthTokenService {
   readonly token = this._token.asReadonly();
 
   initializeFromRoute(): void {
+    // Primero intenta leer el token del sessionStorage compartido
+    const sharedSession = this.getSharedSession();
+    if (sharedSession?.tokens?.accessToken) {
+      this.persistToken(sharedSession.tokens.accessToken);
+      return;
+    }
+
+    // Si no existe, intenta obtenerlo de los query params (compatibilidad)
     const maybeToken =
       this._router.routerState.snapshot.root.queryParamMap.get('token');
     if (maybeToken) {
@@ -38,11 +56,29 @@ export class AuthTokenService {
   }
 
   private restoreToken(): string | null {
+    // Primero intenta leer de la sesión compartida
+    const sharedSession = this.getSharedSession();
+    if (sharedSession?.tokens?.accessToken) {
+      return sharedSession.tokens.accessToken;
+    }
+    // Si no, lee del storage local
     return this.storage?.getItem(TOKEN_KEY) ?? null;
   }
 
+  private getSharedSession(): AuthSession | null {
+    const sessionData = this.storage?.getItem(SESSION_KEY);
+    if (!sessionData) {
+      return null;
+    }
+    try {
+      return JSON.parse(sessionData) as AuthSession;
+    } catch {
+      return null;
+    }
+  }
+
   private get storage(): Storage | null {
-    return this._document.defaultView?.sessionStorage ?? null;
+    return this._document.defaultView?.localStorage ?? null; // Cambiado a localStorage
   }
 
   getAuthorizationHeader(): string | null {

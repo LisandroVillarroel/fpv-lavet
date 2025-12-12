@@ -9,5 +9,6 @@ export const authGuard: CanActivateFn = () => {
 
   authTokenService.initializeFromRoute();
 
-  return authTokenService.token() ? true : router.parseUrl('/sin-acceso');
+  // Si no hay token, redirige al login
+  return authTokenService.token() ? true : router.parseUrl('/auth/login');
 };
