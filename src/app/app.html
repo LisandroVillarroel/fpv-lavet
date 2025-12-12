@@ -1,0 +1,17 @@
+<mat-toolbar color="primary" class="app-toolbar">
+  <div class="app-toolbar__group">
+    <mat-icon aria-hidden="true">pets</mat-icon>
+    <span class="app-toolbar__title">{{ title }}</span>
+  </div>
+  <a
+    mat-button
+    href="https://portal.lavetonline.cl"
+    target="_blank"
+    rel="noopener"
+    >Portal principal</a
+  >
+</mat-toolbar>
+
+<main class="app-container">
+  <router-outlet></router-outlet>
+</main>

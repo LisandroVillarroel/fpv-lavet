@@ -1,0 +1,23 @@
+<section class="access-denied-shell">
+  <mat-card appearance="outlined">
+    <mat-card-header>
+      <mat-card-title>Acceso restringido</mat-card-title>
+      <mat-card-subtitle>
+        No encontramos una sesión activa desde FPI Lavet.
+      </mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      <p>
+        Regresa al portal principal para autenticarte nuevamente y continuar con
+        la experiencia clínica.
+      </p>
+    </mat-card-content>
+
+    <mat-card-actions>
+      <button mat-flat-button color="primary" (click)="goToPortal()">
+        Ir al portal
+      </button>
+    </mat-card-actions>
+  </mat-card>
+</section>

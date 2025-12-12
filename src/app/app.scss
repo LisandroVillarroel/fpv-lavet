@@ -1,0 +1,31 @@
+@use 'sass:color';
+
+.app-toolbar {
+	position: sticky;
+	top: 0;
+	z-index: 1000;
+	-webkit-backdrop-filter: blur(10px);
+	backdrop-filter: blur(10px);
+	background-color: color.adjust(var(--mat-sys-primary-container), $alpha: -0.22);
+	padding-inline: clamp(1rem, 4vw, 4rem);
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+
+	&__group {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.75rem;
+		font-weight: 600;
+		letter-spacing: 0.08em;
+		text-transform: uppercase;
+	}
+
+	&__title {
+		font-size: clamp(1rem, 2.2vw, 1.35rem);
+	}
+}
+
+.app-container {
+	min-height: calc(100vh - 64px);
+}

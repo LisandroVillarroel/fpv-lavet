@@ -1,0 +1,34 @@
+<section class="dashboard-shell">
+  <mat-card appearance="outlined">
+    <mat-card-header>
+      <mat-card-title>
+        <mat-icon aria-hidden="true">pets</mat-icon>
+        Clínica Veterinaria Integral
+      </mat-card-title>
+      <mat-card-subtitle>
+        Gestiona pacientes, agenda y planes preventivos en un solo lugar.
+      </mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      <p class="dashboard-meta">Último acceso: {{ now | date : "medium" }}</p>
+      <div class="feature-chips">
+        <mat-chip-row>
+          <span matChip>Agenda inteligente</span>
+          <span matChip>Historias clínicas digitales</span>
+          <span matChip>Recordatorios automatizados</span>
+        </mat-chip-row>
+      </div>
+      <p>
+        Mantén la continuidad del cuidado con acceso a resultados de laboratorio
+        y unifica la comunicación con los tutores en tiempo real.
+      </p>
+    </mat-card-content>
+
+    <mat-card-actions>
+      <button mat-stroked-button color="primary" (click)="logout()">
+        Cerrar sesión
+      </button>
+    </mat-card-actions>
+  </mat-card>
+</section>
