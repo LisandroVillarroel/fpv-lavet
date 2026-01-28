@@ -1,0 +1,103 @@
+<section class="report-page">
+  <header class="report-header">
+    <button mat-icon-button matTooltip="Volver al dashboard" (click)="volverDashboard()">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    <div class="report-title">
+      <h1>Detalle presupuesto vs. gasto</h1>
+      <p>Comparativa por proyecto y categoría para comité financiero</p>
+    </div>
+    <button mat-stroked-button color="primary" (click)="exportar()">
+      <mat-icon>file_download</mat-icon>
+      Exportar
+    </button>
+  </header>
+
+  @if (error()) {
+    <mat-card class="feedback error">
+      <mat-icon>error</mat-icon>
+      <span>{{ error() }}</span>
+    </mat-card>
+  }
+
+  @if (cargando()) {
+    <mat-card class="feedback loading">
+      <mat-icon class="spinning">sync</mat-icon>
+      <span>Cargando presupuesto...</span>
+    </mat-card>
+  }
+
+  <mat-card class="totals-card">
+    <div class="total-item">
+      <span class="label">Presupuestado</span>
+      <span class="value">{{ formatear(totalPresupuestado()) }}</span>
+    </div>
+    <div class="total-item">
+      <span class="label">Ejecutado</span>
+      <span class="value">{{ formatear(totalEjecutado()) }}</span>
+    </div>
+    <div class="total-item">
+      <span class="label">Variación</span>
+      <mat-chip [ngClass]="claseVariacion(variacionTotal())">
+        <mat-icon>{{ iconoTendencia(variacionTotal() > 0 ? 'up' : variacionTotal() < 0 ? 'down' : 'flat') }}</mat-icon>
+        {{ variacionTotal() >= 0 ? '+' : '-' }}{{ formatear(variacionTotal()) }}
+      </mat-chip>
+    </div>
+    <div class="progress">
+      <span>Ejecución del portafolio</span>
+      <mat-progress-bar mode="determinate" [value]="porcentajeEjecucion()"></mat-progress-bar>
+      <strong>{{ porcentajeEjecucion() }}%</strong>
+    </div>
+  </mat-card>
+
+  <mat-card class="table-card">
+    <div class="table-head">
+      <h2>Desglose por proyecto</h2>
+      <span>
+        {{ datos().length }} proyectos analizados
+        @if (rango()) {
+          · periodo {{ rango()!.inicio }} al {{ rango()!.fin }}
+        }
+      </span>
+    </div>
+    <div class="table-wrapper">
+      @if (!cargando() && !datos().length) {
+        <div class="empty-state">
+          <mat-icon>inventory_2</mat-icon>
+          <p>No se encontraron registros de presupuesto para el período consultado.</p>
+        </div>
+      } @else {
+        <table>
+          <thead>
+            <tr>
+              <th>Proyecto</th>
+              <th>Categoría</th>
+              <th>Presupuestado</th>
+              <th>Ejecutado</th>
+              <th>Variación</th>
+              <th>Tendencia</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (fila of datos(); track fila.id) {
+              <tr>
+                <td>{{ fila.proyecto }}</td>
+                <td>{{ fila.categoria }}</td>
+                <td>{{ formatear(fila.presupuesto) }}</td>
+                <td>{{ formatear(fila.ejecutado) }}</td>
+                <td>
+                  <mat-chip [ngClass]="claseVariacion(fila.variacion)">
+                    {{ fila.variacion >= 0 ? '+' : '-' }}{{ formatear(fila.variacion) }}
+                  </mat-chip>
+                </td>
+                <td>
+                  <mat-icon [ngClass]="'trend-' + fila.tendencia">{{ iconoTendencia(fila.tendencia) }}</mat-icon>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      }
+    </div>
+  </mat-card>
+</section>

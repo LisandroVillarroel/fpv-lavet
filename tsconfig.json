@@ -3,6 +3,28 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
+    "baseUrl": "./",
+    "paths": {
+      "@shared/*": [
+        "src/app/shared/*"
+      ],
+      "@envs/*": [
+        "src/environments/*"
+      ],
+      "@util/*": [
+        "src/app/shared/utiles/*"
+      ],
+      "@directivas/*": [
+        "src/app/common/directivas/*"
+      ],
+      "@core/*": [
+        "src/app/core/*"
+      ],
+      "@features/*": [
+        "src/app/features/*"
+      ],
+    },
+    "outDir": "./dist/out-tsc",
     "strict": true,
     "noImplicitOverride": true,
     "noPropertyAccessFromIndexSignature": true,

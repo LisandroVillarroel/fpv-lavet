@@ -1,0 +1,384 @@
+<div class="planning-dashboard">
+  <section class="hero" [@fadeInUp]>
+    <div class="hero-content">
+      <div class="hero-summary">
+        <div class="hero-icon">
+          <mat-icon class="hero-icon">analytics</mat-icon>
+        </div>
+        <div class="hero-text">
+          <div class="hero-heading">
+            <h1>{{ saludoHora() }}, {{ nombreUsuario() }}</h1>
+            <p>Tablero de planificación y seguimiento de proyectos</p>
+          </div>
+          <mat-chip-set class="hero-chips">
+            <mat-chip
+              color="primary"
+              matBadgeColor="primary"
+              class="chip-active"
+            >
+              <mat-icon>calendar_month</mat-icon>
+              {{ fechaFormateada() }}
+            </mat-chip>
+            @if (estadisticas().riesgosAltos) {
+            <mat-chip class="chip-secondary">
+              <mat-icon>warning</mat-icon>
+              {{ estadisticas().riesgosAltos }} riesgos altos activos
+            </mat-chip>
+            }
+          </mat-chip-set>
+        </div>
+      </div>
+      <div class="hero-actions">
+        <button
+          mat-flat-button
+          color="primary"
+          (click)="crearProyecto()"
+          [disabled]="!puedeCrearNuevoProyecto()"
+        >
+          <mat-icon class="cambiarTamano">add_circle</mat-icon>
+          Nueva Nota de venta
+        </button>
+<!--
+        <button mat-stroked-button color="primary" (click)="registrarAvance()">
+          <mat-icon>playlist_add_check</mat-icon>
+          Registrar avance
+        </button>
+      -->
+                <header class="chart-header">
+                  <div class="title">
+                    <mat-icon>donut_small</mat-icon>
+                    <h3>Estado de actividades</h3>
+                  </div>
+                </header>
+
+        <div class="portada-filtro-header" style="display: flex; align-items: center; justify-content: space-between; margin-top: 0.5rem; margin-bottom: 0.5rem;">
+          <div style="display: flex; flex-direction: column;">
+            <h3 style="margin: 0; font-size: 2rem; line-height: 1.1;">Configurar vista</h3>
+            <span style="font-size: 1.5rem; color: #98004f; margin-top: 0.2rem; line-height: 1.1;">Filtra la información según periodo y tablero</span>
+          </div>
+          <button
+            mat-icon-button
+            (click)="cargarDashboard()"
+            [disabled]="cargandoDatos()"
+            matTooltip="Refrescar datos"
+          >
+            <mat-icon [class.spinning]="cargandoDatos()">refresh</mat-icon>
+          </button>
+        </div>
+        <div class="filter-content" style="margin-top: 0.5rem;">
+          <div class="portada-filtro-fechas" style="display: flex; gap: 2rem; align-items: flex-end; margin-bottom: 0.5rem;">
+            <mat-form-field appearance="outline" class="date-field">
+              <mat-label>Inicio</mat-label>
+              <mat-icon matPrefix>calendar_today</mat-icon>
+              <input
+                matInput
+                [matDatepicker]="pickerInicio"
+                [(ngModel)]="$any(this).fechaInicioLocal"
+                (ngModelChange)="$any(this).actualizarFechaInicio($event)"
+                [ngModelOptions]="{ standalone: true }"
+                placeholder="Inicio"
+              />
+              <mat-datepicker-toggle
+                matIconSuffix
+                [for]="pickerInicio"
+              ></mat-datepicker-toggle>
+              <mat-datepicker #pickerInicio></mat-datepicker>
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="date-field">
+              <mat-label>Fin</mat-label>
+              <mat-icon matPrefix>event</mat-icon>
+              <input
+                matInput
+                [matDatepicker]="pickerFin"
+                [(ngModel)]="$any(this).fechaFinLocal"
+                (ngModelChange)="$any(this).actualizarFechaFin($event)"
+                [ngModelOptions]="{ standalone: true }"
+                placeholder="Fin"
+              />
+              <mat-datepicker-toggle
+                matIconSuffix
+                [for]="pickerFin"
+              ></mat-datepicker-toggle>
+              <mat-datepicker #pickerFin></mat-datepicker>
+            </mat-form-field>
+          </div>
+          <div class="portada-filtro-rapido" style="display: flex; gap: 1rem; margin-left: 0;">
+            <button
+              mat-stroked-button
+              [class.active]="filtroSeleccionado() === 'hoy'"
+              (click)="seleccionarFiltro('hoy')"
+            >
+              <mat-icon>today</mat-icon>
+              Hoy
+            </button>
+            <button
+              mat-stroked-button
+              [class.active]="filtroSeleccionado() === 'semana'"
+              (click)="seleccionarFiltro('semana')"
+            >
+              <mat-icon>date_range</mat-icon>
+              Semana
+            </button>
+            <button
+              mat-stroked-button
+              [class.active]="filtroSeleccionado() === 'mes'"
+              (click)="seleccionarFiltro('mes')"
+            >
+              <mat-icon>calendar_month</mat-icon>
+              Mes
+            </button>
+            <button
+              mat-stroked-button
+              [class.active]="filtroSeleccionado() === 'personalizado'"
+              (click)="seleccionarFiltro('personalizado')"
+            >
+              <mat-icon>filter_alt</mat-icon>
+              Personalizado
+            </button>
+          </div>
+        <!--
+        <div class="secondary-actions">
+          <button mat-button (click)="gestionarRiesgos()">
+            <mat-icon>warning</mat-icon>
+            Matriz de riesgos
+          </button>
+          <button mat-button (click)="verDetallePortafolio()">
+            <mat-icon>dashboard_customize</mat-icon>
+            Portafolio completo
+          </button>
+          <button mat-button (click)="verTableroTrabajo()">
+            <mat-icon>view_kanban</mat-icon>
+            Tablero operativo
+          </button>
+        </div>
+      --></div>
+    </div>
+    </div>
+  </section>
+
+  <section class="metrics" [@staggerIn]>
+    @if (cargandoDatos()) {
+    <div class="metrics-skeleton">
+      @for (i of [1,2,3,4]; track i) {
+      <div class="metric-placeholder" [@pulseAnimation]></div>
+      }
+    </div>
+    } @else {
+    <div class="metrics-grid">
+      <article class="metric-card" [@cardHover]>
+        <div class="metric-icon primary">
+          <mat-icon>assignment_turned_in</mat-icon>
+        </div>
+        <div class="metric-body">
+          <span class="metric-title">Proyectos activos</span>
+          <span class="metric-value">{{
+            formatearNumero(estadisticas().proyectosActivos)
+          }}</span>
+          <mat-progress-bar
+            mode="determinate"
+            [value]="estadisticas().avancePromedio"
+          ></mat-progress-bar>
+          <span class="metric-footer"
+            >Avance promedio
+            {{ formatearPorcentaje(estadisticas().avancePromedio) }}</span
+          >
+        </div>
+      </article>
+
+      <article class="metric-card" [@cardHover]>
+        <div class="metric-icon warning">
+          <mat-icon>pending_actions</mat-icon>
+        </div>
+        <div class="metric-body">
+          <span class="metric-title">Tareas pendientes</span>
+          <span class="metric-value">{{
+            formatearNumero(estadisticas().tareasPendientes)
+          }}</span>
+          <mat-progress-bar
+            mode="determinate"
+            color="warn"
+            [value]="clamp(estadisticas().tareasPendientes, 0, 100)"
+          ></mat-progress-bar>
+          <span class="metric-footer">Prioriza actividades críticas</span>
+        </div>
+      </article>
+
+      <article class="metric-card" [@cardHover]>
+        <div class="metric-icon success">
+          <mat-icon>task_alt</mat-icon>
+        </div>
+        <div class="metric-body">
+          <span class="metric-title">Hitos cerrados</span>
+          <span class="metric-value">{{
+            formatearNumero(estadisticas().hitosCerrados)
+          }}</span>
+          <mat-progress-bar
+            mode="determinate"
+            color="accent"
+            [value]="calcularPorcentajeHitosCerrados()"
+          ></mat-progress-bar>
+          <span class="metric-footer">Seguimiento al día</span>
+        </div>
+      </article>
+
+      <article class="metric-card" [@cardHover]>
+        <div class="metric-icon info">
+          <mat-icon>paid</mat-icon>
+        </div>
+        <div class="metric-body">
+          <span class="metric-title">Presupuesto comprometido</span>
+          <span class="metric-value">{{ textoPortafolioComprometido() }}</span>
+          <mat-progress-bar
+            mode="determinate"
+            color="primary"
+            [value]="(estadisticas().entregablesSemana ?? 0) * 10"
+          ></mat-progress-bar>
+          <span class="metric-footer"
+            >{{ estadisticas().entregablesSemana ?? 0 }} entregables esta
+            semana</span
+          >
+        </div>
+      </article>
+    </div>
+    }
+  </section>
+
+  <section class="analytics">
+    <div class="analytics-grid">
+      <article class="chart-card" [@slideInLeft]>
+        <header class="chart-header">
+          <div class="title">
+            <mat-icon>stacked_line_chart</mat-icon>
+            <div>
+              <h3>Avance mensual del portafolio</h3>
+              <span>Comparativa de avance promedio por mes</span>
+            </div>
+          </div>
+          <button mat-icon-button matTooltip="Descargar reporte">
+            <mat-icon>file_download</mat-icon>
+          </button>
+        </header>
+        <section class="chart-body">
+          @if (cargandoDatos()) {
+          <div class="chart-skeleton bars">
+            @for (i of [1,2,3,4,5,6]; track i) {
+            <span [style.animation-delay.s]="i * 0.1"></span>
+            }
+          </div>
+          } @else {
+          <canvas #chartCanvas class="chart-canvas"></canvas>
+          }
+        </section>
+      </article>
+
+      <article class="chart-card" [@slideInLeft]>
+        <header class="chart-header">
+          <div class="title">
+            <mat-icon>donut_small</mat-icon>
+            <h3>Estado de actividades</h3>
+          </div>
+        </header>
+        <section class="chart-body">
+          @if (cargandoDatos()) {
+          <div class="chart-skeleton donut"></div>
+          } @else {
+          <canvas #pieChartCanvas class="chart-canvas donut"></canvas>
+          @if (estadoLeyendaItems.length) {
+          <div class="chart-legend legend-actividades">
+            @for (item of estadoLeyendaItems; track item.etiqueta) {
+              <div class="legend-item legend-inline">
+              <span class="legend-color" [style.background-color]="item.color"></span>
+              <span class="legend-label">{{ item.etiqueta }}</span>
+              <span class="legend-value precio-leyenda">{{ formatearMoneda(item.precioSinIva) }}</span>
+              <span class="legend-value porcentaje-leyenda">{{ item.porcentaje }}%</span>
+            </div>
+            }
+          </div>
+          } }
+        </section>
+      </article>
+
+      <article class="chart-card" [@slideInLeft]>
+        <header class="chart-header">
+          <div class="title">
+            <mat-icon>leaderboard</mat-icon>
+            <div>
+              <h3>Proyectos por estado</h3>
+              <span>Cantidad por código de estado</span>
+            </div>
+          </div>
+        </header>
+        <section class="chart-body">
+          @if (cargandoDatos()) {
+          <div class="chart-skeleton list"></div>
+          } @else {
+          <canvas #statusChartCanvas class="chart-canvas status"></canvas>
+          @if (estadoLeyendaItems.length) {
+          <div class="chart-legend">
+            @for (item of estadoLeyendaItems; track item.etiqueta) {
+            <div class="legend-item">
+              <span
+                class="legend-color"
+                [style.background-color]="item.color"
+              ></span>
+              <span class="legend-label">{{ item.etiqueta }}</span>
+              <span class="legend-value">{{
+                formatearNumero(item.valor)
+              }}</span>
+            </div>
+            }
+          </div>
+          } }
+        </section>
+      </article>
+    </div>
+  </section>
+
+  <!-- Reportes Recurrentes -->
+  @if (puedeVerReportesClave()) {
+  <section class="quick-access" [@fadeInUp]>
+    <header class="quick-access-header">
+      <div>
+        <h3>Reportes clave</h3>
+        <span>Documentos listos para cada comité</span>
+      </div>
+    </header>
+    <div class="access-grid">
+      <div class="access-card risk-report" (click)="abrirReporteRiesgos()">
+        <div class="access-icon">
+          <mat-icon>warning</mat-icon>
+        </div>
+        <div class="access-content">
+          <h4>Reporte de riesgos abiertos</h4>
+          <p>Riesgos altos con planes de mitigación</p>
+        </div>
+        <mat-icon class="access-arrow">open_in_new</mat-icon>
+      </div>
+
+      <div
+        class="access-card budget-report"
+        (click)="abrirReportePresupuesto()"
+      >
+        <div class="access-icon">
+          <mat-icon>request_quote</mat-icon>
+        </div>
+        <div class="access-content">
+          <h4>Detalle presupuesto vs. gasto</h4>
+          <p>Comparativa por proyecto o línea de negocio</p>
+        </div>
+        <mat-icon class="access-arrow">stacked_bar_chart</mat-icon>
+      </div>
+    </div>
+  </section>
+  }
+
+  <!-- Indicador de Carga Global -->
+  @if (progreso.isCargando()) {
+  <div class="global-loading" [@fadeInOut]>
+    <mat-progress-bar
+      mode="indeterminate"
+      class="loading-bar"
+    ></mat-progress-bar>
+  </div>
+  }
+</div>

@@ -1,0 +1,225 @@
+.report-page {
+  display: grid;
+  gap: 2.25rem;
+  padding: clamp(1.5rem, 4vw, 3rem);
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.report-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.report-header button[mat-icon-button] {
+  background: color-mix(in srgb, var(--mat-sys-primary) 16%, transparent);
+  color: var(--mat-sys-primary);
+}
+
+.report-title {
+  flex: 1 1 320px;
+}
+
+.report-title h1 {
+  margin: 0;
+  font-size: clamp(1.35rem, 3vw, 1.8rem);
+  font-weight: 700;
+}
+
+.report-title p {
+  margin: 0.35rem 0 0;
+  color: color-mix(in srgb, var(--mat-sys-on-surface) 68%, transparent);
+}
+
+.totals-card {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.35rem;
+  padding: 1.75rem;
+  border-radius: 24px;
+  background: var(--mat-sys-surface);
+  border: 1px solid color-mix(in srgb, var(--mat-sys-primary) 12%, transparent);
+  box-shadow: 0 16px 36px color-mix(in srgb, var(--mat-sys-primary) 10%, rgba(15, 23, 42, 0.12));
+}
+
+.total-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.total-item .label {
+  font-size: 0.9rem;
+  color: color-mix(in srgb, var(--mat-sys-on-surface) 60%, transparent);
+}
+
+.total-item .value {
+  font-weight: 700;
+  font-size: 1.35rem;
+}
+
+.total-item mat-chip {
+  align-self: flex-start;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  border-radius: 999px;
+}
+
+.progress {
+  grid-column: 1 / -1;
+  display: grid;
+  gap: 0.35rem;
+}
+
+.progress span {
+  font-size: 0.95rem;
+  color: color-mix(in srgb, var(--mat-sys-on-surface) 62%, transparent);
+}
+
+mat-progress-bar {
+  height: 8px;
+  border-radius: 999px;
+}
+
+.table-card {
+  padding: 1.35rem 1.75rem 1.75rem;
+  border-radius: 24px;
+  border: 1px solid var(--mat-sys-outline-variant);
+  box-shadow: 0 18px 44px color-mix(in srgb, var(--mat-sys-primary) 12%, rgba(15, 23, 42, 0.16));
+}
+
+.table-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.35rem;
+}
+
+.table-head h2 {
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.table-head span {
+  color: color-mix(in srgb, var(--mat-sys-on-surface) 58%, transparent);
+  font-size: 0.9rem;
+}
+
+.table-wrapper {
+  overflow-x: auto;
+}
+
+.table-wrapper table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.table-wrapper th,
+.table-wrapper td {
+  padding: 0.85rem 0.75rem;
+  text-align: left;
+  border-bottom: 1px solid color-mix(in srgb, var(--mat-sys-outline) 24%, transparent);
+  font-size: 0.88rem;
+}
+
+.table-wrapper th {
+  font-size: 0.82rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+  color: color-mix(in srgb, var(--mat-sys-on-surface) 58%, transparent);
+}
+
+.table-wrapper tr:last-child td {
+  border-bottom: none;
+}
+
+.mat-mdc-chip.variacion-over {
+  background: color-mix(in srgb, var(--mat-sys-error) 14%, transparent);
+  color: var(--mat-sys-error);
+}
+
+.mat-mdc-chip.variacion-under {
+  background: color-mix(in srgb, var(--mat-sys-secondary) 18%, transparent);
+  color: var(--mat-sys-secondary);
+}
+
+.mat-mdc-chip.variacion-neutral {
+  background: color-mix(in srgb, var(--mat-sys-primary) 12%, transparent);
+  color: var(--mat-sys-primary);
+}
+
+.trend-up {
+  color: var(--mat-sys-error);
+}
+
+.trend-down {
+  color: var(--mat-sys-secondary);
+}
+
+.trend-flat {
+  color: color-mix(in srgb, var(--mat-sys-on-surface) 58%, transparent);
+}
+
+.feedback {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.9rem 1.1rem;
+  border-radius: 16px;
+  font-weight: 500;
+  width: fit-content;
+}
+
+.feedback mat-icon {
+  font-size: 1.4rem;
+}
+
+.feedback.loading {
+  background: color-mix(in srgb, var(--mat-sys-primary) 10%, transparent);
+  color: var(--mat-sys-primary);
+}
+
+.feedback.error {
+  background: color-mix(in srgb, var(--mat-sys-error) 12%, transparent);
+  color: var(--mat-sys-error);
+}
+
+.empty-state {
+  display: grid;
+  place-items: center;
+  padding: 2.5rem 1rem;
+  color: color-mix(in srgb, var(--mat-sys-on-surface) 60%, transparent);
+  gap: 0.75rem;
+}
+
+.empty-state mat-icon {
+  font-size: 2.4rem;
+  color: color-mix(in srgb, var(--mat-sys-primary) 32%, transparent);
+}
+
+.spinning {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (max-width: 720px) {
+  .report-header {
+    justify-content: flex-start;
+  }
+
+  .report-header button[mat-stroked-button] {
+    width: 100%;
+    justify-content: center;
+  }
+}
