@@ -8,8 +8,9 @@ import { MenuItemComponent } from './menu-item/menu-item.component';
 
 import SidenavHeaderComponent from './sidenav-header/sidenav-header.component';
 import { StorageService } from '@core/guards/storage.service';
-import { loginInterface } from '@features/auth/interface/loginInterface';
+
 import { MenuItemData } from './menu-items';
+import { loginInterface } from '@core/auth/loginInterface';
 
 //import { AppStore } from '../../../app.store';
 
@@ -19,7 +20,7 @@ import { MenuItemData } from './menu-items';
     <app-sidenav-header [collapsed]="collapsed()" />
     <mat-nav-list class="[--mat-list-active-indicator-shape:0px] mb-6">
       @for (item of menuItems(); track item.despliegaNombre) {
-      <app-menu-item [item]="item" [collapsed]="collapsed()" />
+        <app-menu-item [item]="item" [collapsed]="collapsed()" />
       }
     </mat-nav-list>
   `,
@@ -52,8 +53,8 @@ export class CustomSidenavComponent {
     () =>
       this.filtrarMenu(
         this._storage()?.menuItem || [],
-        this._storage()?.menuUsuario!
-      ) || []
+        this._storage()?.menuUsuario!,
+      ) || [],
   );
 
   filtrarMenu(menu: MenuItemData[], rutasPermitidas: number[]): MenuItemData[] {
@@ -67,7 +68,7 @@ export class CustomSidenavComponent {
         }
         if (item.subItems) {
           const subItemsFiltrados = item.subItems.filter((subItem) =>
-            rutasPermitidas.includes(subItem.id)
+            rutasPermitidas.includes(subItem.id),
           );
 
           // Si el elemento tiene subItems permitidos, se devuelve el objeto completo

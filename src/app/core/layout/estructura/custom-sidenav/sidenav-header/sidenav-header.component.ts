@@ -6,7 +6,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { RouterLink } from '@angular/router';
 import { StorageService } from '@core/guards/storage.service';
 import { environment } from '@envs/environment';
-import { loginInterface } from '@features/auth/interface/loginInterface';
+import { loginInterface } from '@core/auth/loginInterface';
 
 //import { AppStore } from '../../../../app.store';
 
@@ -28,7 +28,7 @@ import { loginInterface } from '@features/auth/interface/loginInterface';
       >
         <img
           class="avatar-img pr-4"
-          [ngSrc]="imagenUsuario()"
+          [ngSrc]="'imagenUsuario()'"
           fill
           priority
           decoding="async"
@@ -69,39 +69,38 @@ import { loginInterface } from '@features/auth/interface/loginInterface';
     </div>
   `,
   styles: `
+    :host * {
+      transition-property: width, height, opacity;
+      transition-duration: 500ms;
+      transition-timing-function: ease-in-out;
+    }
+    h2 {
+      font-size: 14px;
+    }
+    p {
+      font-size: 12px;
+    }
 
-  :host * {
-    transition-property: width, height, opacity;
-    transition-duration: 500ms;
-    transition-timing-function: ease-in-out;
-  }
-  h2{
-    font-size: 14px;
-  }
-   p{
-    font-size: 12px;
-  }
+    .justificar {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 5px;
+      flex-direction: row;
+    }
 
-  .justificar{
-  display: flex ;
-  justify-content: center ;
-  align-items: center ;
-  gap: 5px ;
-  flex-direction: row ;
-  }
+    .avatar-wrapper {
+      position: relative;
+      border-radius: 9999px;
+      overflow: hidden;
+      margin: 0 auto;
+      margin-right: 100px;
+    }
 
-  .avatar-wrapper {
-    position: relative;
-    border-radius: 9999px;
-    overflow: hidden;
-    margin: 0 auto;
-    margin-right:100px
-  }
-
-  .avatar-img {
-    object-fit: cover;
-    object-position: center;
-  }
+    .avatar-img {
+      object-fit: cover;
+      object-position: center;
+    }
   `,
 })
 export default class SidenavHeaderComponent {
@@ -112,7 +111,7 @@ export default class SidenavHeaderComponent {
   readonly #storage = inject(StorageService);
   _storage = signal(this.#storage.get<loginInterface>('sesion'));
   profilePicSize = computed(() => (this.collapsed() ? 32 : 100));
-  imagenUsuario = signal(
+  /*imagenUsuario = signal(
     this._storage()?.usuarioLogin.nombreFoto != ''
       ? environment.apiUrlImagenes +
           '/imagenes/fotos/' +
@@ -121,4 +120,5 @@ export default class SidenavHeaderComponent {
           this.marcaDeTiempo
       : './person-placeholder.png'
   );
+  */
 }
