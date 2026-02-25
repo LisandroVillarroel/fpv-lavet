@@ -2,14 +2,12 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '@envs/environment';
-import {
-  DashboardRequest,
-  DashboardResponse,
-} from './portada.models';
+import { DashboardRequest, DashboardResponse } from './portada.models';
 
 @Injectable({ providedIn: 'root' })
 export class PortadaDashboardService {
   private readonly http = inject(HttpClient);
+  /*
   private readonly baseUrl = `${environment.apiUrl}/dashboard`;
 
   obtenerDashboard(payload: DashboardRequest): Observable<DashboardResponse> {
@@ -29,4 +27,5 @@ export class PortadaDashboardService {
 
     return this.http.get<DashboardResponse>(url, { params });
   }
+  */
 }

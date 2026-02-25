@@ -29,32 +29,42 @@
         </div>
       </div>
       <div class="hero-actions">
-        <button
-          mat-flat-button
-          color="primary"
-          (click)="crearProyecto()"
-          [disabled]="!puedeCrearNuevoProyecto()"
-        >
-          <mat-icon class="cambiarTamano">add_circle</mat-icon>
-          Nueva Nota de venta
-        </button>
-<!--
+        <!--
         <button mat-stroked-button color="primary" (click)="registrarAvance()">
           <mat-icon>playlist_add_check</mat-icon>
           Registrar avance
         </button>
       -->
-                <header class="chart-header">
-                  <div class="title">
-                    <mat-icon>donut_small</mat-icon>
-                    <h3>Estado de actividades</h3>
-                  </div>
-                </header>
+        <header class="chart-header">
+          <div class="title">
+            <mat-icon>donut_small</mat-icon>
+            <h3>Estado de actividades</h3>
+          </div>
+        </header>
 
-        <div class="portada-filtro-header" style="display: flex; align-items: center; justify-content: space-between; margin-top: 0.5rem; margin-bottom: 0.5rem;">
-          <div style="display: flex; flex-direction: column;">
-            <h3 style="margin: 0; font-size: 2rem; line-height: 1.1;">Configurar vista</h3>
-            <span style="font-size: 1.5rem; color: #98004f; margin-top: 0.2rem; line-height: 1.1;">Filtra la información según periodo y tablero</span>
+        <div
+          class="portada-filtro-header"
+          style="
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 0.5rem;
+            margin-bottom: 0.5rem;
+          "
+        >
+          <div style="display: flex; flex-direction: column">
+            <h3 style="margin: 0; font-size: 2rem; line-height: 1.1">
+              Configurar vista
+            </h3>
+            <span
+              style="
+                font-size: 1.5rem;
+                color: #98004f;
+                margin-top: 0.2rem;
+                line-height: 1.1;
+              "
+              >Filtra la información según periodo y tablero</span
+            >
           </div>
           <button
             mat-icon-button
@@ -65,8 +75,16 @@
             <mat-icon [class.spinning]="cargandoDatos()">refresh</mat-icon>
           </button>
         </div>
-        <div class="filter-content" style="margin-top: 0.5rem;">
-          <div class="portada-filtro-fechas" style="display: flex; gap: 2rem; align-items: flex-end; margin-bottom: 0.5rem;">
+        <div class="filter-content" style="margin-top: 0.5rem">
+          <div
+            class="portada-filtro-fechas"
+            style="
+              display: flex;
+              gap: 2rem;
+              align-items: flex-end;
+              margin-bottom: 0.5rem;
+            "
+          >
             <mat-form-field appearance="outline" class="date-field">
               <mat-label>Inicio</mat-label>
               <mat-icon matPrefix>calendar_today</mat-icon>
@@ -102,7 +120,10 @@
               <mat-datepicker #pickerFin></mat-datepicker>
             </mat-form-field>
           </div>
-          <div class="portada-filtro-rapido" style="display: flex; gap: 1rem; margin-left: 0;">
+          <div
+            class="portada-filtro-rapido"
+            style="display: flex; gap: 1rem; margin-left: 0"
+          >
             <button
               mat-stroked-button
               [class.active]="filtroSeleccionado() === 'hoy'"
@@ -136,7 +157,7 @@
               Personalizado
             </button>
           </div>
-        <!--
+          <!--
         <div class="secondary-actions">
           <button mat-button (click)="gestionarRiesgos()">
             <mat-icon>warning</mat-icon>
@@ -151,8 +172,9 @@
             Tablero operativo
           </button>
         </div>
-      --></div>
-    </div>
+      -->
+        </div>
+      </div>
     </div>
   </section>
 
@@ -171,16 +193,16 @@
         </div>
         <div class="metric-body">
           <span class="metric-title">Proyectos activos</span>
-          <span class="metric-value">{{
-            formatearNumero(estadisticas().proyectosActivos)
-          }}</span>
+          <span class="metric-value"
+            >{{ formatearNumero(estadisticas().proyectosActivos) }}</span
+          >
           <mat-progress-bar
             mode="determinate"
             [value]="estadisticas().avancePromedio"
           ></mat-progress-bar>
           <span class="metric-footer"
-            >Avance promedio
-            {{ formatearPorcentaje(estadisticas().avancePromedio) }}</span
+            >Avance promedio {{
+            formatearPorcentaje(estadisticas().avancePromedio) }}</span
           >
         </div>
       </article>
@@ -191,9 +213,9 @@
         </div>
         <div class="metric-body">
           <span class="metric-title">Tareas pendientes</span>
-          <span class="metric-value">{{
-            formatearNumero(estadisticas().tareasPendientes)
-          }}</span>
+          <span class="metric-value"
+            >{{ formatearNumero(estadisticas().tareasPendientes) }}</span
+          >
           <mat-progress-bar
             mode="determinate"
             color="warn"
@@ -209,9 +231,9 @@
         </div>
         <div class="metric-body">
           <span class="metric-title">Hitos cerrados</span>
-          <span class="metric-value">{{
-            formatearNumero(estadisticas().hitosCerrados)
-          }}</span>
+          <span class="metric-value"
+            >{{ formatearNumero(estadisticas().hitosCerrados) }}</span
+          >
           <mat-progress-bar
             mode="determinate"
             color="accent"
@@ -286,11 +308,18 @@
           @if (estadoLeyendaItems.length) {
           <div class="chart-legend legend-actividades">
             @for (item of estadoLeyendaItems; track item.etiqueta) {
-              <div class="legend-item legend-inline">
-              <span class="legend-color" [style.background-color]="item.color"></span>
+            <div class="legend-item legend-inline">
+              <span
+                class="legend-color"
+                [style.background-color]="item.color"
+              ></span>
               <span class="legend-label">{{ item.etiqueta }}</span>
-              <span class="legend-value precio-leyenda">{{ formatearMoneda(item.precioSinIva) }}</span>
-              <span class="legend-value porcentaje-leyenda">{{ item.porcentaje }}%</span>
+              <span class="legend-value precio-leyenda"
+                >{{ formatearMoneda(item.precioSinIva) }}</span
+              >
+              <span class="legend-value porcentaje-leyenda"
+                >{{ item.porcentaje }}%</span
+              >
             </div>
             }
           </div>
@@ -322,9 +351,9 @@
                 [style.background-color]="item.color"
               ></span>
               <span class="legend-label">{{ item.etiqueta }}</span>
-              <span class="legend-value">{{
-                formatearNumero(item.valor)
-              }}</span>
+              <span class="legend-value"
+                >{{ formatearNumero(item.valor) }}</span
+              >
             </div>
             }
           </div>

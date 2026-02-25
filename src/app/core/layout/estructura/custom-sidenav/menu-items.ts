@@ -11,17 +11,6 @@ export interface MenuItem {
   seleccionado: WritableSignal<boolean>;
 }
 
-export interface MenuItemData {
-  id: number;
-  iconoNombre: string;
-  despliegaNombre: string;
-  route?: string;
-  tipoPermiso?: string;
-  subItems?: MenuItemData[];
-  indeterminate: boolean;
-  seleccionado: boolean;
-}
-
 /*
 export const menuItems: MenuItem[] = [
   {

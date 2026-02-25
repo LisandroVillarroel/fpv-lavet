@@ -11,33 +11,19 @@ import { StorageService } from '@core/guards/storage.service';
 
 @Component({
   selector: 'app-cabecera',
-  imports: [
-    MatToolbar,
-    MatIcon,
-    MatButtonModule,
-    MatMenuModule,
-    MatDividerModule,
-  ],
+  imports: [MatToolbar, MatIcon, MatButtonModule, MatMenuModule, MatDividerModule],
   styleUrls: ['./cabecera.scss'],
   template: `
-    <mat-toolbar
-      class="mat-elevation-z3 relative z-10 [view-transition-name:header]"
-    >
+    <mat-toolbar class="cabecera" color="primary">
       <button mat-icon-button (click)="collapsed.set(!collapsed())">
         <mat-icon>menu</mat-icon>
       </button>
 
       <div class="container-fluid">
-        <a>
-          <img src="imagenes/logoFinal.png" alt="Logo" class="logo-img me-2" />
-        </a>
-        <div class="titulo mb-0">Sistema Informático Gestión de Proyectos</div>
-        <button
-          class="btn-salir"
-          matTooltip="Cerrar"
-          (click)="logout()"
-          matButton
-        >
+        <mat-icon aria-hidden="true">pets</mat-icon>
+        <span class="titulo mb-0">SISTEMA VETERINARIO</span>
+
+        <button class="btn-salir" matTooltip="Cerrar" (click)="logout()" matButton>
           <mat-icon>exit_to_app</mat-icon>
         </button>
       </div>

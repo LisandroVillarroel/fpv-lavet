@@ -22,7 +22,6 @@ import {
 } from '@angular/animations';
 import { Progreso } from '@core/guards/progreso';
 import { StorageService } from '@core/guards/storage.service';
-import { loginInterface } from '@features/auth/interface/loginInterface';
 
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
@@ -51,7 +50,7 @@ import {
 } from './portada.models';
 import { PortadaDashboardService } from './portada.service';
 import { MatDialog } from '@angular/material/dialog';
-import { AgregaNotaVentaComponente } from '@features/nota-venta/agrega-nota-venta/agrega-nota-ventaComponente';
+import { loginInterface } from '@core/auth/loginInterface';
 
 type TiempoFiltro = 'hoy' | 'semana' | 'mes' | 'personalizado';
 
@@ -86,7 +85,7 @@ type TiempoFiltro = 'hoy' | 'semana' | 'mes' | 'personalizado';
         style({ opacity: 0, transform: 'translateY(30px)' }),
         animate(
           '600ms cubic-bezier(0.35, 0, 0.25, 1)',
-          style({ opacity: 1, transform: 'translateY(0)' })
+          style({ opacity: 1, transform: 'translateY(0)' }),
         ),
       ]),
     ]),
@@ -95,7 +94,7 @@ type TiempoFiltro = 'hoy' | 'semana' | 'mes' | 'personalizado';
         style({ opacity: 0, transform: 'translateX(50px)' }),
         animate(
           '500ms 200ms cubic-bezier(0.35, 0, 0.25, 1)',
-          style({ opacity: 1, transform: 'translateX(0)' })
+          style({ opacity: 1, transform: 'translateX(0)' }),
         ),
       ]),
     ]),
@@ -104,7 +103,7 @@ type TiempoFiltro = 'hoy' | 'semana' | 'mes' | 'personalizado';
         style({ opacity: 0, transform: 'translateX(-50px)' }),
         animate(
           '500ms 200ms cubic-bezier(0.35, 0, 0.25, 1)',
-          style({ opacity: 1, transform: 'translateX(0)' })
+          style({ opacity: 1, transform: 'translateX(0)' }),
         ),
       ]),
     ]),
@@ -118,11 +117,11 @@ type TiempoFiltro = 'hoy' | 'semana' | 'mes' | 'personalizado';
               '100ms',
               animate(
                 '600ms cubic-bezier(0.35, 0, 0.25, 1)',
-                style({ opacity: 1, transform: 'translateY(0)' })
-              )
+                style({ opacity: 1, transform: 'translateY(0)' }),
+              ),
             ),
           ],
-          { optional: true }
+          { optional: true },
         ),
       ]),
     ]),
@@ -139,7 +138,7 @@ type TiempoFiltro = 'hoy' | 'semana' | 'mes' | 'personalizado';
             style({ opacity: 0.3, offset: 0 }),
             style({ opacity: 0.8, offset: 0.5 }),
             style({ opacity: 0.3, offset: 1 }),
-          ])
+          ]),
         ),
       ]),
     ]),
@@ -148,7 +147,7 @@ type TiempoFiltro = 'hoy' | 'semana' | 'mes' | 'personalizado';
         style({ opacity: 0, transform: 'translateX(-100%)' }),
         animate(
           '400ms cubic-bezier(0.25, 0.8, 0.25, 1)',
-          style({ opacity: 1, transform: 'translateX(0)' })
+          style({ opacity: 1, transform: 'translateX(0)' }),
         ),
       ]),
     ]),
@@ -176,9 +175,8 @@ export default class Portada implements OnInit, AfterViewInit {
   readonly usuario = signal(this.storage.get<loginInterface>('sesion'));
   readonly cargandoDatos = signal(true);
   readonly fechaInicio = signal(
-    this.normalizarFecha(
-      new Date(new Date().getFullYear(), new Date().getMonth(), 1)
-    ) ?? new Date(new Date().getFullYear(), new Date().getMonth(), 1)
+    this.normalizarFecha(new Date(new Date().getFullYear(), new Date().getMonth(), 1)) ??
+      new Date(new Date().getFullYear(), new Date().getMonth(), 1),
   );
   readonly fechaFin = signal(this.normalizarFecha(new Date()) ?? new Date());
   readonly filtroSeleccionado = signal<TiempoFiltro>('mes');
@@ -208,7 +206,7 @@ export default class Portada implements OnInit, AfterViewInit {
   });
 
   readonly debeOcultarPortafolio = computed(() => {
-    const menuUsuario = this.usuario()?.menuUsuario as unknown;
+    const menuUsuario = this.usuario()?.user.MenuItem as unknown;
     if (Array.isArray(menuUsuario)) {
       const contiene = menuUsuario.some((valor) => Number(valor) === 100);
       return !contiene;
@@ -243,9 +241,7 @@ export default class Portada implements OnInit, AfterViewInit {
     });
   });
 
-  readonly puedeCrearNuevoProyecto = computed(
-    () => !this.debeOcultarPortafolio()
-  );
+  readonly puedeCrearNuevoProyecto = computed(() => !this.debeOcultarPortafolio());
 
   readonly fechaFormateada = computed(() => {
     const inicio = this.fechaInicio();
@@ -254,7 +250,7 @@ export default class Portada implements OnInit, AfterViewInit {
   });
 
   readonly nombreUsuario = computed(() => {
-    return this.usuario()?.usuarioLogin?.nombres || 'Usuario';
+    return this.usuario()?.user?.nombres || 'Usuario';
   });
 
   readonly saludoHora = computed(() => {
@@ -290,9 +286,7 @@ export default class Portada implements OnInit, AfterViewInit {
     ];
   });
 
-  readonly puedeVerReportesClave = computed(() =>
-    this.puedeCrearNuevoProyecto()
-  );
+  readonly puedeVerReportesClave = computed(() => this.puedeCrearNuevoProyecto());
 
   ngOnInit(): void {
     this.sincronizarFechasLocales();
@@ -313,13 +307,13 @@ export default class Portada implements OnInit, AfterViewInit {
         fechaFin: this.formatearFechaParam(this.fechaFin()),
       };
 
-      const usuarioSesion = this.usuario()?.usuarioLogin;
+      const usuarioSesion = this.usuario()?.user;
       if (usuarioSesion?.usuario) {
         payload.usuario = usuarioSesion.usuario;
       }
-
+      /*
       const respuesta: DashboardResponse = await firstValueFrom(
-        this.dashboardService.obtenerDashboard(payload)
+        this.dashboardService.obtenerDashboard(payload),
       );
 
       if (respuesta.estadisticas) {
@@ -341,6 +335,7 @@ export default class Portada implements OnInit, AfterViewInit {
       if (respuesta.resumen?.periodo) {
         this.actualizarPeriodoDesdeBackend(respuesta.resumen.periodo);
       }
+      */
     } catch (error) {
       console.error('Error cargando dashboard:', error);
       this.estadisticas.set({
@@ -394,9 +389,7 @@ export default class Portada implements OnInit, AfterViewInit {
     this.onFechaChange();
   }
 
-  private normalizarFecha(
-    fecha: Date | string | null | undefined
-  ): Date | null {
+  private normalizarFecha(fecha: Date | string | null | undefined): Date | null {
     if (!fecha) {
       return null;
     }
@@ -413,8 +406,7 @@ export default class Portada implements OnInit, AfterViewInit {
   }
 
   private sincronizarFechasLocales(): void {
-    const inicio =
-      this.normalizarFecha(this.fechaInicio()) ?? this.fechaInicio();
+    const inicio = this.normalizarFecha(this.fechaInicio()) ?? this.fechaInicio();
     const fin = this.normalizarFecha(this.fechaFin()) ?? this.fechaFin();
     this.fechaInicioLocal = new Date(inicio.getTime());
     this.fechaFinLocal = new Date(fin.getTime());
@@ -448,17 +440,12 @@ export default class Portada implements OnInit, AfterViewInit {
     // @ts-ignore: Se agrega la propiedad totalPrecioSinIva al dataset desde el backend
     this.estadoLeyendaItems = data.labels.map((label, index) => ({
       etiqueta: this.extraerSiglaEstado(label),
-      color:
-        dataset.backgroundColor?.[index] ??
-        coloresDefault[index % coloresDefault.length],
+      color: dataset.backgroundColor?.[index] ?? coloresDefault[index % coloresDefault.length],
       valor: dataset.data[index] ?? 0,
       porcentaje: Math.round(((dataset.data[index] ?? 0) / total) * 100),
       precioSinIva: (dataset as any).totalPrecioSinIva?.[index] ?? 0,
     }));
-
   }
-
-
 
   seleccionarFiltro(filtro: TiempoFiltro): void {
     this.filtroSeleccionado.set(filtro);
@@ -494,11 +481,7 @@ export default class Portada implements OnInit, AfterViewInit {
     const hoy = new Date();
     const primerDia =
       this.normalizarFecha(
-        new Date(
-          hoy.getFullYear(),
-          hoy.getMonth(),
-          hoy.getDate() - ((hoy.getDay() + 6) % 7)
-        )
+        new Date(hoy.getFullYear(), hoy.getMonth(), hoy.getDate() - ((hoy.getDay() + 6) % 7)),
       ) ??
       new Date(
         hoy.getFullYear(),
@@ -507,25 +490,13 @@ export default class Portada implements OnInit, AfterViewInit {
         12,
         0,
         0,
-        0
+        0,
       );
     const ultimoDia =
       this.normalizarFecha(
-        new Date(
-          primerDia.getFullYear(),
-          primerDia.getMonth(),
-          primerDia.getDate() + 6
-        )
+        new Date(primerDia.getFullYear(), primerDia.getMonth(), primerDia.getDate() + 6),
       ) ??
-      new Date(
-        primerDia.getFullYear(),
-        primerDia.getMonth(),
-        primerDia.getDate() + 6,
-        12,
-        0,
-        0,
-        0
-      );
+      new Date(primerDia.getFullYear(), primerDia.getMonth(), primerDia.getDate() + 6, 12, 0, 0, 0);
     this.fechaInicio.set(primerDia);
     this.fechaFin.set(ultimoDia);
     this.sincronizarFechasLocales();
@@ -538,9 +509,8 @@ export default class Portada implements OnInit, AfterViewInit {
       this.normalizarFecha(new Date(hoy.getFullYear(), hoy.getMonth(), 1)) ??
       new Date(hoy.getFullYear(), hoy.getMonth(), 1, 12, 0, 0, 0);
     const ultimoDia =
-      this.normalizarFecha(
-        new Date(hoy.getFullYear(), hoy.getMonth() + 1, 0)
-      ) ?? new Date(hoy.getFullYear(), hoy.getMonth() + 1, 0, 12, 0, 0, 0);
+      this.normalizarFecha(new Date(hoy.getFullYear(), hoy.getMonth() + 1, 0)) ??
+      new Date(hoy.getFullYear(), hoy.getMonth() + 1, 0, 12, 0, 0, 0);
     this.fechaInicio.set(primerDia);
     this.fechaFin.set(ultimoDia);
     this.sincronizarFechasLocales();
@@ -563,10 +533,7 @@ export default class Portada implements OnInit, AfterViewInit {
     }).format(valor);
   }
 
-  formatearPorcentaje(
-    valor: number,
-    opciones: { conSigno?: boolean } = {}
-  ): string {
+  formatearPorcentaje(valor: number, opciones: { conSigno?: boolean } = {}): string {
     const formatter = new Intl.NumberFormat('es-CL', {
       style: 'percent',
       maximumFractionDigits: 0,
@@ -589,29 +556,6 @@ export default class Portada implements OnInit, AfterViewInit {
       return 0;
     }
     return (stats.hitosCerrados / total) * 100;
-  }
-
-  crearProyecto() {
-    const enterAnimationDuration = '250ms';
-    const exitAnimationDuration = '250ms';
-    const dialogConfig = {
-      maxWidth: '98vw',
-      maxHeight: '98vh',
-      height: '95%',
-      width: '80%',
-      position: { top: '2%' },
-      enterAnimationDuration,
-      exitAnimationDuration,
-      panelClass: 'full-screen-modal',
-
-      data: {},
-    };
-    this.dialog
-      .open(AgregaNotaVentaComponente, dialogConfig)
-      .afterClosed()
-      .subscribe((data) => {
-        console.log('Dialog output3333:', data);
-      });
   }
 
   registrarAvance(): void {
@@ -695,7 +639,7 @@ export default class Portada implements OnInit, AfterViewInit {
       12,
       0,
       0,
-      0
+      0,
     );
   }
 
@@ -717,12 +661,10 @@ export default class Portada implements OnInit, AfterViewInit {
     canvas.height = rect.height * dpr;
     ctx.scale(dpr, dpr);
 
-    const puntos: Array<{ etiqueta: string; valor: number }> = data.labels.map(
-      (label, index) => ({
-        etiqueta: label,
-        valor: dataset.data[index] ?? 0,
-      })
-    );
+    const puntos: Array<{ etiqueta: string; valor: number }> = data.labels.map((label, index) => ({
+      etiqueta: label,
+      valor: dataset.data[index] ?? 0,
+    }));
 
     if (!puntos.length) {
       ctx.clearRect(0, 0, rect.width, rect.height);
@@ -780,13 +722,7 @@ export default class Portada implements OnInit, AfterViewInit {
     if (!data.labels.length || !data.datasets.length) return;
 
     const dataset = data.datasets[0];
-    const coloresDefault = [
-      '#1976d2',
-      '#64b5f6',
-      '#2e7d32',
-      '#fb8c00',
-      '#c62828',
-    ];
+    const coloresDefault = ['#1976d2', '#64b5f6', '#2e7d32', '#fb8c00', '#c62828'];
     const canvas = this.pieChartCanvas.nativeElement;
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
@@ -804,9 +740,7 @@ export default class Portada implements OnInit, AfterViewInit {
     }> = data.labels.map((label, index) => ({
       etiqueta: this.extraerSiglaEstado(label),
       valor: dataset.data[index] ?? 0,
-      color:
-        dataset.backgroundColor?.[index] ??
-        coloresDefault[index % coloresDefault.length],
+      color: dataset.backgroundColor?.[index] ?? coloresDefault[index % coloresDefault.length],
     }));
 
     if (!segmentos.length) {
@@ -828,13 +762,7 @@ export default class Portada implements OnInit, AfterViewInit {
 
       ctx.beginPath();
       ctx.moveTo(centerX, centerY);
-      ctx.arc(
-        centerX,
-        centerY,
-        radius,
-        currentAngle,
-        currentAngle + sliceAngle
-      );
+      ctx.arc(centerX, centerY, radius, currentAngle, currentAngle + sliceAngle);
       ctx.closePath();
       ctx.fillStyle = segmento.color;
       ctx.fill();
@@ -860,8 +788,7 @@ export default class Portada implements OnInit, AfterViewInit {
       ctx.font = 'bold 11px "Roboto", sans-serif';
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
-      const porcentaje =
-        total > 0 ? Math.round((segmento.valor / total) * 100) : 0;
+      const porcentaje = total > 0 ? Math.round((segmento.valor / total) * 100) : 0;
       ctx.fillText(`${porcentaje}%`, labelX, labelY);
 
       currentAngle += sliceAngle;
@@ -914,10 +841,7 @@ export default class Portada implements OnInit, AfterViewInit {
     const areaHeight = rect.height - paddingY * 2;
     const gap = 18;
     const totalGap = gap * Math.max(filas.length - 1, 0);
-    const barHeight = Math.max(
-      12,
-      (areaHeight - totalGap) / Math.max(filas.length, 1)
-    );
+    const barHeight = Math.max(12, (areaHeight - totalGap) / Math.max(filas.length, 1));
     const maxValor = Math.max(...filas.map((item) => item.valor), 1);
 
     ctx.clearRect(0, 0, rect.width, rect.height);
@@ -927,10 +851,7 @@ export default class Portada implements OnInit, AfterViewInit {
 
     filas.forEach((fila, index) => {
       const y = paddingY + index * (barHeight + gap) + barHeight / 2;
-      const longitud = Math.max(
-        (fila.valor / maxValor) * areaWidth,
-        fila.valor > 0 ? 6 : 2
-      );
+      const longitud = Math.max((fila.valor / maxValor) * areaWidth, fila.valor > 0 ? 6 : 2);
 
       const barX = paddingX;
       const barY = y - barHeight / 2;
@@ -941,7 +862,7 @@ export default class Portada implements OnInit, AfterViewInit {
           y: number,
           width: number,
           height: number,
-          radii?: number | DOMPointInit | DOMPointInit[]
+          radii?: number | DOMPointInit | DOMPointInit[],
         ) => void;
       };
 

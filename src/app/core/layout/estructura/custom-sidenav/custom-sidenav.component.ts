@@ -1,4 +1,4 @@
-import { Component, computed, inject, input, signal } from '@angular/core';
+import { Component, computed, inject, input, signal, WritableSignal } from '@angular/core';
 
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
@@ -9,8 +9,8 @@ import { MenuItemComponent } from './menu-item/menu-item.component';
 import SidenavHeaderComponent from './sidenav-header/sidenav-header.component';
 import { StorageService } from '@core/guards/storage.service';
 
-import { MenuItemData } from './menu-items';
-import { loginInterface } from '@core/auth/loginInterface';
+import { loginInterface, menuItems as defaultMenuItems } from '@core/auth/loginInterface';
+import { MenuItem } from './menu-items';
 
 //import { AppStore } from '../../../app.store';
 
@@ -19,7 +19,7 @@ import { loginInterface } from '@core/auth/loginInterface';
   template: `
     <app-sidenav-header [collapsed]="collapsed()" />
     <mat-nav-list class="[--mat-list-active-indicator-shape:0px] mb-6">
-      @for (item of menuItems(); track item.despliegaNombre) {
+      @for (item of menuItems(); track item.id) {
         <app-menu-item [item]="item" [collapsed]="collapsed()" />
       }
     </mat-nav-list>
@@ -48,41 +48,27 @@ export class CustomSidenavComponent {
   _storage = signal(this.#storage.get<loginInterface>('sesion'));
   collapsed = input<boolean>(false);
 
-  //menuItems = this._storage()?.menuItem;
-  menuItems = computed(
-    () =>
-      this.filtrarMenu(
-        this._storage()?.menuItem || [],
-        this._storage()?.menuUsuario!,
-      ) || [],
-  );
+  menuItems = computed(() => {
+    const storedData = this._storage();
+    const items = storedData?.user?.MenuItem || defaultMenuItems;
+    return this.convertToMenuItems(items);
+  });
 
-  filtrarMenu(menu: MenuItemData[], rutasPermitidas: number[]): MenuItemData[] {
-    return menu
-      .map((item) => {
-        // Si el elemento tiene subItems, se mapea para filtrar sus subItems
+  private convertToMenuItems(items: any[]): MenuItem[] {
+    return items.map((item, index) => ({
+      id: Number(item._id) || index,
+      iconoNombre: item.iconoNombre,
+      despliegaNombre: item.despliegaNombre,
+      route: item.route,
+      tipoPermiso: item.tipoPermiso,
+      subItems: item.children ? this.convertToMenuItems(item.children) : [],
+      indeterminate: signal(item.indeterminate || false),
+      seleccionado: signal(item.seleccionado || false),
+    }));
+  }
 
-        // Si el elemento no tiene subItems, se verifica directamente su ruta
-        if (rutasPermitidas.includes(item.id)) {
-          return item;
-        }
-        if (item.subItems) {
-          const subItemsFiltrados = item.subItems.filter((subItem) =>
-            rutasPermitidas.includes(subItem.id),
-          );
-
-          // Si el elemento tiene subItems permitidos, se devuelve el objeto completo
-          // con los subItems filtrados.
-          if (subItemsFiltrados.length > 0) {
-            return { ...item, subItems: subItemsFiltrados };
-          }
-          // Si no hay subItems permitidos, se retorna `null` o `undefined`
-          return null;
-        }
-        // Si no cumple ninguna condición, se retorna `null` o `undefined`
-        return null;
-      })
-      .filter((item) => item !== null) as MenuItemData[]; // Finalmente, se eliminan los elementos nulos
+  filtrarMenu(menu: MenuItem[], rutasPermitidas: number[]): MenuItem[] {
+    return menu.filter((item) => rutasPermitidas.includes(item.id));
   }
 
   constructor() {}

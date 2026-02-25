@@ -10,17 +10,11 @@ import { AuthTokenService } from '../../core/services/auth-token.service';
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [
-    DatePipe,
-    MatCardModule,
-    MatIconModule,
-    MatButtonModule,
-    MatChipsModule,
-  ],
+  imports: [DatePipe, MatCardModule, MatIconModule, MatButtonModule, MatChipsModule],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss',
 })
-export class DashboardComponent implements OnInit {
+export default class DashboardComponent implements OnInit {
   private readonly _authToken = inject(AuthTokenService);
 
   now = Date.now();

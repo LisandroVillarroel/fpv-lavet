@@ -12,13 +12,7 @@ import { loginInterface } from '@core/auth/loginInterface';
 
 @Component({
   selector: 'app-sidenav-header',
-  imports: [
-    MatButtonModule,
-    MatMenuModule,
-    MatIconModule,
-    RouterLink,
-    NgOptimizedImage,
-  ],
+  imports: [MatButtonModule, MatMenuModule, MatIconModule, RouterLink, NgOptimizedImage],
   template: `
     <div class="pt-6 flex flex-col items-center text-center">
       <div
@@ -28,42 +22,26 @@ import { loginInterface } from '@core/auth/loginInterface';
       >
         <img
           class="avatar-img pr-4"
-          [ngSrc]="'imagenUsuario()'"
+          [ngSrc]="imagenUsuario()"
           fill
           priority
           decoding="async"
-          alt="Foto de usuario"
+          alt="Foto usuariooo"
         />
       </div>
       <div class="justificar">
-        <div
-          class="text-center mb-2 h-[3rem] {{
-            collapsed() ? 'h-0! opacity-0' : ''
-          }}"
-        >
+        <div class="text-center mb-2 h-[3rem] {{ collapsed() ? 'h-0! opacity-0' : '' }}">
           <h2>
-            {{
-              _storage()?.usuarioLogin?.nombres +
-                ' ' +
-                _storage()?.usuarioLogin?.apellidoPaterno
-            }}
+            {{ _storage()?.user?.nombres + ' ' + _storage()?.user?.apellidoPaterno }}
           </h2>
-          <p>{{ _storage()?.usuarioLogin?.cargo }}</p>
+          <p>{{ _storage()?.user?.veterinaria?.rolVeterinario }}</p>
         </div>
-        <button
-          class="padingLateral v-align-middle"
-          mat-icon-button
-          [matMenuTriggerFor]="menu"
-        >
+        <button class="padingLateral v-align-middle" mat-icon-button [matMenuTriggerFor]="menu">
           <mat-icon>expand_more</mat-icon>
         </button>
         <mat-menu #menu="matMenu">
-          <button mat-menu-item routerLink="/datoPersonal/datosPersonales">
-            Datos Personales
-          </button>
-          <button mat-menu-item routerLink="/datoPersonal/cambioContrasena">
-            Contraseña
-          </button>
+          <button mat-menu-item routerLink="/datoPersonal/datosPersonales">Datos Personales</button>
+          <button mat-menu-item routerLink="/datoPersonal/cambioContrasena">Contraseña</button>
         </mat-menu>
       </div>
     </div>
@@ -109,8 +87,9 @@ export default class SidenavHeaderComponent {
 
   //appStore = inject(AppStore);
   readonly #storage = inject(StorageService);
-  _storage = signal(this.#storage.get<loginInterface>('sesion'));
+  _storage = signal(this.#storage.get<loginInterface>('fpi-lavet/session'));
   profilePicSize = computed(() => (this.collapsed() ? 32 : 100));
+  imagenUsuario = signal('./person-placeholder.png');
   /*imagenUsuario = signal(
     this._storage()?.usuarioLogin.nombreFoto != ''
       ? environment.apiUrlImagenes +
