@@ -5,10 +5,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { RouterLink } from '@angular/router';
 import { StorageService } from '@core/guards/storage.service';
-import { environment } from '@envs/environment';
 import { loginInterface } from '@core/auth/loginInterface';
-
-//import { AppStore } from '../../../../app.store';
 
 @Component({
   selector: 'app-sidenav-header',
@@ -16,7 +13,7 @@ import { loginInterface } from '@core/auth/loginInterface';
   template: `
     <div class="pt-6 flex flex-col items-center text-center">
       <div
-        class="mb-3 avatar-wrapper"
+        class="mb-1 mt-1 avatar-wrapper"
         [style.width.px]="profilePicSize()"
         [style.height.px]="profilePicSize()"
       >
@@ -30,19 +27,33 @@ import { loginInterface } from '@core/auth/loginInterface';
         />
       </div>
       <div class="justificar">
-        <div class="text-center mb-2 h-[3rem] {{ collapsed() ? 'h-0! opacity-0' : '' }}">
-          <h2>
+        <div class="text-center h-[3rem] {{ collapsed() ? 32 : 100 }}">
+          <button
+            class=" mb-0"
+            matButton
+            [matMenuTriggerFor]="menu"
+            [style.fontSize]="
+              collapsed() ? 'clamp(0.6rem, 2vw, 0.0rem)' : 'clamp(0.7rem, 2vw, 0.1rem)'
+            "
+          >
             {{ _storage()?.user?.nombres + ' ' + _storage()?.user?.apellidoPaterno }}
-          </h2>
-          <p>{{ _storage()?.user?.veterinaria?.rolVeterinario }}</p>
+          </button>
+          <mat-menu #menu="matMenu">
+            <button mat-menu-item routerLink="/datoPersonal/datosPersonales">
+              Datos Personales
+            </button>
+            <button mat-menu-item routerLink="/datoPersonal/cambioContrasena">Contraseña</button>
+          </mat-menu>
+
+          <p
+            [style.fontSize]="
+              collapsed() ? 'clamp(0.6rem, 2vw, 0.0rem)' : 'clamp(0.7rem, 2vw, 0.1rem)'
+            "
+            [style.marginTop.rem]="collapsed() ? 0.5 : 0.1"
+          >
+            {{ _storage()?.user?.veterinaria?.rolVeterinario + 'Veterinario' }}
+          </p>
         </div>
-        <button class="padingLateral v-align-middle" mat-icon-button [matMenuTriggerFor]="menu">
-          <mat-icon>expand_more</mat-icon>
-        </button>
-        <mat-menu #menu="matMenu">
-          <button mat-menu-item routerLink="/datoPersonal/datosPersonales">Datos Personales</button>
-          <button mat-menu-item routerLink="/datoPersonal/cambioContrasena">Contraseña</button>
-        </mat-menu>
       </div>
     </div>
   `,
@@ -57,6 +68,15 @@ import { loginInterface } from '@core/auth/loginInterface';
     }
     p {
       font-size: 12px;
+      margin-bottom: 0;
+    }
+
+    .fontNombre {
+      font-size: clamp(0.7rem, 2vw, 0.1rem);
+    }
+
+    .mat-mdc-button {
+      height: 0;
     }
 
     .justificar {
@@ -72,7 +92,6 @@ import { loginInterface } from '@core/auth/loginInterface';
       border-radius: 9999px;
       overflow: hidden;
       margin: 0 auto;
-      margin-right: 100px;
     }
 
     .avatar-img {

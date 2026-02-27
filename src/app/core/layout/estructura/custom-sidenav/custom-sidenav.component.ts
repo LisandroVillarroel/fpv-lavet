@@ -1,4 +1,4 @@
-import { Component, computed, inject, input, signal, WritableSignal } from '@angular/core';
+import { Component, computed, inject, input, signal } from '@angular/core';
 
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
@@ -9,8 +9,8 @@ import { MenuItemComponent } from './menu-item/menu-item.component';
 import SidenavHeaderComponent from './sidenav-header/sidenav-header.component';
 import { StorageService } from '@core/guards/storage.service';
 
-import { loginInterface, menuItems as defaultMenuItems } from '@core/auth/loginInterface';
-import { MenuItem } from './menu-items';
+import { loginInterface } from '@core/auth/loginInterface';
+import { MenuItem, menuItems } from './menu-items';
 
 //import { AppStore } from '../../../app.store';
 
@@ -19,7 +19,7 @@ import { MenuItem } from './menu-items';
   template: `
     <app-sidenav-header [collapsed]="collapsed()" />
     <mat-nav-list class="[--mat-list-active-indicator-shape:0px] mb-6">
-      @for (item of menuItems(); track item.id) {
+      @for (item of menuItems(); track item._id) {
         <app-menu-item [item]="item" [collapsed]="collapsed()" />
       }
     </mat-nav-list>
@@ -50,25 +50,25 @@ export class CustomSidenavComponent {
 
   menuItems = computed(() => {
     const storedData = this._storage();
-    const items = storedData?.user?.MenuItem || defaultMenuItems;
+    const items = storedData?.user?.MenuItem || menuItems;
     return this.convertToMenuItems(items);
   });
 
-  private convertToMenuItems(items: any[]): MenuItem[] {
-    return items.map((item, index) => ({
-      id: Number(item._id) || index,
+  private convertToMenuItems(items: MenuItem[]): MenuItem[] {
+    return items.map((item) => ({
+      _id: item._id,
       iconoNombre: item.iconoNombre,
       despliegaNombre: item.despliegaNombre,
       route: item.route,
       tipoPermiso: item.tipoPermiso,
-      subItems: item.children ? this.convertToMenuItems(item.children) : [],
-      indeterminate: signal(item.indeterminate || false),
-      seleccionado: signal(item.seleccionado || false),
+      children: item.children ? this.convertToMenuItems(item.children) : [],
+      indeterminate: item.indeterminate || false,
+      seleccionado: item.seleccionado || false,
     }));
   }
 
-  filtrarMenu(menu: MenuItem[], rutasPermitidas: number[]): MenuItem[] {
-    return menu.filter((item) => rutasPermitidas.includes(item.id));
+  filtrarMenu(menu: MenuItem[], rutasPermitidas: string[]): MenuItem[] {
+    return menu.filter((item) => item._id && rutasPermitidas.includes(item._id));
   }
 
   constructor() {}

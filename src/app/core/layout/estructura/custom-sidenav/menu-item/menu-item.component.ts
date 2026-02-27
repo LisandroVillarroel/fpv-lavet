@@ -18,16 +18,20 @@ import { MenuItem } from '../menu-items';
       #rla="routerLinkActive"
       [activated]="rla.isActive"
     >
-      <mat-icon
-        [fontSet]="rla.isActive ? 'material-icons' : 'another-font-set'"
-        class="material-icons-outlined"
+      <img
+        [src]="'/imagenes/iconosMenu/' + item().iconoNombre + '.png'"
+        [alt]="item().despliegaNombre"
+        class="w-6 h-6 object-contain"
+        [class.opacity-100]="rla.isActive"
+        [class.opacity-60]="!rla.isActive"
+        [style.filter]="rla.isActive ? 'brightness(1.2)' : 'brightness(1)'"
         matListItemIcon
-        >{{ item().iconoNombre }}</mat-icon
-      >
+      />
+
       @if (!collapsed()) {
         <span matListItemTitle>{{ item().despliegaNombre }}</span>
       }
-      @if (item().subItems?.length !== 0 && item().subItems != undefined) {
+      @if (item().children?.length !== 0 && item().children != undefined) {
         <span matListItemMeta>
           @if (nestedItemOpen()) {
             <mat-icon>expand_less</mat-icon>
@@ -39,7 +43,7 @@ import { MenuItem } from '../menu-items';
     </a>
     @if (nestedItemOpen()) {
       <div @expandContractMenu>
-        @for (subItem of item().subItems; track subItem.route) {
+        @for (subItem of item().children; track subItem.route) {
           <app-menu-item
             [item]="subItem"
             [routeHistory]="routeHistory() + '/' + item().route"
@@ -51,9 +55,18 @@ import { MenuItem } from '../menu-items';
   `,
   styles: `
     :host * {
-      transition-property: margin-inline-start, opacity, height;
+      transition-property: margin-inline-start, opacity, height, filter;
       transition-duration: 500ms;
       transition-timing-function: ease-in-out;
+    }
+
+    img[matListItemIcon] {
+      opacity: 0.6;
+    }
+
+    a[routerLinkActive] img[matListItemIcon] {
+      opacity: 1;
+      filter: brightness(1.3);
     }
   `,
   animations: [

@@ -1,54 +1,77 @@
-import { signal, WritableSignal } from '@angular/core';
-// Hay dos porque indeterminate y seleccionado deben estar con signal para poder cambiar los seleccionados
 export interface MenuItem {
-  id: number;
-  iconoNombre: string;
+  _id?: string;
   despliegaNombre: string;
+  iconoNombre: string;
   route?: string;
   tipoPermiso?: string;
-  subItems?: MenuItem[];
-  indeterminate: WritableSignal<boolean>;
-  seleccionado: WritableSignal<boolean>;
+  indeterminate?: boolean;
+  seleccionado?: boolean;
+  children?: MenuItem[];
 }
 
-/*
 export const menuItems: MenuItem[] = [
   {
-    iconoNombre: 'dashboard',
+    _id: '1',
+    iconoNombre: 'portada',
     despliegaNombre: 'Portada',
     route: 'portada',
+    tipoPermiso: '',
+    seleccionado: false,
+    children: [],
   },
   {
-    iconoNombre: 'emoji_objects',
+    _id: '2',
+    iconoNombre: 'proyecto',
     despliegaNombre: 'Proyectos',
     route: 'proyectos',
+    tipoPermiso: '',
+    seleccionado: false,
+    children: [],
   },
   {
-    iconoNombre: 'folder_open',
+    _id: '3',
+    iconoNombre: 'ficha',
     despliegaNombre: 'Fichas',
     route: 'fichas',
+    tipoPermiso: '',
+    seleccionado: false,
+    children: [],
   },
   {
+    _id: '4',
     iconoNombre: 'format_list_bulleted',
     despliegaNombre: 'Mantenedores',
     route: 'mantenedores',
-    subItems: [
+    tipoPermiso: '',
+    seleccionado: false,
+    children: [
       {
-        iconoNombre: 'group',
+        _id: '4-1',
+        iconoNombre: 'usuario',
         despliegaNombre: 'Usuarios',
         route: 'usuarios',
+        tipoPermiso: '',
+        seleccionado: false,
+        children: [],
       },
       {
-        iconoNombre: 'rule_settings',
+        _id: '4-2',
+        iconoNombre: 'estado',
         despliegaNombre: 'Estados',
         route: 'estados',
+        tipoPermiso: '',
+        seleccionado: false,
+        children: [],
       },
       {
-        iconoNombre: 'handshake',
+        _id: '4-3',
+        iconoNombre: 'cliente',
         despliegaNombre: 'Clientes',
         route: 'cliente',
+        tipoPermiso: '',
+        seleccionado: false,
+        children: [],
       },
     ],
   },
 ];
-*/
