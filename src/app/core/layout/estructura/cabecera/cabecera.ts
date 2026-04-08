@@ -1,4 +1,5 @@
 import { Component, effect, inject, model, signal } from '@angular/core';
+import { AuthTokenService } from '@core/services/auth-token.service';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { MatToolbar } from '@angular/material/toolbar';
@@ -35,6 +36,7 @@ export class Cabecera {
   /// appStore = inject(AppStore);
   readonly #router = inject(Router);
   readonly #storage = inject(StorageService);
+  readonly #authToken = inject(AuthTokenService);
 
   collapsed = model.required<boolean>();
 
@@ -44,8 +46,12 @@ export class Cabecera {
   });
 
   logout() {
-    console.log('logout');
-    this.#storage.remueve('sesion');
-    this.#router.navigate(['/login']);
+    // Limpia todas las sesiones relevantes
+    this.#storage.remueve('fpv-lavet/session');
+    this.#storage.remueve('fpi-lavet/session');
+    this.#storage.remueve('sesion'); // Por compatibilidad
+    localStorage.removeItem('fpv-lavet/token');
+    // Redirige al login de fpi-lavet
+    this.#authToken.redirectToPortal();
   }
 }

@@ -10,7 +10,7 @@ import SidenavHeaderComponent from './sidenav-header/sidenav-header.component';
 import { StorageService } from '@core/guards/storage.service';
 
 import { loginInterface } from '@core/auth/loginInterface';
-import { MenuItem, menuItems } from './menu-items';
+import { MenuItem } from './menu-items';
 
 //import { AppStore } from '../../../app.store';
 
@@ -50,7 +50,7 @@ export class CustomSidenavComponent {
 
   menuItems = computed(() => {
     const storedData = this._storage();
-    const items = storedData?.user?.MenuItem || menuItems;
+    const items = storedData?.user?.MenuItem || [];
     return this.convertToMenuItems(items);
   });
 

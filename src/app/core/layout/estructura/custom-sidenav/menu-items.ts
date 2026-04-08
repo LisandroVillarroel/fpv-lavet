@@ -8,7 +8,7 @@ export interface MenuItem {
   seleccionado?: boolean;
   children?: MenuItem[];
 }
-
+/*
 export const menuItems: MenuItem[] = [
   {
     _id: '1',
@@ -39,7 +39,7 @@ export const menuItems: MenuItem[] = [
   },
   {
     _id: '4',
-    iconoNombre: 'format_list_bulleted',
+    iconoNombre: 'usuario',
     despliegaNombre: 'Mantenedores',
     route: 'mantenedores',
     tipoPermiso: '',
@@ -75,3 +75,4 @@ export const menuItems: MenuItem[] = [
     ],
   },
 ];
+*/

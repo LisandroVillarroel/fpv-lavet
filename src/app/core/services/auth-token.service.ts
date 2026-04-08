@@ -5,8 +5,7 @@ import { DOCUMENT } from '@angular/common';
 
 import { environment } from '../../../environments/environment';
 
-const TOKEN_KEY = 'fpv-lavet/token';
-const SESSION_KEY = 'fpi-lavet/session'; // Llave compartida del login
+const SESSION_KEY = 'sesion-lavet'; // Llave única y compartida para la sesión
 
 interface AuthSession {
   user: any;
@@ -25,7 +24,6 @@ export class AuthTokenService {
   private readonly _isBrowser = isPlatformBrowser(this._platformId);
 
   private readonly _token = signal<string | null>(this.restoreToken());
-
   readonly token = this._token.asReadonly();
 
   initializeFromRoute(): void {
@@ -51,14 +49,65 @@ export class AuthTokenService {
     }
   }
 
+  /**
+   * Elimina completamente la sesión del storage (logout seguro)
+   */
   clear(): void {
     this._token.set(null);
-    this.storage?.removeItem(TOKEN_KEY);
+    this.storage?.removeItem(SESSION_KEY);
   }
 
-  private persistToken(token: string): void {
+  /**
+   * Persiste el token y el usuario autenticado en localStorage de forma segura.
+   * @param token Token de acceso JWT
+   * @param user  Usuario autenticado (sin datos sensibles)
+   */
+  persistToken(token: string, user?: any): void {
     this._token.set(token);
-    this.storage?.setItem(TOKEN_KEY, token);
+    // Solo guarda datos públicos del usuario
+    const safeUser = user ? this.sanitizeUser(user) : null;
+    const session = { user: safeUser, tokens: { accessToken: token } };
+    this.storage?.setItem(SESSION_KEY, JSON.stringify(session));
+  }
+
+  /**
+   * Elimina campos sensibles del usuario antes de guardar en storage
+   */
+  private sanitizeUser(user: any): any {
+    if (!user) return null;
+    // Copia solo los campos públicos necesarios
+    const {
+      _id,
+      usuario,
+      rutUsuario,
+      nombres,
+      apellidoPaterno,
+      apellidoMaterno,
+      telefono,
+      email,
+      direccion,
+      usuarioEntidad,
+      tipoUsuario,
+      MenuItem,
+      estadoUsuario,
+      estado,
+    } = user;
+    return {
+      _id,
+      usuario,
+      rutUsuario,
+      nombres,
+      apellidoPaterno,
+      apellidoMaterno,
+      telefono,
+      email,
+      direccion,
+      usuarioEntidad,
+      tipoUsuario,
+      MenuItem,
+      estadoUsuario,
+      estado,
+    };
   }
 
   private restoreToken(): string | null {
@@ -66,29 +115,20 @@ export class AuthTokenService {
       return null;
     }
 
-    // Primero intenta leer de la sesión compartida
+    // Lee el token de la sesión compartida
     const sharedSession = this.getSharedSession();
     if (sharedSession?.tokens?.accessToken) {
-      // Guarda en localStorage para uso futuro
-      this.storage?.setItem(TOKEN_KEY, sharedSession.tokens.accessToken);
       return sharedSession.tokens.accessToken;
-    }
-
-    // Intenta leer del storage local
-    const storedToken = this.storage?.getItem(TOKEN_KEY);
-    if (storedToken) {
-      return storedToken;
     }
 
     // Como último recurso, intenta leer de los query params (para primera carga)
     if (this._isBrowser && this._document.defaultView?.location) {
-      const urlParams = new URLSearchParams(
-        this._document.defaultView.location.search
-      );
+      const urlParams = new URLSearchParams(this._document.defaultView.location.search);
       const tokenFromUrl = urlParams.get('token');
       if (tokenFromUrl) {
-        // Guarda en localStorage para uso futuro
-        this.storage?.setItem(TOKEN_KEY, tokenFromUrl);
+        // Crea una sesión nueva solo con el token
+        const session = { user: null, tokens: { accessToken: tokenFromUrl } };
+        this.storage?.setItem(SESSION_KEY, JSON.stringify(session));
         return tokenFromUrl;
       }
     }
@@ -96,11 +136,10 @@ export class AuthTokenService {
     return null;
   }
 
-  private getSharedSession(): AuthSession | null {
+  getSharedSession(): AuthSession | null {
     if (!this._isBrowser) {
       return null;
     }
-
     const sessionData = this.storage?.getItem(SESSION_KEY);
     if (!sessionData) {
       return null;
