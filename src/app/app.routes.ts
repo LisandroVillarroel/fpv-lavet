@@ -12,14 +12,13 @@ export const routes: Routes = [
   {
     path: '',
     loadComponent: () => import('@core/layout/estructura/principal/principal'),
-    //  canActivate: [privadoGuard()],
+    canActivate: [authGuard],
     children: [
       {
         path: 'dashboard',
         loadComponent: () => import('@features/dashboard/dashboard.component'),
       },
     ],
-    //loadComponent: () => import('./componentes/portada/portada.component'),
   },
 
   /*{

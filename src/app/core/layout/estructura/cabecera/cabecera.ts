@@ -34,7 +34,6 @@ import { StorageService } from '@core/guards/storage.service';
 })
 export class Cabecera {
   /// appStore = inject(AppStore);
-  readonly #router = inject(Router);
   readonly #storage = inject(StorageService);
   readonly #authToken = inject(AuthTokenService);
 
@@ -47,9 +46,7 @@ export class Cabecera {
 
   logout() {
     // Limpia todas las sesiones relevantes
-    this.#storage.remueve('fpv-lavet/session');
-    this.#storage.remueve('fpi-lavet/session');
-    this.#storage.remueve('sesion'); // Por compatibilidad
+    this.#storage.remueve('sesion-lavet');
     localStorage.removeItem('fpv-lavet/token');
     // Redirige al login de fpi-lavet
     this.#authToken.redirectToPortal();
