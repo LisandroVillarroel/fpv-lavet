@@ -65,9 +65,13 @@ export class AuthTokenService {
   persistToken(token: string, user?: any): void {
     this._token.set(token);
     // Solo guarda datos públicos del usuario
+    console.log('Persistiendo token en storage con usuario:', user);
     const safeUser = user ? this.sanitizeUser(user) : null;
+    console.log('Usuario sanitizado para storage:', safeUser);
     const session = { user: safeUser, tokens: { accessToken: token } };
+    console.log('Sesión a guardar en storage:', session);
     this.storage?.setItem(SESSION_KEY, JSON.stringify(session));
+    console.log('Sesión guardada en storage:', this.getSharedSession());
   }
 
   /**
@@ -88,6 +92,7 @@ export class AuthTokenService {
       direccion,
       usuarioEntidad,
       tipoUsuario,
+      veterinaria,
       MenuItem,
       estadoUsuario,
       estado,
@@ -104,6 +109,7 @@ export class AuthTokenService {
       direccion,
       usuarioEntidad,
       tipoUsuario,
+      veterinaria,
       MenuItem,
       estadoUsuario,
       estado,

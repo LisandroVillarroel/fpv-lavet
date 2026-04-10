@@ -19,7 +19,7 @@ import { MenuItem } from './menu-items';
   template: `
     <app-sidenav-header [collapsed]="collapsed()" />
     <mat-nav-list class="[--mat-list-active-indicator-shape:0px] mb-6">
-      @for (item of menuItems(); track item._id) {
+      @for (item of menuItems(); track item._id ?? $index) {
         <app-menu-item [item]="item" [collapsed]="collapsed()" />
       }
     </mat-nav-list>
@@ -45,7 +45,7 @@ import { MenuItem } from './menu-items';
 export class CustomSidenavComponent {
   // appStore = inject(AppStore);
   readonly #storage = inject(StorageService);
-  _storage = signal(this.#storage.get<loginInterface>('sesion'));
+  _storage = signal(this.#storage.get<loginInterface>('sesion-lavet'));
   collapsed = input<boolean>(false);
 
   menuItems = computed(() => {

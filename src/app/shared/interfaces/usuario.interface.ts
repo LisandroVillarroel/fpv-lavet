@@ -31,11 +31,18 @@ export interface IUsuario {
   direccion?: string;
   usuarioEntidad?: IUsuarioEntidad;
   tipoUsuario?: 'Laboratorio' | 'Veterinaria' | 'Usuario';
+  veterinaria?: IVeterinaria;
   MenuItem?: MenuItem[];
   usuarioCrea_id?: string;
   usuarioModifica_id?: string;
   estadoUsuario?: 'Activo' | 'Inactivo';
   estado?: string;
+}
+
+export interface IVeterinaria {
+  tipoVeterinario: string; //(Dr. - Dra. - Tec.Vet., etc)
+  rolVeterinario: string; //(administrador-veterinario)
+  porcentajeComisionVeterinario: number;
 }
 
 export interface AuthTokens {

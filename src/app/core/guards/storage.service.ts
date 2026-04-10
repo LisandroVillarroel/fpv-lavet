@@ -25,7 +25,6 @@ export class StorageService {
   set(key: string, value: any): void {
     // if (this.chequeaPlataformaService.chequeaSiBrowser()) {
     let data = JSON.stringify(value);
-    console.log('environment.production:', environment.production);
     if (environment.production) {
       //   data = encrypt(data);
     }

@@ -51,7 +51,7 @@ import { loginInterface } from '@core/auth/loginInterface';
             "
             [style.marginTop.rem]="collapsed() ? 0.5 : 0.1"
           >
-            {{ _storage()?.user?.veterinaria?.rolVeterinario + 'Veterinario' }}
+            {{ _storage()?.user?.veterinaria?.rolVeterinario || 'Rol no definido' }}
           </p>
         </div>
       </div>
@@ -104,9 +104,21 @@ export default class SidenavHeaderComponent {
   collapsed = input(false);
   public marcaDeTiempo = Date.now();
 
-  //appStore = inject(AppStore);
   readonly #storage = inject(StorageService);
-  _storage = signal(this.#storage.get<loginInterface>('fpi-lavet/session'));
+  _storage = signal(
+    (() => {
+      const raw = this.#storage.get<loginInterface>('sesion-lavet');
+      if (typeof raw === 'string') {
+        try {
+          return JSON.parse(raw);
+        } catch {
+          return null;
+        }
+      }
+      return raw;
+    })(),
+  );
+
   profilePicSize = computed(() => (this.collapsed() ? 32 : 100));
   imagenUsuario = signal('./person-placeholder.png');
   /*imagenUsuario = signal(
