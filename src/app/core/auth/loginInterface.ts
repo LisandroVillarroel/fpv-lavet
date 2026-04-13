@@ -20,7 +20,7 @@ export interface loginInterface {
     MenuItem?: MenuItem[];
     tipoUsuario?: 'Laboratorio' | 'Veterinaria' | 'Propietario';
     veterinaria?: IVeterinaria;
-    usuarioEmpresa?: IUsuarioEmpresa;
+    empresa?: IUsuarioEmpresa;
     estadoUsuario?: 'Activo' | 'Bloqueado' | 'Suspendido';
     estado?: string;
     usuarioCrea_id?: string;
@@ -42,7 +42,6 @@ export interface IUsuarioEmpresa {
   rutEmpresa: string;
   razonSocial: string;
   nombreFantasia: string;
-  menu_Id: string;
   tipoEmpresa?: 'Laboratorio' | 'Veterinaria' | 'Usuario';
 }
 
