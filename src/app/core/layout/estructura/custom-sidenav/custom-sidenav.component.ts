@@ -10,7 +10,7 @@ import SidenavHeaderComponent from './sidenav-header/sidenav-header.component';
 import { StorageService } from '@core/guards/storage.service';
 
 import { loginInterface } from '@core/auth/loginInterface';
-import { MenuItem } from './menu-items';
+import { MenuItem } from '@shared/interfaces/usuario.interface';
 
 //import { AppStore } from '../../../app.store';
 

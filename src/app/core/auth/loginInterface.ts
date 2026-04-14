@@ -1,4 +1,4 @@
-import { MenuItem } from '@core/layout/estructura/custom-sidenav/menu-items';
+import { MenuItem } from '@shared/interfaces/usuario.interface';
 
 export interface autenticaInterface {
   usuario: string;

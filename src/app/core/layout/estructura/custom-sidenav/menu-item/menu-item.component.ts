@@ -3,7 +3,7 @@ import { RouterLinkActive, RouterModule } from '@angular/router';
 import { MatListModule } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon';
 import { trigger, transition, style, animate } from '@angular/animations';
-import { MenuItem } from '../menu-items';
+import { MenuItem } from '@shared/interfaces/usuario.interface';
 
 @Component({
   selector: 'app-menu-item',
