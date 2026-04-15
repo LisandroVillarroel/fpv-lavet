@@ -33,7 +33,7 @@ export class AuthTokenService {
 
     // Ya se inicializó el token en restoreToken() desde la URL
     // Solo necesitamos persistir si viene del sessionStorage compartido
-    const sharedSession = this.getSharedSession();
+    const sharedSession = this.getStorage();
     if (sharedSession?.tokens?.accessToken && !this._token()) {
       this.persistToken(sharedSession.tokens.accessToken);
     }
@@ -71,7 +71,7 @@ export class AuthTokenService {
     const session = { user: safeUser, tokens: { accessToken: token } };
     console.log('Sesión a guardar en storage:', session);
     this.storage?.setItem(SESSION_KEY, JSON.stringify(session));
-    console.log('Sesión guardada en storage:', this.getSharedSession());
+    console.log('Sesión guardada en storage:', this.getStorage());
   }
 
   /**
@@ -93,6 +93,7 @@ export class AuthTokenService {
       usuarioEntidad,
       tipoUsuario,
       veterinaria,
+      empresa,
       MenuItem,
       estadoUsuario,
       estado,
@@ -110,6 +111,7 @@ export class AuthTokenService {
       usuarioEntidad,
       tipoUsuario,
       veterinaria,
+      empresa,
       MenuItem,
       estadoUsuario,
       estado,
@@ -122,7 +124,7 @@ export class AuthTokenService {
     }
 
     // Lee el token de la sesión compartida
-    const sharedSession = this.getSharedSession();
+    const sharedSession = this.getStorage();
     if (sharedSession?.tokens?.accessToken) {
       return sharedSession.tokens.accessToken;
     }
@@ -142,7 +144,7 @@ export class AuthTokenService {
     return null;
   }
 
-  getSharedSession(): AuthSession | null {
+  getStorage(): AuthSession | null {
     if (!this._isBrowser) {
       return null;
     }

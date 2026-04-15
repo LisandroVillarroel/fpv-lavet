@@ -1,0 +1,76 @@
+<h2 mat-dialog-title>{{ modo === 'agregar' ? 'Agregar Usuario' : 'Editar Usuario' }}</h2>
+<form (ngSubmit)="guardar()" mat-dialog-content>
+  <mat-form-field appearance="outline" class="full-width">
+    <mat-label>Usuario</mat-label>
+    <input matInput [formField]="usuarioForm.usuario" placeholder="Usuario" title="Usuario" />
+  </mat-form-field>
+  <mat-form-field appearance="outline" class="full-width">
+    <mat-label>RUT</mat-label>
+    <input matInput [formField]="usuarioForm.rutUsuario" placeholder="RUT" title="RUT" />
+  </mat-form-field>
+  <mat-form-field appearance="outline" class="full-width">
+    <mat-label>Nombres</mat-label>
+    <input matInput [formField]="usuarioForm.nombres" placeholder="Nombres" title="Nombres" />
+  </mat-form-field>
+  <mat-form-field appearance="outline" class="full-width">
+    <mat-label>Apellido Paterno</mat-label>
+    <input
+      matInput
+      [formField]="usuarioForm.apellidoPaterno"
+      placeholder="Apellido Paterno"
+      title="Apellido Paterno"
+    />
+  </mat-form-field>
+  <mat-form-field appearance="outline" class="full-width">
+    <mat-label>Apellido Materno</mat-label>
+    <input
+      matInput
+      [formField]="usuarioForm.apellidoMaterno"
+      placeholder="Apellido Materno"
+      title="Apellido Materno"
+    />
+  </mat-form-field>
+  <mat-form-field appearance="outline" class="full-width">
+    <mat-label>Email</mat-label>
+    <input matInput [formField]="usuarioForm.email" placeholder="Email" title="Email" />
+    type="email" placeholder="Email" title="Email" />
+  </mat-form-field>
+  <mat-form-field appearance="outline" class="full-width">
+    <mat-label>Teléfono</mat-label>
+    <input matInput [formField]="usuarioForm.telefono" placeholder="Teléfono" title="Teléfono" />
+  </mat-form-field>
+  <mat-form-field appearance="outline" class="full-width">
+    <mat-label>Dirección</mat-label>
+    <input matInput [formField]="usuarioForm.direccion" placeholder="Dirección" title="Dirección" />
+  </mat-form-field>
+  <mat-form-field appearance="outline" class="full-width">
+    <mat-label>Región</mat-label>
+    <input matInput [formField]="usuarioForm.region" placeholder="Región" title="Región" />
+  </mat-form-field>
+  <mat-form-field appearance="outline" class="full-width">
+    <mat-label>Comuna</mat-label>
+    <input matInput [formField]="usuarioForm.comuna" placeholder="Comuna" title="Comuna" />
+  </mat-form-field>
+  <mat-form-field appearance="outline" class="full-width">
+    <mat-label>Tipo Usuario</mat-label>
+    <input
+      matInput
+      [formField]="usuarioForm.tipoUsuario"
+      placeholder="Tipo Usuario"
+      title="Tipo Usuario"
+    />
+  </mat-form-field>
+  <mat-form-field appearance="outline" class="full-width">
+    <mat-label>Estado</mat-label>
+    <mat-select [formField]="usuarioForm.estadoUsuario" placeholder="Estado" title="Estado">
+      <mat-option value="ACTIVO">ACTIVO</mat-option>
+      <mat-option value="INACTIVO">INACTIVO</mat-option>
+    </mat-select>
+  </mat-form-field>
+  <div class="actions">
+    <button mat-raised-button color="primary" type="submit" [disabled]="usuarioForm().invalid()">
+      Guardar
+    </button>
+    <button mat-button type="button" (click)="cancelar()">Cancelar</button>
+  </div>
+</form>

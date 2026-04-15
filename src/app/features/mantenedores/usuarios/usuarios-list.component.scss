@@ -1,0 +1,25 @@
+.usuarios-list-container {
+  padding: 24px;
+}
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+.search-field {
+  width: 300px;
+  margin-bottom: 16px;
+}
+.table-container {
+  position: relative;
+}
+mat-progress-spinner {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+table {
+  width: 100%;
+}

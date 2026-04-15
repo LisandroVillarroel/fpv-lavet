@@ -18,6 +18,10 @@ export const routes: Routes = [
         path: 'dashboard',
         loadComponent: () => import('@features/dashboard/dashboard.component'),
       },
+      {
+        path: 'mantenedores/usuarios',
+        loadComponent: () => import('./features/mantenedores/usuarios/usuarios-list.component'),
+      },
     ],
   },
 

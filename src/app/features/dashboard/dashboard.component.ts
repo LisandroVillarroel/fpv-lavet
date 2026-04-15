@@ -25,7 +25,7 @@ export default class DashboardComponent implements OnInit {
   ngOnInit(): void {
     this._authToken.initializeFromRoute();
     // Si hay token pero no user, obtener el usuario y persistirlo
-    const session = this._authToken.getSharedSession();
+    const session = this._authToken.getStorage();
     if (session?.tokens?.accessToken && !session.user) {
       this._userService
         .getProfile()

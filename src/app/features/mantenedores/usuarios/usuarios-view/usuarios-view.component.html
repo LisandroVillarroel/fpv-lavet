@@ -1,0 +1,17 @@
+<h2 mat-dialog-title>Consulta Usuario</h2>
+<div mat-dialog-content>
+  <mat-card>
+    <mat-card-title>{{ usuario()?.nombres }} {{ usuario()?.apellidoPaterno }}</mat-card-title>
+    <mat-card-content>
+      <p><strong>Usuario:</strong> {{ usuario()?.usuario }}</p>
+      <p><strong>RUT:</strong> {{ usuario()?.rutUsuario }}</p>
+      <p><strong>Email:</strong> {{ usuario()?.email }}</p>
+      <p><strong>Teléfono:</strong> {{ usuario()?.telefono }}</p>
+      <p><strong>Dirección:</strong> {{ usuario()?.direccion }}</p>
+      <p><strong>Región:</strong> {{ usuario()?.region }}</p>
+      <p><strong>Comuna:</strong> {{ usuario()?.comuna }}</p>
+      <p><strong>Cargo:</strong> {{ usuario()?.veterinaria?.tipoVeterinario }}</p>
+      <p><strong>Estado:</strong> {{ usuario()?.estadoUsuario }}</p>
+    </mat-card-content>
+  </mat-card>
+</div>

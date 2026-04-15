@@ -38,7 +38,7 @@ export interface respuesta {
 }
 
 export interface IUsuarioEmpresa {
-  Empresa_Id: string;
+  empresaId: string;
   rutEmpresa: string;
   razonSocial: string;
   nombreFantasia: string;

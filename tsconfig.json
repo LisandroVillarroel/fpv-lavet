@@ -8,6 +8,9 @@
       "@shared/*": [
         "src/app/shared/*"
       ],
+      "@ui/*": [
+        "src/app/shared/ui/*"
+      ],
       "@envs/*": [
         "src/environments/*"
       ],

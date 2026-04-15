@@ -9,12 +9,15 @@
 @use '@angular/material' as mat;
 
 html {
-  @include mat.theme((color: (primary: mat.$rose-palette,
-        tertiary: mat.$red-palette,
-      ),
-      typography: Roboto,
-      density: 0,
-    ));
+  @include mat.theme((
+    color: (
+      primary: mat.$cyan-palette,
+      accent: mat.$orange-palette,
+      warn: mat.$red-palette,
+    ),
+    typography: Roboto,
+    density: 0,
+  ));
 }
 
 /* Forzar visibilidad de mat-progress-bar en caso de temas personalizados */

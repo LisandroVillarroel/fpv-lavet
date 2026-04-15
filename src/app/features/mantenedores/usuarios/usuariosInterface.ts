@@ -1,0 +1,47 @@
+import { MenuItem } from '@shared/interfaces/usuario.interface';
+
+export interface IUsuario {
+  _id?: string;
+  usuario: string;
+  contrasena?: string;
+  rutUsuario: string;
+  nombres: string;
+  apellidoPaterno: string;
+  apellidoMaterno: string;
+  telefono: string;
+  email: string;
+  direccion: string;
+  region: string;
+  comuna: string;
+  MenuItem?: MenuItem[];
+  tipoUsuario: 'Laboratorio' | 'Veterinaria' | 'Propietario';
+  veterinaria?: IVeterinaria;
+  empresa?: IUsuarioEmpresa;
+  estadoUsuario: 'Activo' | 'Bloqueado' | 'Suspendido';
+  estado?: string;
+  usuarioCrea_id?: string;
+  fechaHora_Crea?: string;
+  usuarioModifica_id?: string;
+  fechaHora_Modifica?: string;
+}
+
+export interface respuesta {
+  error: string;
+  data: [];
+  codigo: number;
+  mensaje: string;
+}
+
+export interface IUsuarioEmpresa {
+  empresaId: string;
+  rutEmpresa: string;
+  razonSocial: string;
+  nombreFantasia: string;
+  tipoEmpresa?: 'Laboratorio' | 'Veterinaria' | 'Usuario';
+}
+
+export interface IVeterinaria {
+  tipoVeterinario: string; //(Dr. - Dra. - Tec.Vet., etc)
+  rolVeterinario: string; //(administrador-veterinario)
+  porcentajeComisionVeterinario: number;
+}

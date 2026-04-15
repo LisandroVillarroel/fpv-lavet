@@ -17,7 +17,7 @@ export class App {
   ngOnInit(): void {
     this.authToken.initializeFromRoute();
     setTimeout(() => {
-      const session = this.authToken.getSharedSession();
+      const session = this.authToken.getStorage();
       if (session?.tokens?.accessToken && !session.user) {
         this.userService
           .getProfile()
@@ -30,7 +30,7 @@ export class App {
               );
               this.authToken.persistToken(session.tokens.accessToken, user);
               // Log extra para verificar storage
-              const stored = this.authToken.getSharedSession();
+              const stored = this.authToken.getStorage();
             },
             error: (err) => {
               if (err?.status === 401) {
@@ -40,16 +40,16 @@ export class App {
                 console.error('[APP] Error al obtener usuario, pero se mantiene el token.', err);
               }
               // Log extra para verificar storage tras error
-              const stored = this.authToken.getSharedSession();
+              const stored = this.authToken.getStorage();
             },
           });
       } else if (!session?.tokens?.accessToken) {
         console.warn('[APP] No hay token en storage tras initializeFromRoute.');
         // Log extra para verificar storage vacío
-        const stored = this.authToken.getSharedSession();
+        const stored = this.authToken.getStorage();
       } else if (session.user) {
         // Log extra para verificar storage completo
-        const stored = this.authToken.getSharedSession();
+        const stored = this.authToken.getStorage();
       }
     }, 0);
   }
