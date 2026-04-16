@@ -6,6 +6,8 @@ import { MatToolbar } from '@angular/material/toolbar';
 import { MatMenuModule } from '@angular/material/menu';
 import { StorageService } from '@core/guards/storage.service';
 import { ThemeService } from '@core/services/theme.service';
+import { UserService } from '@core/services/user.service';
+import { take } from 'rxjs';
 
 ///import { AppStore } from '../../../app.store';
 
@@ -25,7 +27,7 @@ import { ThemeService } from '@core/services/theme.service';
 
         <div class="actions-container">
           <button mat-icon-button [matMenuTriggerFor]="themeMenu" matTooltip="Cambiar Tema">
-            <mat-icon [style.color]="activeThemeAccent()">palette</mat-icon>
+            <mat-icon [style.color]="activeThemeAccent()">tune</mat-icon>
           </button>
           <mat-menu #themeMenu="matMenu" xPosition="before" class="theme-menu-panel">
             @for (section of themeSections; track section.label) {
@@ -77,6 +79,7 @@ export class Cabecera {
   readonly #storage = inject(StorageService);
   readonly #authToken = inject(AuthTokenService);
   readonly #themeService = inject(ThemeService);
+  readonly #userService = inject(UserService);
   readonly currentTheme = this.#themeService.currentTheme;
   readonly themeSections = [
     {
@@ -142,6 +145,35 @@ export class Cabecera {
 
   setTheme(theme: string) {
     this.#themeService.setTheme(theme);
+
+    const session = this.#authToken.getStorage();
+    const userId = session?.user?._id;
+
+    if (!userId) {
+      return;
+    }
+
+    this.#authToken.updateStoredUser({ temaColorSistema: theme });
+
+    this.#userService
+      .updateThemeColor(userId, theme)
+      .pipe(take(1))
+      .subscribe({
+        next: (response) => {
+          if (response?.error) {
+            console.error('[CABECERA] API rechazo guardar temaColorSistema.', response);
+            return;
+          }
+
+          if (response?.data?.temaColorSistema) {
+            this.#authToken.updateStoredUser({ temaColorSistema: response.data.temaColorSistema });
+            this.#themeService.syncThemeFromSession(response.data.temaColorSistema);
+          }
+        },
+        error: (error) => {
+          console.error('[CABECERA] No se pudo guardar temaColorSistema.', error);
+        },
+      });
   }
 
   logout() {

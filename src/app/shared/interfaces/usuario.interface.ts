@@ -22,6 +22,7 @@ export interface IUsuario {
   _id?: string;
   usuario?: string;
   contrasena?: string;
+  temaColorSistema?: string;
   rutUsuario: string;
   nombres: string;
   apellidoPaterno: string;

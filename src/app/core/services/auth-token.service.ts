@@ -83,6 +83,7 @@ export class AuthTokenService {
     const {
       _id,
       usuario,
+      temaColorSistema,
       rutUsuario,
       nombres,
       apellidoPaterno,
@@ -101,6 +102,7 @@ export class AuthTokenService {
     return {
       _id,
       usuario,
+      temaColorSistema,
       rutUsuario,
       nombres,
       apellidoPaterno,
@@ -116,6 +118,23 @@ export class AuthTokenService {
       estadoUsuario,
       estado,
     };
+  }
+
+  updateStoredUser(patch: Record<string, unknown>): void {
+    const session = this.getStorage();
+    if (!session?.user) {
+      return;
+    }
+
+    const updatedSession = {
+      ...session,
+      user: {
+        ...session.user,
+        ...patch,
+      },
+    };
+
+    this.storage?.setItem(SESSION_KEY, JSON.stringify(updatedSession));
   }
 
   private restoreToken(): string | null {

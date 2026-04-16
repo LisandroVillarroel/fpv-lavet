@@ -49,40 +49,46 @@ mat-toolbar {
 
   ::ng-deep .theme-menu-panel {
     .mat-mdc-menu-content {
-      padding: 6px;
+      padding: 4px;
       background: var(--mat-sys-surface-container-high);
-      border-radius: 16px;
+      border-radius: 14px;
     }
   }
 
   .theme-section-label {
-    padding: 6px 8px 3px;
-    font-size: 0.64rem;
-    font-weight: 700;
-    letter-spacing: 0.05em;
+    padding: 5px 8px 2px;
+    font-size: 0.54rem;
+    font-weight: 500;
+    letter-spacing: 0.07em;
     text-transform: uppercase;
     color: var(--mat-sys-on-surface-variant);
+    opacity: 0.8;
   }
 
   ::ng-deep .theme-menu-item {
-    min-width: 258px;
-    min-height: 60px;
-    border-radius: 12px;
-    margin: 2px 0;
-    padding-top: 4px;
-    padding-bottom: 4px;
+    min-width: 244px;
+    min-height: 52px;
+    border-radius: 10px;
+    margin: 1px 0;
+    padding-top: 3px;
+    padding-bottom: 3px;
 
     .mat-mdc-menu-item-text {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
       width: 100%;
     }
+  }
+
+  ::ng-deep .theme-menu-item:hover {
+    background: var(--mat-sys-surface-container-low);
   }
 
   ::ng-deep .theme-menu-item-selected {
     background: transparent;
     box-shadow: inset 0 0 0 1px var(--mat-sys-outline-variant);
+    opacity: 0.96;
   }
 
   .theme-copy {
@@ -90,13 +96,13 @@ mat-toolbar {
     flex: 1 1 auto;
     min-width: 0;
     flex-direction: column;
-    gap: 1px;
+    gap: 0;
   }
 
   .theme-copy-topline {
     display: flex;
     align-items: center;
-    gap: 6px;
+    gap: 4px;
     min-width: 0;
   }
 
@@ -104,28 +110,36 @@ mat-toolbar {
     color: var(--mat-sys-on-surface-variant);
     margin-right: 0 !important;
     flex: 0 0 auto;
-    transform: scale(0.82);
+    transform: scale(0.76);
   }
 
   ::ng-deep .theme-menu-item-selected .theme-radio-icon {
     color: var(--mat-sys-primary);
+    opacity: 0.9;
   }
 
   ::ng-deep .theme-menu-item-selected .theme-label {
     color: var(--mat-sys-primary);
+    opacity: 0.92;
   }
 
   .theme-label {
-    font-weight: 600;
+    font-weight: 400;
     min-width: 0;
-    font-size: 0.86rem;
+    font-size: 0.74rem;
+    letter-spacing: 0.01em;
+  }
+
+  ::ng-deep .theme-menu-item-selected .theme-label {
+    font-weight: 500;
   }
 
   .theme-description {
     padding-left: 24px;
-    font-size: 0.68rem;
-    line-height: 1.15;
+    font-size: 0.58rem;
+    line-height: 1.1;
     color: var(--mat-sys-on-surface-variant);
+    opacity: 0.74;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -142,8 +156,8 @@ mat-toolbar {
   .theme-preview-line {
     position: relative;
     display: inline-flex;
-    width: 28px;
-    height: 6px;
+    width: 22px;
+    height: 4px;
     border-radius: 999px;
     overflow: hidden;
     border: 1px solid var(--mat-sys-outline-variant);
@@ -152,18 +166,18 @@ mat-toolbar {
   .theme-preview-line-accent {
     position: absolute;
     inset: 0 auto 0 0;
-    width: 10px;
+    width: 8px;
     border-radius: 999px;
   }
 
   @media screen and (max-width: 480px) {
     ::ng-deep .theme-menu-item {
-      min-width: 230px;
-      min-height: 56px;
+      min-width: 214px;
+      min-height: 48px;
     }
 
     .theme-preview-line {
-      width: 24px;
+      width: 20px;
     }
   }
 

@@ -31,6 +31,7 @@ export class App implements OnInit {
                 user,
               );
               this.authToken.persistToken(session.tokens.accessToken, user);
+              this.themeService.syncThemeFromSession(user.temaColorSistema);
               // Log extra para verificar storage
               const stored = this.authToken.getStorage();
             },
@@ -50,6 +51,7 @@ export class App implements OnInit {
         // Log extra para verificar storage vacío
         const stored = this.authToken.getStorage();
       } else if (session.user) {
+        this.themeService.syncThemeFromSession(session.user.temaColorSistema);
         // Log extra para verificar storage completo
         const stored = this.authToken.getStorage();
       }
