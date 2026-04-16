@@ -1,7 +1,18 @@
+.dialog-title {
+  color: var(--mat-sys-on-surface);
+}
+
+.usuario-form-dialog {
+  display: grid;
+  gap: 4px;
+  padding-top: 8px;
+}
+
 .full-width {
   width: 100%;
-  margin-bottom: 12px;
+  margin-bottom: 8px;
 }
+
 .actions {
   display: flex;
   justify-content: flex-end;

@@ -1,25 +1,112 @@
 .usuarios-list-container {
-  padding: 24px;
+  padding: 0 8px 16px;
 }
+
 .header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 16px;
 }
-.search-field {
-  width: 300px;
-  margin-bottom: 16px;
+
+.toolbar-busqueda {
+  display: flex;
+  justify-content: flex-start;
+  margin: 8px 0 20px;
 }
+
+.search-field {
+  width: min(100%, 320px);
+}
+
+.table-shell {
+  border: 1px solid var(--mat-sys-outline-variant);
+  border-radius: 20px;
+  overflow: hidden;
+  background: var(--mat-sys-surface);
+  box-shadow: var(--mat-sys-level1);
+}
+
 .table-container {
   position: relative;
 }
+
 mat-progress-spinner {
   position: absolute;
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
 }
+
 table {
   width: 100%;
+}
+
+.usuarios-table {
+  background: transparent;
+}
+
+.usuarios-table .mat-mdc-header-row {
+  background: var(--mat-sys-surface-container-low);
+}
+
+.usuarios-table .mat-mdc-row {
+  background: var(--mat-sys-surface);
+}
+
+.usuarios-table .mat-mdc-row:hover {
+  background: var(--mat-sys-surface-container-low);
+}
+
+.usuarios-table .mat-mdc-header-cell,
+.usuarios-table .mat-mdc-cell {
+  color: var(--mat-sys-on-surface);
+}
+
+.col-index {
+  width: 5%;
+}
+
+.col-usuario,
+.col-rut {
+  width: 15%;
+}
+
+.col-nombres,
+.col-apellido {
+  width: 20%;
+}
+
+.col-opciones {
+  width: 15%;
+}
+
+.opciones-header,
+.opciones-cell {
+  text-align: center;
+}
+
+mat-paginator {
+  background: var(--mat-sys-surface-container-low);
+  color: var(--mat-sys-on-surface);
+  border-top: 1px solid var(--mat-sys-outline-variant);
+}
+
+@media screen and (max-width: 768px) {
+  .usuarios-list-container {
+    padding: 0 0 12px;
+  }
+
+  .toolbar-busqueda {
+    margin-bottom: 12px;
+  }
+
+  .search-field {
+    width: 100%;
+  }
+
+  .table-shell {
+    border-radius: 16px;
+    overflow-x: auto;
+  }
 }

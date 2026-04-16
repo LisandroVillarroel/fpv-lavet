@@ -1,5 +1,7 @@
-<h2 mat-dialog-title>{{ modo === 'agregar' ? 'Agregar Usuario' : 'Editar Usuario' }}</h2>
-<form (ngSubmit)="guardar()" mat-dialog-content>
+<h2 mat-dialog-title class="dialog-title">
+  {{ modo === 'agregar' ? 'Agregar Usuario' : 'Editar Usuario' }}
+</h2>
+<form (ngSubmit)="guardar()" mat-dialog-content class="usuario-form-dialog">
   <mat-form-field appearance="outline" class="full-width">
     <mat-label>Usuario</mat-label>
     <input matInput [formField]="usuarioForm.usuario" placeholder="Usuario" title="Usuario" />
@@ -32,8 +34,13 @@
   </mat-form-field>
   <mat-form-field appearance="outline" class="full-width">
     <mat-label>Email</mat-label>
-    <input matInput [formField]="usuarioForm.email" placeholder="Email" title="Email" />
-    type="email" placeholder="Email" title="Email" />
+    <input
+      matInput
+      type="email"
+      [formField]="usuarioForm.email"
+      placeholder="Email"
+      title="Email"
+    />
   </mat-form-field>
   <mat-form-field appearance="outline" class="full-width">
     <mat-label>Teléfono</mat-label>
@@ -71,6 +78,6 @@
     <button mat-raised-button color="primary" type="submit" [disabled]="usuarioForm().invalid()">
       Guardar
     </button>
-    <button mat-button type="button" (click)="cancelar()">Cancelar</button>
+    <button mat-stroked-button type="button" (click)="cancelar()">Cancelar</button>
   </div>
 </form>

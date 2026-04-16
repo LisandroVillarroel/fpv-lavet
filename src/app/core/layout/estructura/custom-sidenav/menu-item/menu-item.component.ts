@@ -17,16 +17,9 @@ import { MenuItem } from '@shared/interfaces/usuario.interface';
       routerLinkActive
       #rla="routerLinkActive"
       [activated]="rla.isActive"
+      [class.menu-item-active]="rla.isActive"
     >
-      <img
-        [src]="'/imagenes/iconosMenu/' + item().iconoNombre + '.png'"
-        [alt]="item().despliegaNombre"
-        class="w-6 h-6 object-contain"
-        [class.opacity-100]="rla.isActive"
-        [class.opacity-60]="!rla.isActive"
-        [style.filter]="rla.isActive ? 'brightness(1.2)' : 'brightness(1)'"
-        matListItemIcon
-      />
+      <mat-icon matListItemIcon class="menu-icon">{{ iconName() }}</mat-icon>
 
       @if (!collapsed()) {
         <span matListItemTitle>{{ item().despliegaNombre }}</span>
@@ -60,13 +53,29 @@ import { MenuItem } from '@shared/interfaces/usuario.interface';
       transition-timing-function: ease-in-out;
     }
 
-    img[matListItemIcon] {
-      opacity: 0.6;
+    a[mat-list-item] {
+      color: var(--mat-sys-on-surface);
+      border-radius: 18px;
+      margin: 4px 0;
     }
 
-    a[routerLinkActive] img[matListItemIcon] {
+    .menu-icon {
+      color: var(--mat-sys-primary);
+      opacity: 0.92;
+    }
+
+    a[mat-list-item]:hover {
+      background: var(--mat-sys-surface-container);
+    }
+
+    a[mat-list-item].menu-item-active {
+      background: var(--mat-sys-secondary-container);
+      color: var(--mat-sys-on-secondary-container);
+    }
+
+    a[mat-list-item].menu-item-active .menu-icon {
+      color: var(--mat-sys-on-secondary-container);
       opacity: 1;
-      filter: brightness(1.3);
     }
   `,
   animations: [
@@ -86,6 +95,14 @@ export class MenuItemComponent {
 
   level = computed(() => this.routeHistory().split('/').length - 1);
   indentation = computed(() => (this.collapsed() ? '16px' : `${16 + this.level() * 16}px`));
+  iconName = computed(() => {
+    const iconName = this.item().iconoNombre?.trim();
+    if (!iconName) {
+      return 'radio_button_checked';
+    }
+
+    return iconName;
+  });
 
   nestedItemOpen = signal(false);
 }

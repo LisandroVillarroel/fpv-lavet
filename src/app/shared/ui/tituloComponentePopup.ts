@@ -6,24 +6,38 @@ import { MatIcon, MatIconModule } from '@angular/material/icon';
 @Component({
   selector: 'app-TituloComponentePopup',
   standalone: true,
-  imports: [MatIconModule,MatDialogModule,MatDialogClose,MatIcon,MatIconButton],
-  template: `  <div class="barra-titulo titulomodal d-flex" style="width: 100%; padding: 10px 0px 10px 10px !important;">
-    <h2 style="margin: 0px 0 0px;">&nbsp; {{ titulo() }} </h2>
-    <button mat-icon-button mat-dialog-close [disabled]="false"
-      style="align-content: center; padding: 0px 0px 0px; height: 30px; align-self: flex-start;">
-      <mat-icon>close</mat-icon>
-    </button>
-  </div>`,
-   styles: `
-    .barra-titulo{
+  imports: [MatIconModule, MatDialogModule, MatDialogClose, MatIcon, MatIconButton],
+  template: `
+    <div class="barra-titulo titulomodal d-flex">
+      <h2>&nbsp; {{ titulo() }}</h2>
+      <button mat-icon-button mat-dialog-close [disabled]="false" class="cerrar-btn">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+  `,
+  styles: `
+    .barra-titulo {
+      width: 100%;
+      padding: 10px 0 10px 10px !important;
       align-items: center;
       justify-content: space-between;
       background-color: var(--mat-sys-secondary-fixed-dim);
-  }
-  h2{
-font-size: 14px;
-  }
-    `,
+      color: var(--mat-sys-on-secondary-fixed);
+    }
+
+    h2 {
+      margin: 0;
+      font-size: 14px;
+    }
+
+    .cerrar-btn {
+      align-content: center;
+      padding: 0;
+      height: 30px;
+      align-self: flex-start;
+      color: inherit;
+    }
+  `,
 })
 export default class TituloComponentePopup {
   titulo = input<string>();

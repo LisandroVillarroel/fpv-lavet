@@ -1,18 +1,20 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { AuthTokenService } from '@core/services/auth-token.service';
 import { UserService } from '@core/services/user.service';
 import { take } from 'rxjs';
 import { RouterOutlet } from '@angular/router';
+import { ThemeService } from '@core/services/theme.service';
 
 @Component({
   selector: 'app-root',
   imports: [RouterOutlet],
   template: ` <router-outlet /> `,
 })
-export class App {
+export class App implements OnInit {
   readonly title = 'FPV Lavet';
   private readonly authToken = inject(AuthTokenService);
   private readonly userService = inject(UserService);
+  private readonly themeService = inject(ThemeService); // Asegurarse de que el servicio se inyecte
 
   ngOnInit(): void {
     this.authToken.initializeFromRoute();
