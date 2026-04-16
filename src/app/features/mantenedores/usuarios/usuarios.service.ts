@@ -15,7 +15,7 @@ export class UsuarioService {
 
   obtenerUsuarios(empresaId: string): Observable<IUsuario[]> {
     console.log('Obteniendo usuarios para empresaId:', empresaId);
-    return this._http.get<IUsuario[]>(`${environment.apiBaseUrl}/usuario/${empresaId}`);
+    return this._http.get<IUsuario[]>(`${environment.apiBaseUrl}/usuario/empresa/${empresaId}`);
   }
 
   // usuariosResource eliminado. Usar obtenerUsuarios(empresaId) para peticiones con parámetro.
