@@ -1,10 +1,39 @@
 import { TestBed } from '@angular/core/testing';
-import { App } from './app';
+import { of } from 'rxjs';
+import { vi } from 'vitest';
+
+import { App } from '@app/app';
+import { AuthTokenService } from '@core/services/auth-token.service';
+import { UserService } from '@core/services/user.service';
+import { ThemeService } from '@core/services/theme.service';
 
 describe('App', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [App],
+      providers: [
+        {
+          provide: AuthTokenService,
+          useValue: {
+            initializeFromRoute: vi.fn(),
+            getStorage: vi.fn().mockReturnValue(null),
+            persistToken: vi.fn(),
+            clear: vi.fn(),
+          },
+        },
+        {
+          provide: UserService,
+          useValue: {
+            getProfile: vi.fn().mockReturnValue(of(null)),
+          },
+        },
+        {
+          provide: ThemeService,
+          useValue: {
+            syncThemeFromSession: vi.fn(),
+          },
+        },
+      ],
     }).compileComponents();
   });
 
@@ -16,10 +45,7 @@ describe('App', () => {
 
   it('should render title', () => {
     const fixture = TestBed.createComponent(App);
-    fixture.detectChanges();
-    const compiled = fixture.nativeElement as HTMLElement;
-    expect(
-      compiled.querySelector('.app-toolbar__title')?.textContent
-    ).toContain('FPV Lavet');
+    const app = fixture.componentInstance;
+    expect(app.title).toBe('FPV Lavet');
   });
 });

@@ -9,10 +9,9 @@ import { ThemeService } from '@core/services/theme.service';
 import { UserService } from '@core/services/user.service';
 import { take } from 'rxjs';
 
-///import { AppStore } from '../../../app.store';
-
 @Component({
   selector: 'app-cabecera',
+  standalone: true,
   imports: [MatToolbar, MatIcon, MatButtonModule, MatMenuModule],
   styleUrls: ['./cabecera.scss'],
   template: `
@@ -23,7 +22,7 @@ import { take } from 'rxjs';
 
       <div class="container-fluid">
         <mat-icon aria-hidden="true">pets</mat-icon>
-        <span class="titulo mb-0">SISTEMA VETERINARIO</span>
+        <span class="titulo">SISTEMA VETERINARIO</span>
 
         <div class="actions-container">
           <button mat-icon-button [matMenuTriggerFor]="themeMenu" matTooltip="Cambiar Tema">
@@ -75,7 +74,7 @@ import { take } from 'rxjs';
     </mat-toolbar>
   `,
 })
-export class Cabecera {
+export default class Cabecera {
   readonly #storage = inject(StorageService);
   readonly #authToken = inject(AuthTokenService);
   readonly #themeService = inject(ThemeService);

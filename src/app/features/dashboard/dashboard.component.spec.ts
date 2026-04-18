@@ -1,7 +1,10 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { of } from 'rxjs';
+import { vi } from 'vitest';
 
-import { DashboardComponent } from './dashboard.component';
-import { AuthTokenService } from '../../core/services/auth-token.service';
+import DashboardComponent from './dashboard.component';
+import { AuthTokenService } from '@core/services/auth-token.service';
+import { UserService } from '@core/services/user.service';
 
 describe('DashboardComponent', () => {
   let component: DashboardComponent;
@@ -14,9 +17,17 @@ describe('DashboardComponent', () => {
         {
           provide: AuthTokenService,
           useValue: {
-            initializeFromRoute: jasmine.createSpy('initializeFromRoute'),
-            clear: jasmine.createSpy('clear'),
-            redirectToPortal: jasmine.createSpy('redirectToPortal'),
+            initializeFromRoute: vi.fn(),
+            getStorage: vi.fn().mockReturnValue(null),
+            clear: vi.fn(),
+            redirectToPortal: vi.fn(),
+            persistToken: vi.fn(),
+          },
+        },
+        {
+          provide: UserService,
+          useValue: {
+            getProfile: vi.fn().mockReturnValue(of(null)),
           },
         },
       ],

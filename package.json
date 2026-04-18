@@ -2,9 +2,12 @@
   "name": "fpv-lavet",
   "version": "0.0.0",
   "scripts": {
+    "lint": "npm run lint:eslint && npm run lint:imports",
+    "lint:eslint": "eslint \"src/**/*.ts\"",
+    "lint:imports": "node scripts/check-import-aliases.mjs",
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build",
+    "build": "npm run lint && ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "serve:ssr:fpv-lavet": "node dist/fpv-lavet/server/server.mjs"
@@ -44,9 +47,12 @@
     "@angular/build": "^21.1.1",
     "@angular/cli": "^21.1.1",
     "@angular/compiler-cli": "^21.1.1",
+    "@typescript-eslint/eslint-plugin": "^8.46.1",
+    "@typescript-eslint/parser": "^8.46.1",
     "@types/express": "^5.0.1",
     "@types/jasmine": "~5.1.0",
     "@types/node": "^20.17.19",
+    "eslint": "^9.37.0",
     "jsdom": "^27.1.0",
     "typescript": "~5.9.3",
     "vitest": "^4.0.8"

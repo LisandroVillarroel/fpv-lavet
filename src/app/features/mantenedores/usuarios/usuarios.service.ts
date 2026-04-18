@@ -3,7 +3,7 @@ import { HttpClient, HttpHeaders, HttpEvent } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '@envs/environment';
 
-import { IUsuario, respuesta } from './usuariosInterface';
+import { IUsuario, respuesta } from '@usuarios/usuariosInterface';
 
 @Injectable({ providedIn: 'root' })
 export class UsuarioService {

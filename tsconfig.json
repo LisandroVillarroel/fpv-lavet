@@ -3,32 +3,41 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
-    "baseUrl": "./",
     "paths": {
-      "@shared/*": [
-        "src/app/shared/*"
-      ],
-      "@ui/*": [
-        "src/app/shared/ui/*"
-      ],
-      "@envs/*": [
-        "src/environments/*"
-      ],
-      "@util/*": [
-        "src/app/shared/utiles/*"
-      ],
-      "@directivas/*": [
-        "src/app/common/directivas/*"
+      "@app/*": [
+        "./src/app/*"
       ],
       "@core/*": [
-        "src/app/core/*"
+        "./src/app/core/*"
+      ],
+      "@layout/*": [
+        "./src/app/core/layout/*"
+      ],
+      "@portada/*": [
+        "./src/app/core/layout/estructura/portada/*"
+      ],
+      "@envs/*": [
+        "./src/environments/*"
       ],
       "@features/*": [
-        "src/app/features/*"
+        "./src/app/features/*"
       ],
+      "@usuarios/*": [
+        "./src/app/features/mantenedores/usuarios/*"
+      ],
+      "@shared/*": [
+        "./src/app/shared/*"
+      ],
+      "@util/*": [
+        "./src/app/shared/utiles/*"
+      ],
+      "@directivas/*": [
+        "./src/app/common/directivas/*"
+      ]
     },
     "outDir": "./dist/out-tsc",
     "strict": true,
+    "forceConsistentCasingInFileNames": true,
     "noImplicitOverride": true,
     "noPropertyAccessFromIndexSignature": true,
     "noImplicitReturns": true,
@@ -38,7 +47,8 @@
     "experimentalDecorators": true,
     "importHelpers": true,
     "target": "ES2022",
-    "module": "preserve"
+    "module": "ES2022",
+    "moduleResolution": "bundler"
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,

@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
 
-import { authGuard } from './core/guards/auth.guard';
+import { authGuard } from '@core/guards/auth.guard';
 
 export const routes: Routes = [
   {
@@ -11,7 +11,7 @@ export const routes: Routes = [
 
   {
     path: '',
-    loadComponent: () => import('@core/layout/estructura/principal/principal'),
+    loadComponent: () => import('@layout/estructura/principal/principal'),
     canActivate: [authGuard],
     children: [
       {
@@ -20,7 +20,7 @@ export const routes: Routes = [
       },
       {
         path: 'mantenedores/usuarios',
-        loadComponent: () => import('./features/mantenedores/usuarios/usuarios-list.component'),
+        loadComponent: () => import('@usuarios/usuarios-list.component'),
       },
     ],
   },
@@ -29,13 +29,13 @@ export const routes: Routes = [
     path: 'dashboard',
     canActivate: [authGuard],
     loadComponent: () =>
-      import('./features/dashboard/dashboard.component').then((m) => m.DashboardComponent),
+      import('@features/dashboard/dashboard.component').then((m) => m.DashboardComponent),
   },
   */
   {
     path: 'sin-acceso',
     loadComponent: () =>
-      import('./features/access/access-denied/access-denied.component').then(
+      import('@features/access/access-denied/access-denied.component').then(
         (m) => m.AccessDeniedComponent,
       ),
   },

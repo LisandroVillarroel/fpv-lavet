@@ -1,18 +1,44 @@
-import { Injectable, signal } from '@angular/core';
+import { Injectable, computed, signal } from '@angular/core';
 
 @Injectable({
   providedIn: 'root',
 })
 export class Progreso {
-  isCargando = signal<boolean>(false);
+  private readonly _cargasActivas = signal(0);
+  readonly isCargando = computed(() => this._cargasActivas() > 0);
+  readonly cargasActivas = this._cargasActivas.asReadonly();
   /** Porcentaje de progreso (0-100). */
-  porcentaje = signal<number>(0);
-  public ejecutar() {
-    this.isCargando.set(true);
+  readonly porcentaje = signal<number>(0);
+  private _resetTimeoutId: ReturnType<typeof setTimeout> | null = null;
+
+  public iniciarCargaGlobal() {
+    this.cancelarResetPendiente();
+    const cargasActivas = this._cargasActivas();
+    this._cargasActivas.set(cargasActivas + 1);
+
+    if (cargasActivas === 0) {
+      this.cancelarAnimacion();
+      this.porcentaje.set(0);
+    }
   }
 
-  public parar() {
-    this.isCargando.set(false);
+  public finalizarCargaGlobal(resetDelayMs = 0) {
+    const cargasRestantes = Math.max(0, this._cargasActivas() - 1);
+    this._cargasActivas.set(cargasRestantes);
+
+    if (cargasRestantes > 0) {
+      return;
+    }
+
+    this.cancelarAnimacion();
+    this.porcentaje.set(100);
+    this.programarReset(resetDelayMs);
+  }
+
+  public resetear() {
+    this.cancelarAnimacion();
+    this.cancelarResetPendiente();
+    this._cargasActivas.set(0);
     this.porcentaje.set(0);
   }
 
@@ -26,10 +52,8 @@ export class Progreso {
    */
   private _rafId: number | null = null;
   public animateTo(target: number, duration = 400) {
-    if (this._rafId) {
-      cancelAnimationFrame(this._rafId);
-      this._rafId = null;
-    }
+    this.cancelarResetPendiente();
+    this.cancelarAnimacion();
 
     const start = performance.now();
     const from = this.porcentaje();
@@ -49,5 +73,33 @@ export class Progreso {
     };
 
     this._rafId = requestAnimationFrame(step);
+  }
+
+  private programarReset(delayMs: number) {
+    this.cancelarResetPendiente();
+
+    if (delayMs <= 0) {
+      this.porcentaje.set(0);
+      return;
+    }
+
+    this._resetTimeoutId = setTimeout(() => {
+      this._resetTimeoutId = null;
+      this.porcentaje.set(0);
+    }, delayMs);
+  }
+
+  private cancelarResetPendiente() {
+    if (this._resetTimeoutId) {
+      clearTimeout(this._resetTimeoutId);
+      this._resetTimeoutId = null;
+    }
+  }
+
+  private cancelarAnimacion() {
+    if (this._rafId) {
+      cancelAnimationFrame(this._rafId);
+      this._rafId = null;
+    }
   }
 }

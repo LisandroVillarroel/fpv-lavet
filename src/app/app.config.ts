@@ -8,9 +8,11 @@ import { provideRouter, withViewTransitions } from '@angular/router';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { provideHttpClient, withFetch, withInterceptors } from '@angular/common/http';
 
-import { routes } from './app.routes';
-import { authInterceptor } from './core/interceptors/auth.interceptor';
+import { routes } from '@app/app.routes';
+import { authInterceptor } from '@core/interceptors/auth.interceptor';
+import { tokenExpirationInterceptor } from '@core/interceptors/token-expiration.interceptor';
 import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
+import { cargaProgresoInterceptor } from '@core/interceptors/carga-progreso-interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -18,7 +20,10 @@ export const appConfig: ApplicationConfig = {
     provideZonelessChangeDetection(),
     provideRouter(routes, withViewTransitions()),
     provideAnimationsAsync(),
-    provideHttpClient(withFetch(), withInterceptors([authInterceptor])),
+    provideHttpClient(
+      withFetch(),
+      withInterceptors([tokenExpirationInterceptor, authInterceptor, cargaProgresoInterceptor]),
+    ),
     {
       provide: MAT_FORM_FIELD_DEFAULT_OPTIONS,
       useValue: {

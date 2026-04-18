@@ -7,6 +7,7 @@ import { MenuItem } from '@shared/interfaces/usuario.interface';
 
 @Component({
   selector: 'app-menu-item',
+  standalone: true,
   imports: [RouterModule, RouterLinkActive, MatListModule, MatIconModule],
   template: `
     <a

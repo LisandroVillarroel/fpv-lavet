@@ -20,7 +20,6 @@ import {
   transition,
   trigger,
 } from '@angular/animations';
-import { Progreso } from '@core/guards/progreso';
 import { StorageService } from '@core/guards/storage.service';
 
 import { MatCardModule } from '@angular/material/card';
@@ -47,8 +46,8 @@ import {
   DashboardRequest,
   DashboardResponse,
   DashboardStats,
-} from './portada.models';
-import { PortadaDashboardService } from './portada.service';
+} from '@portada/portada.models';
+import { PortadaDashboardService } from '@portada/portada.service';
 import { MatDialog } from '@angular/material/dialog';
 import { loginInterface } from '@core/auth/loginInterface';
 
@@ -161,7 +160,6 @@ type TiempoFiltro = 'hoy' | 'semana' | 'mes' | 'personalizado';
   ],
 })
 export default class Portada implements OnInit, AfterViewInit {
-  readonly progreso = inject(Progreso);
   readonly storage = inject(StorageService);
   private readonly dashboardService = inject(PortadaDashboardService);
   private readonly router = inject(Router);
@@ -299,7 +297,6 @@ export default class Portada implements OnInit, AfterViewInit {
 
   async cargarDashboard(): Promise<void> {
     this.cargandoDatos.set(true);
-    this.progreso.ejecutar();
 
     try {
       const payload: DashboardRequest = {
@@ -353,7 +350,6 @@ export default class Portada implements OnInit, AfterViewInit {
       this.estadoLeyendaItems = [];
     } finally {
       this.cargandoDatos.set(false);
-      this.progreso.parar();
       setTimeout(() => {
         this.renderizarGraficoBarras();
         this.renderizarGraficoPie();

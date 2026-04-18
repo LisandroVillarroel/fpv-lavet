@@ -5,8 +5,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatChipsModule } from '@angular/material/chips';
 
-import { AuthTokenService } from '../../core/services/auth-token.service';
-import { UserService } from '../../core/services/user.service';
+import { AuthTokenService } from '@core/services/auth-token.service';
+import { UserService } from '@core/services/user.service';
 import { take } from 'rxjs';
 
 @Component({

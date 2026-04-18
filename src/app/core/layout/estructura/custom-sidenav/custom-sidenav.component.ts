@@ -1,4 +1,4 @@
-import { Component, computed, inject, input, signal } from '@angular/core';
+import { Component, computed, inject, input } from '@angular/core';
 
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
@@ -7,15 +7,12 @@ import { MatIconModule } from '@angular/material/icon';
 import { MenuItemComponent } from './menu-item/menu-item.component';
 
 import SidenavHeaderComponent from './sidenav-header/sidenav-header.component';
-import { StorageService } from '@core/guards/storage.service';
-
-import { loginInterface } from '@core/auth/loginInterface';
 import { MenuItem } from '@shared/interfaces/usuario.interface';
-
-//import { AppStore } from '../../../app.store';
+import { AuthTokenService } from '@core/services/auth-token.service';
 
 @Component({
   selector: 'app-custom-sidenav',
+  standalone: true,
   template: `
     <app-sidenav-header [collapsed]="collapsed()" />
     <mat-nav-list class="[--mat-list-active-indicator-shape:0px] mb-6">
@@ -42,14 +39,13 @@ import { MenuItem } from '@shared/interfaces/usuario.interface';
     SidenavHeaderComponent,
   ],
 })
-export class CustomSidenavComponent {
+export default class CustomSidenavComponent {
   // appStore = inject(AppStore);
-  readonly #storage = inject(StorageService);
-  _storage = signal(this.#storage.get<loginInterface>('sesion-lavet'));
+  readonly #authToken = inject(AuthTokenService);
   collapsed = input<boolean>(false);
 
   menuItems = computed(() => {
-    const storedData = this._storage();
+    const storedData = this.#authToken.session();
     const items = storedData?.user?.MenuItem || [];
     return this.convertToMenuItems(items);
   });

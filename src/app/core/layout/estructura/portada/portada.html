@@ -402,7 +402,7 @@
   }
 
   <!-- Indicador de Carga Global -->
-  @if (progreso.isCargando()) {
+  @if (cargandoDatos()) {
   <div class="global-loading" [@fadeInOut]>
     <mat-progress-bar
       mode="indeterminate"

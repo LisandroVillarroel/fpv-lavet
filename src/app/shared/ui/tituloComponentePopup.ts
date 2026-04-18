@@ -8,7 +8,7 @@ import { MatIcon, MatIconModule } from '@angular/material/icon';
   standalone: true,
   imports: [MatIconModule, MatDialogModule, MatDialogClose, MatIcon, MatIconButton],
   template: `
-    <div class="barra-titulo titulomodal d-flex">
+    <div class="barra-titulo titulomodal">
       <h2>&nbsp; {{ titulo() }}</h2>
       <button mat-icon-button mat-dialog-close [disabled]="false" class="cerrar-btn">
         <mat-icon>close</mat-icon>
@@ -17,6 +17,7 @@ import { MatIcon, MatIconModule } from '@angular/material/icon';
   `,
   styles: `
     .barra-titulo {
+      display: flex;
       width: 100%;
       padding: 10px 0 10px 10px !important;
       align-items: center;

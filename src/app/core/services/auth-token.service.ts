@@ -3,7 +3,7 @@ import { isPlatformBrowser } from '@angular/common';
 import { Router } from '@angular/router';
 import { DOCUMENT } from '@angular/common';
 
-import { environment } from '../../../environments/environment';
+import { environment } from '@envs/environment';
 
 const SESSION_KEY = 'sesion-lavet'; // Llave única y compartida para la sesión
 
@@ -22,8 +22,11 @@ export class AuthTokenService {
   private readonly _document = inject(DOCUMENT);
   private readonly _platformId = inject(PLATFORM_ID);
   private readonly _isBrowser = isPlatformBrowser(this._platformId);
+  private _isRedirecting = false;
 
-  private readonly _token = signal<string | null>(this.restoreToken());
+  private readonly _session = signal<AuthSession | null>(this.restoreSession());
+  readonly session = this._session.asReadonly();
+  private readonly _token = signal<string | null>(this._session()?.tokens.accessToken ?? null);
   readonly token = this._token.asReadonly();
 
   initializeFromRoute(): void {
@@ -53,8 +56,10 @@ export class AuthTokenService {
    * Elimina completamente la sesión del storage (logout seguro)
    */
   clear(): void {
+    this._session.set(null);
     this._token.set(null);
     this.storage?.removeItem(SESSION_KEY);
+    this._isRedirecting = false;
   }
 
   /**
@@ -63,14 +68,21 @@ export class AuthTokenService {
    * @param user  Usuario autenticado (sin datos sensibles)
    */
   persistToken(token: string, user?: any): void {
-    this._token.set(token);
     // Solo guarda datos públicos del usuario
     console.log('Persistiendo token en storage con usuario:', user);
     const safeUser = user ? this.sanitizeUser(user) : null;
     console.log('Usuario sanitizado para storage:', safeUser);
-    const session = { user: safeUser, tokens: { accessToken: token } };
+    const currentSession = this._session();
+    const session: AuthSession = {
+      user: safeUser,
+      tokens: {
+        accessToken: token,
+        refreshToken: currentSession?.tokens.refreshToken,
+        expiresIn: currentSession?.tokens.expiresIn,
+      },
+    };
     console.log('Sesión a guardar en storage:', session);
-    this.storage?.setItem(SESSION_KEY, JSON.stringify(session));
+    this.persistSession(session);
     console.log('Sesión guardada en storage:', this.getStorage());
   }
 
@@ -121,12 +133,12 @@ export class AuthTokenService {
   }
 
   updateStoredUser(patch: Record<string, unknown>): void {
-    const session = this.getStorage();
+    const session = this._session();
     if (!session?.user) {
       return;
     }
 
-    const updatedSession = {
+    const updatedSession: AuthSession = {
       ...session,
       user: {
         ...session.user,
@@ -134,18 +146,18 @@ export class AuthTokenService {
       },
     };
 
-    this.storage?.setItem(SESSION_KEY, JSON.stringify(updatedSession));
+    this.persistSession(updatedSession);
   }
 
-  private restoreToken(): string | null {
+  private restoreSession(): AuthSession | null {
     if (!this._isBrowser) {
       return null;
     }
 
     // Lee el token de la sesión compartida
-    const sharedSession = this.getStorage();
+    const sharedSession = this.readStorage();
     if (sharedSession?.tokens?.accessToken) {
-      return sharedSession.tokens.accessToken;
+      return sharedSession;
     }
 
     // Como último recurso, intenta leer de los query params (para primera carga)
@@ -154,9 +166,9 @@ export class AuthTokenService {
       const tokenFromUrl = urlParams.get('token');
       if (tokenFromUrl) {
         // Crea una sesión nueva solo con el token
-        const session = { user: null, tokens: { accessToken: tokenFromUrl } };
+        const session: AuthSession = { user: null, tokens: { accessToken: tokenFromUrl } };
         this.storage?.setItem(SESSION_KEY, JSON.stringify(session));
-        return tokenFromUrl;
+        return session;
       }
     }
 
@@ -164,6 +176,10 @@ export class AuthTokenService {
   }
 
   getStorage(): AuthSession | null {
+    return this._session();
+  }
+
+  private readStorage(): AuthSession | null {
     if (!this._isBrowser) {
       return null;
     }
@@ -185,9 +201,65 @@ export class AuthTokenService {
     return this._document.defaultView?.localStorage ?? null;
   }
 
+  private persistSession(session: AuthSession): void {
+    this._session.set(session);
+    this._token.set(session.tokens.accessToken);
+    this.storage?.setItem(SESSION_KEY, JSON.stringify(session));
+  }
+
   getAuthorizationHeader(): string | null {
     const current = this._token();
     return current ? `Bearer ${current}` : null;
+  }
+
+  isTokenExpired(token = this._token()): boolean {
+    if (!token) {
+      return true;
+    }
+
+    const payload = this.decodeJwtPayload(token);
+    const exp = payload?.['exp'];
+
+    if (typeof exp !== 'number') {
+      return true;
+    }
+
+    return exp * 1000 <= Date.now();
+  }
+
+  handleExpiredSession(): void {
+    if (this._isRedirecting) {
+      return;
+    }
+
+    this._isRedirecting = true;
+    this._session.set(null);
+    this._token.set(null);
+    this.storage?.removeItem(SESSION_KEY);
+    this.redirectToPortal();
+  }
+
+  private decodeJwtPayload(token: string): Record<string, unknown> | null {
+    if (!this._isBrowser) {
+      return null;
+    }
+
+    const [, payload] = token.split('.');
+    if (!payload) {
+      return null;
+    }
+
+    try {
+      const normalizedPayload = payload.replace(/-/g, '+').replace(/_/g, '/');
+      const paddedPayload = normalizedPayload.padEnd(
+        normalizedPayload.length + ((4 - (normalizedPayload.length % 4)) % 4),
+        '=',
+      );
+      const decodedPayload = this._document.defaultView?.atob(paddedPayload);
+      return decodedPayload ? (JSON.parse(decodedPayload) as Record<string, unknown>) : null;
+    } catch {
+      return null;
+    }
   }
 
   redirectToPortal(): void {

@@ -1,5 +1,4 @@
 @use '@angular/material' as mat;
-@use 'bootstrap/scss/bootstrap';
 
 // Incluye los estilos base de Angular Material (solo una vez).
 @include mat.core();

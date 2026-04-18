@@ -1,24 +1,52 @@
 <h2 mat-dialog-title class="dialog-title">
   {{ modo === 'agregar' ? 'Agregar Usuario' : 'Editar Usuario' }}
 </h2>
-<form (ngSubmit)="guardar()" mat-dialog-content class="usuario-form-dialog">
+<form
+  #usuarioForm="ngForm"
+  (ngSubmit)="guardar(usuarioForm)"
+  mat-dialog-content
+  class="usuario-form-dialog"
+>
   <mat-form-field appearance="outline" class="full-width">
     <mat-label>Usuario</mat-label>
-    <input matInput [formField]="usuarioForm.usuario" placeholder="Usuario" title="Usuario" />
+    <input
+      matInput
+      [(ngModel)]="usuario.usuario"
+      name="usuario"
+      required
+      placeholder="Usuario"
+      title="Usuario"
+    />
   </mat-form-field>
   <mat-form-field appearance="outline" class="full-width">
     <mat-label>RUT</mat-label>
-    <input matInput [formField]="usuarioForm.rutUsuario" placeholder="RUT" title="RUT" />
+    <input
+      matInput
+      [(ngModel)]="usuario.rutUsuario"
+      name="rutUsuario"
+      required
+      placeholder="RUT"
+      title="RUT"
+    />
   </mat-form-field>
   <mat-form-field appearance="outline" class="full-width">
     <mat-label>Nombres</mat-label>
-    <input matInput [formField]="usuarioForm.nombres" placeholder="Nombres" title="Nombres" />
+    <input
+      matInput
+      [(ngModel)]="usuario.nombres"
+      name="nombres"
+      required
+      placeholder="Nombres"
+      title="Nombres"
+    />
   </mat-form-field>
   <mat-form-field appearance="outline" class="full-width">
     <mat-label>Apellido Paterno</mat-label>
     <input
       matInput
-      [formField]="usuarioForm.apellidoPaterno"
+      [(ngModel)]="usuario.apellidoPaterno"
+      name="apellidoPaterno"
+      required
       placeholder="Apellido Paterno"
       title="Apellido Paterno"
     />
@@ -27,7 +55,9 @@
     <mat-label>Apellido Materno</mat-label>
     <input
       matInput
-      [formField]="usuarioForm.apellidoMaterno"
+      [(ngModel)]="usuario.apellidoMaterno"
+      name="apellidoMaterno"
+      required
       placeholder="Apellido Materno"
       title="Apellido Materno"
     />
@@ -37,45 +67,78 @@
     <input
       matInput
       type="email"
-      [formField]="usuarioForm.email"
+      [(ngModel)]="usuario.email"
+      name="email"
+      required
       placeholder="Email"
       title="Email"
     />
   </mat-form-field>
   <mat-form-field appearance="outline" class="full-width">
     <mat-label>Teléfono</mat-label>
-    <input matInput [formField]="usuarioForm.telefono" placeholder="Teléfono" title="Teléfono" />
+    <input
+      matInput
+      [(ngModel)]="usuario.telefono"
+      name="telefono"
+      placeholder="Teléfono"
+      title="Teléfono"
+    />
   </mat-form-field>
   <mat-form-field appearance="outline" class="full-width">
     <mat-label>Dirección</mat-label>
-    <input matInput [formField]="usuarioForm.direccion" placeholder="Dirección" title="Dirección" />
+    <input
+      matInput
+      [(ngModel)]="usuario.direccion"
+      name="direccion"
+      placeholder="Dirección"
+      title="Dirección"
+    />
   </mat-form-field>
   <mat-form-field appearance="outline" class="full-width">
     <mat-label>Región</mat-label>
-    <input matInput [formField]="usuarioForm.region" placeholder="Región" title="Región" />
+    <input
+      matInput
+      [(ngModel)]="usuario.region"
+      name="region"
+      placeholder="Región"
+      title="Región"
+    />
   </mat-form-field>
   <mat-form-field appearance="outline" class="full-width">
     <mat-label>Comuna</mat-label>
-    <input matInput [formField]="usuarioForm.comuna" placeholder="Comuna" title="Comuna" />
+    <input
+      matInput
+      [(ngModel)]="usuario.comuna"
+      name="comuna"
+      placeholder="Comuna"
+      title="Comuna"
+    />
   </mat-form-field>
   <mat-form-field appearance="outline" class="full-width">
     <mat-label>Tipo Usuario</mat-label>
     <input
       matInput
-      [formField]="usuarioForm.tipoUsuario"
+      [(ngModel)]="usuario.tipoUsuario"
+      name="tipoUsuario"
       placeholder="Tipo Usuario"
       title="Tipo Usuario"
     />
   </mat-form-field>
   <mat-form-field appearance="outline" class="full-width">
     <mat-label>Estado</mat-label>
-    <mat-select [formField]="usuarioForm.estadoUsuario" placeholder="Estado" title="Estado">
-      <mat-option value="ACTIVO">ACTIVO</mat-option>
-      <mat-option value="INACTIVO">INACTIVO</mat-option>
+    <mat-select
+      [(ngModel)]="usuario.estadoUsuario"
+      name="estadoUsuario"
+      placeholder="Estado"
+      title="Estado"
+    >
+      <mat-option value="Activo">Activo</mat-option>
+      <mat-option value="Bloqueado">Bloqueado</mat-option>
+      <mat-option value="Suspendido">Suspendido</mat-option>
     </mat-select>
   </mat-form-field>
   <div class="actions">
-    <button mat-raised-button color="primary" type="submit" [disabled]="usuarioForm().invalid()">
+    <button mat-raised-button color="primary" type="submit" [disabled]="usuarioForm.invalid">
       Guardar
     </button>
     <button mat-stroked-button type="button" (click)="cancelar()">Cancelar</button>

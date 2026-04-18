@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 
-import { AuthTokenService } from '../../../core/services/auth-token.service';
+import { AuthTokenService } from '@core/services/auth-token.service';
 
 @Component({
   selector: 'app-access-denied',

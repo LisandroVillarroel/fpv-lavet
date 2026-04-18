@@ -1,7 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { vi } from 'vitest';
 
 import { AccessDeniedComponent } from './access-denied.component';
-import { AuthTokenService } from '../../../core/services/auth-token.service';
+import { AuthTokenService } from '@core/services/auth-token.service';
 
 describe('AccessDeniedComponent', () => {
   let component: AccessDeniedComponent;
@@ -14,7 +15,7 @@ describe('AccessDeniedComponent', () => {
         {
           provide: AuthTokenService,
           useValue: {
-            redirectToPortal: jasmine.createSpy('redirectToPortal'),
+            redirectToPortal: vi.fn(),
           },
         },
       ],
