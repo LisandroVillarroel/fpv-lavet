@@ -62,11 +62,11 @@ export class NotificacioAlertnService {
   /**
    * Mostrar una notificación de advertencia
    */
-  warning(titulo: string, mensaje: string) {
-    this.notificationMixin.fire({
+  warning(titulo: string, mensaje?: string) {
+    return this.notificationMixin.fire({
       icon: 'warning',
       title: titulo,
-      text: mensaje,
+      ...(mensaje ? { text: mensaje } : {}),
     });
   }
 
@@ -85,7 +85,7 @@ export class NotificacioAlertnService {
     titulo: string,
     mensaje: string,
     textoAceptar: string = 'Aceptar',
-    textoCancelar: string = 'Cancelar'
+    textoCancelar: string = 'Cancelar',
   ): Promise<boolean> {
     const result = await this.notificationMixinSeleccion.fire({
       icon: 'warning',
@@ -102,7 +102,7 @@ export class NotificacioAlertnService {
   async confirmacion(
     titulo: string,
     mensaje: string,
-    textoAceptar: string = 'OK'
+    textoAceptar: string = 'OK',
   ): Promise<boolean> {
     const result = await this.notificationMixinSeleccion.fire({
       icon: 'success',

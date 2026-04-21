@@ -86,7 +86,7 @@ export default class Cabecera {
       items: [
         {
           name: 'rose-red-theme',
-          label: 'Rose & Red',
+          label: 'Rosa & Rojo',
           description: 'Claro, cálido y suave',
           previewTop: '#fffbff',
           previewSurface: '#fff8f8',
@@ -95,7 +95,7 @@ export default class Cabecera {
         },
         {
           name: 'azure-blue-theme',
-          label: 'Azure & Blue',
+          label: 'Azul & Celeste',
           description: 'Limpio, frío y equilibrado',
           previewTop: '#fdfbff',
           previewSurface: '#f7f9ff',
@@ -109,7 +109,7 @@ export default class Cabecera {
       items: [
         {
           name: 'magenta-violet-theme',
-          label: 'Magenta & Violet',
+          label: 'Magenta & Violeta',
           description: 'Oscuro, intenso y vibrante',
           previewTop: '#1e1a1d',
           previewSurface: '#151316',
@@ -118,7 +118,7 @@ export default class Cabecera {
         },
         {
           name: 'cyan-orange-theme',
-          label: 'Cyan & Orange',
+          label: 'Cian & Naranja',
           description: 'Oscuro, técnico y contrastado',
           previewTop: '#191c1c',
           previewSurface: '#111414',

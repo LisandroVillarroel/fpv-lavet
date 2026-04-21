@@ -227,16 +227,35 @@ export class AuthTokenService {
     return exp * 1000 <= Date.now();
   }
 
-  handleExpiredSession(): void {
+  beginExpiredSessionRedirect(): boolean {
     if (this._isRedirecting) {
-      return;
+      return false;
     }
 
     this._isRedirecting = true;
+    return true;
+  }
+
+  completeExpiredSessionRedirect(): void {
     this._session.set(null);
     this._token.set(null);
     this.storage?.removeItem(SESSION_KEY);
     this.redirectToPortal();
+  }
+
+  handleExpiredSession(redirectDelayMs = 0): void {
+    if (!this.beginExpiredSessionRedirect()) {
+      return;
+    }
+
+    if (redirectDelayMs > 0) {
+      this._document.defaultView?.setTimeout(() => {
+        this.completeExpiredSessionRedirect();
+      }, redirectDelayMs);
+      return;
+    }
+
+    this.completeExpiredSessionRedirect();
   }
 
   private decodeJwtPayload(token: string): Record<string, unknown> | null {

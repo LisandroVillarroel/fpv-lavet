@@ -36,12 +36,7 @@ export class App implements OnInit {
               const stored = this.authToken.getStorage();
             },
             error: (err) => {
-              if (err?.status === 401) {
-                console.error('[APP] Token inválido, limpiando sesión.', err);
-                this.authToken.clear();
-              } else {
-                console.error('[APP] Error al obtener usuario, pero se mantiene el token.', err);
-              }
+              console.error('[APP] No se pudo completar la carga inicial del perfil.', err);
               // Log extra para verificar storage tras error
               const stored = this.authToken.getStorage();
             },

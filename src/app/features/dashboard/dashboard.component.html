@@ -11,7 +11,7 @@
     </mat-card-header>
 
     <mat-card-content>
-      <p class="dashboard-meta">Último acceso: {{ now | date : "medium" }}</p>
+      <p class="dashboard-meta">Último acceso: {{ now | date: 'medium' }}</p>
       <div class="feature-chips">
         <mat-chip-row>
           <span matChip>Agenda inteligente</span>
@@ -20,15 +20,9 @@
         </mat-chip-row>
       </div>
       <p>
-        Mantén la continuidad del cuidado con acceso a resultados de laboratorio
-        y unifica la comunicación con los tutores en tiempo real.
+        Mantén la continuidad del cuidado con acceso a resultados de laboratorio y unifica la
+        comunicación con los tutores en tiempo real.
       </p>
     </mat-card-content>
-
-    <mat-card-actions>
-      <button mat-stroked-button color="primary" (click)="logout()">
-        Cerrar sesión
-      </button>
-    </mat-card-actions>
   </mat-card>
 </section>
