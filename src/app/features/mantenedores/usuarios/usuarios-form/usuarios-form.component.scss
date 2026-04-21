@@ -1,21 +1,17 @@
-.dialog-title {
-  color: var(--mat-sys-on-surface);
+
+mat-dialog-actions {
+  align-items: stretch;
 }
 
-.usuario-form-dialog {
-  display: grid;
-  gap: 4px;
-  padding-top: 8px;
-}
-
-.full-width {
-  width: 100%;
-  margin-bottom: 8px;
-}
-
-.actions {
+mat-dialog-actions > div {
   display: flex;
-  justify-content: flex-end;
-  gap: 8px;
-  margin-top: 16px;
+}
+
+mat-dialog-actions button {
+  width: 100%;
+}
+
+
+button {
+  width: 100%;
 }

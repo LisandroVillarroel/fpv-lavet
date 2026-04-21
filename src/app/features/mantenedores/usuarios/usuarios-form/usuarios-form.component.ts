@@ -1,5 +1,6 @@
 import { Component, inject, signal } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
+import { A11yModule } from '@angular/cdk/a11y';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
@@ -10,7 +11,7 @@ import { FormsModule, NgForm } from '@angular/forms';
 
 import { IUsuario } from '@usuarios/usuariosInterface';
 import { UsuarioService } from '@usuarios/usuarios.service';
-
+import TituloComponentePopup from '@app/shared/ui/tituloComponentePopup';
 
 @Component({
   selector: 'app-usuarios-form',
@@ -18,6 +19,7 @@ import { UsuarioService } from '@usuarios/usuarios.service';
   templateUrl: './usuarios-form.component.html',
   styleUrls: ['./usuarios-form.component.scss'],
   imports: [
+    A11yModule,
     MatDialogModule,
     MatFormFieldModule,
     MatInputModule,
@@ -25,6 +27,7 @@ import { UsuarioService } from '@usuarios/usuarios.service';
     MatSelectModule,
     MatOptionModule,
     FormsModule,
+    TituloComponentePopup,
   ],
 })
 export class UsuariosFormComponent {

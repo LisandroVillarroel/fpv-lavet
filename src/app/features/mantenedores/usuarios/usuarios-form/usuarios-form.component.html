@@ -1,146 +1,151 @@
-<h2 mat-dialog-title class="dialog-title">
+<!--<h2 mat-dialog-title class="dialog-title">
   {{ modo === 'agregar' ? 'Agregar Usuario' : 'Editar Usuario' }}
 </h2>
-<form
-  #usuarioForm="ngForm"
-  (ngSubmit)="guardar(usuarioForm)"
-  mat-dialog-content
-  class="usuario-form-dialog"
->
-  <mat-form-field appearance="outline" class="full-width">
-    <mat-label>Usuario</mat-label>
-    <input
-      matInput
-      [(ngModel)]="usuario.usuario"
-      name="usuario"
-      required
-      placeholder="Usuario"
-      title="Usuario"
-    />
-  </mat-form-field>
-  <mat-form-field appearance="outline" class="full-width">
-    <mat-label>RUT</mat-label>
-    <input
-      matInput
-      [(ngModel)]="usuario.rutUsuario"
-      name="rutUsuario"
-      required
-      placeholder="RUT"
-      title="RUT"
-    />
-  </mat-form-field>
-  <mat-form-field appearance="outline" class="full-width">
-    <mat-label>Nombres</mat-label>
-    <input
-      matInput
-      [(ngModel)]="usuario.nombres"
-      name="nombres"
-      required
-      placeholder="Nombres"
-      title="Nombres"
-    />
-  </mat-form-field>
-  <mat-form-field appearance="outline" class="full-width">
-    <mat-label>Apellido Paterno</mat-label>
-    <input
-      matInput
-      [(ngModel)]="usuario.apellidoPaterno"
-      name="apellidoPaterno"
-      required
-      placeholder="Apellido Paterno"
-      title="Apellido Paterno"
-    />
-  </mat-form-field>
-  <mat-form-field appearance="outline" class="full-width">
-    <mat-label>Apellido Materno</mat-label>
-    <input
-      matInput
-      [(ngModel)]="usuario.apellidoMaterno"
-      name="apellidoMaterno"
-      required
-      placeholder="Apellido Materno"
-      title="Apellido Materno"
-    />
-  </mat-form-field>
-  <mat-form-field appearance="outline" class="full-width">
-    <mat-label>Email</mat-label>
-    <input
-      matInput
-      type="email"
-      [(ngModel)]="usuario.email"
-      name="email"
-      required
-      placeholder="Email"
-      title="Email"
-    />
-  </mat-form-field>
-  <mat-form-field appearance="outline" class="full-width">
-    <mat-label>Teléfono</mat-label>
-    <input
-      matInput
-      [(ngModel)]="usuario.telefono"
-      name="telefono"
-      placeholder="Teléfono"
-      title="Teléfono"
-    />
-  </mat-form-field>
-  <mat-form-field appearance="outline" class="full-width">
-    <mat-label>Dirección</mat-label>
-    <input
-      matInput
-      [(ngModel)]="usuario.direccion"
-      name="direccion"
-      placeholder="Dirección"
-      title="Dirección"
-    />
-  </mat-form-field>
-  <mat-form-field appearance="outline" class="full-width">
-    <mat-label>Región</mat-label>
-    <input
-      matInput
-      [(ngModel)]="usuario.region"
-      name="region"
-      placeholder="Región"
-      title="Región"
-    />
-  </mat-form-field>
-  <mat-form-field appearance="outline" class="full-width">
-    <mat-label>Comuna</mat-label>
-    <input
-      matInput
-      [(ngModel)]="usuario.comuna"
-      name="comuna"
-      placeholder="Comuna"
-      title="Comuna"
-    />
-  </mat-form-field>
-  <mat-form-field appearance="outline" class="full-width">
-    <mat-label>Tipo Usuario</mat-label>
-    <input
-      matInput
-      [(ngModel)]="usuario.tipoUsuario"
-      name="tipoUsuario"
-      placeholder="Tipo Usuario"
-      title="Tipo Usuario"
-    />
-  </mat-form-field>
-  <mat-form-field appearance="outline" class="full-width">
-    <mat-label>Estado</mat-label>
-    <mat-select
-      [(ngModel)]="usuario.estadoUsuario"
-      name="estadoUsuario"
-      placeholder="Estado"
-      title="Estado"
-    >
-      <mat-option value="Activo">Activo</mat-option>
-      <mat-option value="Bloqueado">Bloqueado</mat-option>
-      <mat-option value="Suspendido">Suspendido</mat-option>
-    </mat-select>
-  </mat-form-field>
-  <div class="actions">
-    <button mat-raised-button color="primary" type="submit" [disabled]="usuarioForm.invalid">
-      Guardar
-    </button>
-    <button mat-stroked-button type="button" (click)="cancelar()">Cancelar</button>
-  </div>
+-->
+<app-TituloComponentePopup [titulo]="modo === 'agregar' ? 'Agregar Usuario' : 'Editar Usuario'" />
+<form #usuarioForm="ngForm" (ngSubmit)="guardar(usuarioForm)">
+  <mat-dialog-content class="formulario-form-dialog">
+    <mat-form-field>
+      <mat-label class="labelI">Usuario</mat-label>
+      <input
+        cdkFocusInitial
+        matInput
+        [(ngModel)]="usuario.usuario"
+        name="usuario"
+        required
+        placeholder="Usuario"
+        title="Usuario"
+      />
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label class="labelI">RUT</mat-label>
+      <input
+        matInput
+        [(ngModel)]="usuario.rutUsuario"
+        name="rutUsuario"
+        required
+        placeholder="RUT"
+        title="RUT"
+      />
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label class="labelI">Nombres</mat-label>
+      <input
+        matInput
+        [(ngModel)]="usuario.nombres"
+        name="nombres"
+        required
+        placeholder="Nombres"
+        title="Nombres"
+      />
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label class="labelI">Apellido Paterno</mat-label>
+      <input
+        matInput
+        [(ngModel)]="usuario.apellidoPaterno"
+        name="apellidoPaterno"
+        required
+        placeholder="Apellido Paterno"
+        title="Apellido Paterno"
+      />
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label class="labelI">Apellido Materno</mat-label>
+      <input
+        matInput
+        [(ngModel)]="usuario.apellidoMaterno"
+        name="apellidoMaterno"
+        required
+        placeholder="Apellido Materno"
+        title="Apellido Materno"
+      />
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label class="labelI">Email</mat-label>
+      <input
+        matInput
+        type="email"
+        [(ngModel)]="usuario.email"
+        name="email"
+        required
+        placeholder="Email"
+        title="Email"
+      />
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label class="labelI">Teléfono</mat-label>
+      <input
+        matInput
+        [(ngModel)]="usuario.telefono"
+        name="telefono"
+        placeholder="Teléfono"
+        title="Teléfono"
+      />
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label class="labelI">Dirección</mat-label>
+      <input
+        matInput
+        [(ngModel)]="usuario.direccion"
+        name="direccion"
+        placeholder="Dirección"
+        title="Dirección"
+      />
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label class="labelI">Región</mat-label>
+      <input
+        matInput
+        [(ngModel)]="usuario.region"
+        name="region"
+        placeholder="Región"
+        title="Región"
+      />
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label class="labelI">Comuna</mat-label>
+      <input
+        matInput
+        [(ngModel)]="usuario.comuna"
+        name="comuna"
+        placeholder="Comuna"
+        title="Comuna"
+      />
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label class="labelI">Tipo Usuario</mat-label>
+      <input
+        matInput
+        [(ngModel)]="usuario.tipoUsuario"
+        name="tipoUsuario"
+        placeholder="Tipo Usuario"
+        title="Tipo Usuario"
+      />
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label class="labelI">Estado</mat-label>
+      <mat-select
+        [(ngModel)]="usuario.estadoUsuario"
+        name="estadoUsuario"
+        placeholder="Estado"
+        title="Estado"
+      >
+        <mat-option value="Activo">Activo</mat-option>
+        <mat-option value="Bloqueado">Bloqueado</mat-option>
+        <mat-option value="Suspendido">Suspendido</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </mat-dialog-content>
+
+  <mat-dialog-actions class="row g-3 w-100 m-0 px-4 pb-4">
+    <div class="col-12 col-md-6">
+      <button mat-raised-button color="primary" type="submit" [disabled]="usuarioForm.invalid">
+        Guardar
+      </button>
+    </div>
+    <div class="col-12 col-md-6">
+      <button mat-stroked-button type="button" (click)="cancelar()">Cancelar</button>
+    </div>
+  </mat-dialog-actions>
 </form>

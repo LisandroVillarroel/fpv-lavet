@@ -248,13 +248,19 @@ body {
 
 /*Fin Titulo Mantenedores Tablas principales*/
 /* Titulos Mantenedores secundarios */
-.mat-mdc-dialog-container,
-.mdc-dialog__title {
+.mat-mdc-dialog-container .mdc-dialog__title,
+.mat-mdc-dialog-container .dialog-title {
   color: var(--mat-sys-on-secondary-container) !important;
   background-color: var(--mat-sys-secondary-container) !important;
   font-size: 16px !important;
   text-align: center;
   height: 65px;
+}
+
+.full-screen-modal .mat-mdc-dialog-surface,
+.full-screen-modal .mdc-dialog__surface {
+  border-radius: 18px !important;
+  overflow: hidden !important;
 }
 
 /* Fin Titulos Mantenedores Secundarios*/
@@ -332,8 +338,8 @@ button.nuevo {
   // color: black !important;
   border: 0;
   //background-color: rgb(112 108 108 / 34%);
-  width: 30px !important;
-  height: 30px !important;
+  width: 40px !important;
+  height: 40px !important;
   background-color: transparent;
 }
 
@@ -486,6 +492,44 @@ mat-button-toggle-group.contrast {
   /*Fin Modifica el fields*/
 }
 
+/*FORMULARIOS*/
+.formulario-form-dialog {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.formulario-form-dialog .mat-mdc-form-field {
+  width: calc(50% - 6px) !important;
+  --mat-form-field-container-height: 32px;
+  --mat-form-field-container-vertical-padding: 4px;
+}
+
+.formulario-form-dialog .mat-mdc-text-field-wrapper {
+  height: 32px !important;
+}
+
+.formulario-form-dialog .mat-mdc-form-field-flex {
+  height: 32px !important;
+  align-items: center;
+}
+
+.formulario-form-dialog .mat-mdc-form-field-infix {
+  min-height: 32px !important;
+  padding-top: 4px !important;
+  padding-bottom: 4px !important;
+}
+
+.formulario-form-dialog .mat-mdc-input-element,
+.formulario-form-dialog .mat-mdc-select-value-text,
+.formulario-form-dialog .mdc-floating-label {
+  font-size: 11px !important;
+}
+
+.formulario-form-dialog .mat-mdc-form-field-subscript-wrapper {
+  height: 12px;
+}
+/*FIN FORMULARIOS*/
 ::ng-deep .mat-mdc-form-field-infix {
   --mat-form-field-container-height: 5px;
   min-height: var(--mat-form-field-container-height, 5px);
