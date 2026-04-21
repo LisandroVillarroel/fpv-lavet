@@ -2,21 +2,21 @@
 
 <!--<app-ExportaMatTableComponente [exporter]="exporter" [nombreArchivo]="'Usuarios'" />-->
 
-<section class="usuarios-list-container">
-  <div class="toolbar-busqueda">
-    <mat-form-field appearance="outline" subscriptSizing="dynamic" class="search-field inputBuscar">
+<section>
+  <div class="ml-2 mr-2">
+    <mat-form-field class="inputBuscar">
       <mat-icon matPrefix>search</mat-icon>
       <input matInput (keyup)="applyFilter($event)" placeholder="Buscar" />
     </mat-form-field>
   </div>
 
-  <div class="table-shell">
+  <div class="tabla-mantenedor">
     <table
       mat-table
       [dataSource]="dataSource()"
       multiTemplateDataRows
       matSort
-      class="usuarios-table"
+      class="tabla-cabecera"
     >
       <!-- ID Index -->
       <ng-container matColumnDef="index">

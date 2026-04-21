@@ -191,15 +191,44 @@ body {
 }
 
 .inputBuscar {
-  font-size: 12px !important;
-  font-family: Roboto, "Helvetica Neue", sans-serif;
   padding-top: 10px !important;
-  padding-bottom: 5px !important;
-  height: 80%;
-  /* height: 55px !important; /*tamaño height de inpul*/
+  font-size: 12px !important;
+  font-family: Roboto, 'Helvetica Neue', sans-serif;
+  width: 100%;
+  --mat-form-field-container-height: 40px;
+  --mat-form-field-container-vertical-padding: 8px;
 }
 
+.inputBuscar .mat-mdc-text-field-wrapper {
+  height: 40px;
+}
 
+.inputBuscar .mat-mdc-form-field-flex {
+  height: 40px;
+  align-items: center;
+}
+
+.inputBuscar .mat-mdc-form-field-infix {
+  min-height: 40px;
+  padding-top: 8px !important;
+  padding-bottom: 8px !important;
+}
+
+.inputBuscar .mat-mdc-form-field-subscript-wrapper {
+  height: 2px !important;
+}
+
+.tabla-cabecera .mat-mdc-header-row {
+  height: 36px !important;
+}
+
+.tabla-mantenedor {
+  border: 1px solid var(--mat-sys-outline-variant);
+  border-radius: 20px;
+  overflow: hidden;
+  background: var(--mat-sys-surface);
+  box-shadow: var(--mat-sys-level1);
+}
 /*MAT-TABLE*/
 /* Mantenedores Material*/
 /*Titulo Mantenedores Tablas principales*/
@@ -340,6 +369,12 @@ button.tabla {
 }
 
 /* Fin Foot Tabla*/
+
+mat-paginator {
+  background: var(--mat-sys-surface-container-low);
+  color: var(--mat-sys-on-surface);
+  border-top: 1px solid var(--mat-sys-outline-variant);
+}
 /*Fin MAT-TABLE*/
 
 .accent {

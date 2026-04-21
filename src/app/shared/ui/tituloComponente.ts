@@ -4,14 +4,15 @@ import { Component, input } from '@angular/core';
   selector: 'app-TituloComponente',
   standalone: true,
   imports: [],
-  template: ` <h6 class="titulo-componente">{{ titulo() }}</h6> `,
+  template: ` <div class="titulo-componente">{{ titulo() }}</div> `,
   styles: `
     .titulo-componente {
-      color: var(--mat-sys-on-surface);
+      color: var(--mat-sys-primary);
       margin: 0;
       text-align: center;
-      font-size: 1.5rem;
+      font-size: 1.2rem;
       line-height: 1.2;
+      font-weight: 500;
     }
   `,
 })
