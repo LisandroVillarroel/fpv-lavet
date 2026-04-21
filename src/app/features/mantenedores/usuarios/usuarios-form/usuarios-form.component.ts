@@ -9,7 +9,7 @@ import { MatOptionModule } from '@angular/material/core';
 
 import { FormsModule, NgForm } from '@angular/forms';
 
-import { IUsuario } from '@usuarios/usuariosInterface';
+import { IUsuario, IVeterinaria } from '@usuarios/usuariosInterface';
 import { UsuarioService } from '@usuarios/usuarios.service';
 import TituloComponentePopup from '@app/shared/ui/tituloComponentePopup';
 
@@ -34,6 +34,11 @@ export class UsuariosFormComponent {
   private readonly usuarioService = inject(UsuarioService);
   private readonly dialogRef = inject(MatDialogRef<UsuariosFormComponent>);
   readonly data = inject(MAT_DIALOG_DATA) as any;
+  private readonly defaultVeterinaria: IVeterinaria = {
+    tipoVeterinario: '',
+    rolVeterinario: '',
+    porcentajeComisionVeterinario: 0,
+  };
 
   modo: 'agregar' | 'editar';
   isLoading = signal(false);
@@ -52,6 +57,7 @@ export class UsuariosFormComponent {
     region: '',
     comuna: '',
     tipoUsuario: 'Veterinaria', // O un valor por defecto válido
+    veterinaria: { ...this.defaultVeterinaria },
     estadoUsuario: 'Activo',
   };
 
@@ -59,7 +65,13 @@ export class UsuariosFormComponent {
     this.modo = this.data.modo;
 
     if (this.modo === 'editar' && this.data.usuario) {
-      this.usuario = { ...this.data.usuario };
+      this.usuario = {
+        ...this.data.usuario,
+        veterinaria: {
+          ...this.defaultVeterinaria,
+          ...(this.data.usuario.veterinaria ?? {}),
+        },
+      };
     }
   }
 
