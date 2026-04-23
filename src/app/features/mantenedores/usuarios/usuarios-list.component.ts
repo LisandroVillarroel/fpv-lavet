@@ -23,14 +23,13 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
-import { UsuarioService } from '@usuarios/usuarios.service';
-import { AuthTokenService } from '@core/services/auth-token.service';
-import { UsuariosFormComponent } from '@usuarios/usuarios-form/usuarios-form.component';
-import { UsuariosViewComponent } from '@usuarios/usuarios-view/usuarios-view.component';
+import { UsuarioService } from '@features/mantenedores/usuarios/usuarios.service';
+import { UsuariosFormComponent } from '@features/mantenedores/usuarios/usuarios-form/usuarios-form.component';
+import { UsuariosViewComponent } from '@features/mantenedores/usuarios/usuarios-view/usuarios-view.component';
 import { TituloComponente } from '@shared/ui/tituloComponente';
 import { StorageService } from '@core/guards/storage.service';
 import { loginInterface } from '@core/auth/loginInterface';
-import { IUsuario } from '@usuarios/usuariosInterface';
+import { IUsuario } from '@features/mantenedores/usuarios/usuariosInterface';
 import { combineLatest } from 'rxjs';
 import { map, switchAll } from 'rxjs';
 

@@ -2,7 +2,10 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '@envs/environment';
-import { DashboardRequest, DashboardResponse } from '@portada/portada.models';
+import {
+  DashboardRequest,
+  DashboardResponse,
+} from '@core/layout/estructura/portada/portada.models';
 
 @Injectable({ providedIn: 'root' })
 export class PortadaDashboardService {

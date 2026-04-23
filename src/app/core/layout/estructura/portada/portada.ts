@@ -46,8 +46,8 @@ import {
   DashboardRequest,
   DashboardResponse,
   DashboardStats,
-} from '@portada/portada.models';
-import { PortadaDashboardService } from '@portada/portada.service';
+} from '@core/layout/estructura/portada/portada.models';
+import { PortadaDashboardService } from '@core/layout/estructura/portada/portada.service';
 import { MatDialog } from '@angular/material/dialog';
 import { loginInterface } from '@core/auth/loginInterface';
 

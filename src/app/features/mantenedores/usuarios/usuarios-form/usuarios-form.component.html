@@ -3,131 +3,132 @@
 </h2>
 -->
 <app-TituloComponentePopup [titulo]="modo === 'agregar' ? 'Agregar Usuario' : 'Editar Usuario'" />
-<form #usuarioForm="ngForm" (ngSubmit)="guardar(usuarioForm)">
+<form (ngSubmit)="guardar()">
   <mat-dialog-content class="formulario-form-dialog">
     <mat-form-field>
       <mat-label class="labelI">Usuario</mat-label>
       <input
         cdkFocusInitial
         matInput
-        [(ngModel)]="usuario.usuario"
-        name="usuario"
-        required
+        [formField]="usuarioForm.usuario"
         placeholder="Usuario"
         title="Usuario"
       />
+      @if (usuarioForm.usuario().touched() && !usuarioForm.usuario().valid()) {
+        <mat-error>{{ usuarioErrorMessage() }}</mat-error>
+      }
     </mat-form-field>
+
     <mat-form-field>
       <mat-label class="labelI">RUT</mat-label>
-      <input
-        matInput
-        [(ngModel)]="usuario.rutUsuario"
-        name="rutUsuario"
-        required
-        placeholder="RUT"
-        title="RUT"
-      />
+      <input matInput [formField]="usuarioForm.rutUsuario" placeholder="RUT" title="RUT" />
+      @if (usuarioForm.rutUsuario().touched() && !usuarioForm.rutUsuario().valid()) {
+        <mat-error>{{ rutUsuarioErrorMessage() }}</mat-error>
+      }
     </mat-form-field>
+
     <mat-form-field>
       <mat-label class="labelI">Nombres</mat-label>
-      <input
-        matInput
-        [(ngModel)]="usuario.nombres"
-        name="nombres"
-        required
-        placeholder="Nombres"
-        title="Nombres"
-      />
+      <input matInput [formField]="usuarioForm.nombres" placeholder="Nombres" title="Nombres" />
+      @if (usuarioForm.nombres().touched() && !usuarioForm.nombres().valid()) {
+        <mat-error>{{ nombresErrorMessage() }}</mat-error>
+      }
     </mat-form-field>
+
     <mat-form-field>
       <mat-label class="labelI">Apellido Paterno</mat-label>
       <input
         matInput
-        [(ngModel)]="usuario.apellidoPaterno"
-        name="apellidoPaterno"
-        required
+        [formField]="usuarioForm.apellidoPaterno"
         placeholder="Apellido Paterno"
         title="Apellido Paterno"
       />
+      @if (usuarioForm.apellidoPaterno().touched() && !usuarioForm.apellidoPaterno().valid()) {
+        <mat-error>{{ apellidoPaternoErrorMessage() }}</mat-error>
+      }
     </mat-form-field>
+
     <mat-form-field>
       <mat-label class="labelI">Apellido Materno</mat-label>
       <input
         matInput
-        [(ngModel)]="usuario.apellidoMaterno"
-        name="apellidoMaterno"
-        required
+        [formField]="usuarioForm.apellidoMaterno"
         placeholder="Apellido Materno"
         title="Apellido Materno"
       />
+      @if (usuarioForm.apellidoMaterno().touched() && !usuarioForm.apellidoMaterno().valid()) {
+        <mat-error>{{ apellidoMaternoErrorMessage() }}</mat-error>
+      }
     </mat-form-field>
+
     <mat-form-field>
       <mat-label class="labelI">Email</mat-label>
       <input
         matInput
         type="email"
-        [(ngModel)]="usuario.email"
-        name="email"
-        required
+        [formField]="usuarioForm.email"
         placeholder="Email"
         title="Email"
       />
+      @if (usuarioForm.email().touched() && !usuarioForm.email().valid()) {
+        <mat-error>{{ emailErrorMessage() }}</mat-error>
+      }
     </mat-form-field>
+
     <mat-form-field>
       <mat-label class="labelI">Teléfono</mat-label>
-      <input
-        matInput
-        [(ngModel)]="usuario.telefono"
-        name="telefono"
-        placeholder="Teléfono"
-        title="Teléfono"
-      />
+      <input matInput [formField]="usuarioForm.telefono" placeholder="Teléfono" title="Teléfono" />
+      @if (usuarioForm.telefono().touched() && !usuarioForm.telefono().valid()) {
+        <mat-error>{{ telefonoErrorMessage() }}</mat-error>
+      }
     </mat-form-field>
+
     <mat-form-field>
       <mat-label class="labelI">Dirección</mat-label>
       <input
         matInput
-        [(ngModel)]="usuario.direccion"
-        name="direccion"
+        [formField]="usuarioForm.direccion"
         placeholder="Dirección"
         title="Dirección"
       />
+      @if (usuarioForm.direccion().touched() && !usuarioForm.direccion().valid()) {
+        <mat-error>{{ direccionErrorMessage() }}</mat-error>
+      }
     </mat-form-field>
+
     <mat-form-field>
       <mat-label class="labelI">Región</mat-label>
-      <input
-        matInput
-        [(ngModel)]="usuario.region"
-        name="region"
-        placeholder="Región"
-        title="Región"
-      />
+      <input matInput [formField]="usuarioForm.region" placeholder="Región" title="Región" />
+      @if (usuarioForm.region().touched() && !usuarioForm.region().valid()) {
+        <mat-error>{{ regionErrorMessage() }}</mat-error>
+      }
     </mat-form-field>
+
     <mat-form-field>
       <mat-label class="labelI">Comuna</mat-label>
-      <input
-        matInput
-        [(ngModel)]="usuario.comuna"
-        name="comuna"
-        placeholder="Comuna"
-        title="Comuna"
-      />
+      <input matInput [formField]="usuarioForm.comuna" placeholder="Comuna" title="Comuna" />
+      @if (usuarioForm.comuna().touched() && !usuarioForm.comuna().valid()) {
+        <mat-error>{{ comunaErrorMessage() }}</mat-error>
+      }
     </mat-form-field>
+
     <mat-form-field>
       <mat-label class="labelI">Tipo Usuario</mat-label>
       <input
         matInput
-        [(ngModel)]="usuario.tipoUsuario"
-        name="tipoUsuario"
+        [formField]="usuarioForm.tipoUsuario"
         placeholder="Tipo Usuario"
         title="Tipo Usuario"
       />
+      @if (usuarioForm.tipoUsuario().touched() && !usuarioForm.tipoUsuario().valid()) {
+        <mat-error>{{ tipoUsuarioErrorMessage() }}</mat-error>
+      }
     </mat-form-field>
+
     <mat-form-field>
       <mat-label class="labelI">Tipo Veterinario</mat-label>
       <mat-select
-        [(ngModel)]="usuario.veterinaria!.tipoVeterinario"
-        name="tipoVeterinario"
+        [formField]="tipoVeterinario"
         placeholder="Dr., Dra., Tec. Vet., etc."
         title="Tipo Veterinario"
       >
@@ -136,50 +137,57 @@
         <mat-option value="Tec. Vet.">Tec. Vet.</mat-option>
         <mat-option value="Asistente Vet.">Asistente Vet.</mat-option>
       </mat-select>
+      @if (tipoVeterinario().touched() && !tipoVeterinario().valid()) {
+        <mat-error>{{ tipoVeterinarioErrorMessage() }}</mat-error>
+      }
     </mat-form-field>
+
     <mat-form-field>
       <mat-label class="labelI">Rol Veterinario</mat-label>
       <mat-select
-        [(ngModel)]="usuario.veterinaria!.rolVeterinario"
-        name="rolVeterinario"
+        [formField]="rolVeterinario"
         placeholder="administrador, veterinario"
         title="Rol Veterinario"
       >
         <mat-option value="administrador">Administrador</mat-option>
         <mat-option value="veterinario">Veterinario</mat-option>
       </mat-select>
+      @if (rolVeterinario().touched() && !rolVeterinario().valid()) {
+        <mat-error>{{ rolVeterinarioErrorMessage() }}</mat-error>
+      }
     </mat-form-field>
+
     <mat-form-field>
       <mat-label class="labelI">% Comisión Veterinario</mat-label>
       <input
         matInput
         type="number"
-        [(ngModel)]="usuario.veterinaria!.porcentajeComisionVeterinario"
-        name="porcentajeComisionVeterinario"
-        min="0"
+        [formField]="porcentajeComisionVeterinario"
         step="0.01"
         placeholder="0"
         title="Porcentaje Comisión Veterinario"
       />
+      @if (porcentajeComisionVeterinario().touched() && !porcentajeComisionVeterinario().valid()) {
+        <mat-error>{{ porcentajeComisionVeterinarioErrorMessage() }}</mat-error>
+      }
     </mat-form-field>
+
     <mat-form-field>
       <mat-label class="labelI">Estado</mat-label>
-      <mat-select
-        [(ngModel)]="usuario.estadoUsuario"
-        name="estadoUsuario"
-        placeholder="Estado"
-        title="Estado"
-      >
+      <mat-select [formField]="usuarioForm.estadoUsuario" placeholder="Estado" title="Estado">
         <mat-option value="Activo">Activo</mat-option>
         <mat-option value="Bloqueado">Bloqueado</mat-option>
         <mat-option value="Suspendido">Suspendido</mat-option>
       </mat-select>
+      @if (usuarioForm.estadoUsuario().touched() && !usuarioForm.estadoUsuario().valid()) {
+        <mat-error>{{ estadoUsuarioErrorMessage() }}</mat-error>
+      }
     </mat-form-field>
   </mat-dialog-content>
 
   <mat-dialog-actions class="row g-3 w-100 m-0 px-4 pb-4">
     <div class="col-12 col-md-6">
-      <button mat-raised-button color="primary" type="submit" [disabled]="usuarioForm.invalid">
+      <button mat-raised-button color="primary" type="submit" [disabled]="isFormInvalid()">
         Guardar
       </button>
     </div>

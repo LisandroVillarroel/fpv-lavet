@@ -11,7 +11,7 @@ export const routes: Routes = [
 
   {
     path: '',
-    loadComponent: () => import('@layout/estructura/principal/principal'),
+    loadComponent: () => import('@core/layout/estructura/principal/principal'),
     canActivate: [authGuard],
     children: [
       {
@@ -20,7 +20,7 @@ export const routes: Routes = [
       },
       {
         path: 'mantenedores/usuarios',
-        loadComponent: () => import('@usuarios/usuarios-list.component'),
+        loadComponent: () => import('@features/mantenedores/usuarios/usuarios-list.component'),
       },
     ],
   },

@@ -3,7 +3,7 @@ import { MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
 
 import { NgIf } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
-import { IUsuario } from '@usuarios/usuariosInterface';
+import { IUsuario } from '@features/mantenedores/usuarios/usuariosInterface';
 
 @Component({
   selector: 'app-usuarios-view',
