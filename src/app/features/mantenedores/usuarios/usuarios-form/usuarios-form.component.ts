@@ -7,8 +7,9 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatSelectModule } from '@angular/material/select';
 import { MatOptionModule } from '@angular/material/core';
 
-import { FormField, form, required, email, min } from '@angular/forms/signals';
+import { FormField, form, required, email, min, validate } from '@angular/forms/signals';
 
+import { cleanRut, formatRut, RutFormat, validateRut } from '@fdograph/rut-utilities';
 import { UsuarioService } from '@features/mantenedores/usuarios/usuarios.service';
 import TituloComponentePopup from '@shared/ui/tituloComponentePopup';
 import {
@@ -65,118 +66,32 @@ export class UsuariosFormComponent {
   });
 
   usuarioForm = form(this.usuarioModel, (schema) => {
-    required(schema.usuario);
-    required(schema.rutUsuario);
-    required(schema.nombres);
-    required(schema.apellidoPaterno);
-    required(schema.apellidoMaterno);
-    required(schema.email);
-    email(schema.email);
-    required(schema.telefono);
-    required(schema.direccion);
-    required(schema.region);
-    required(schema.comuna);
-    required(schema.tipoUsuario);
-    required(schema.veterinaria!.tipoVeterinario);
-    required(schema.veterinaria!.rolVeterinario);
-    min(schema.veterinaria!.porcentajeComisionVeterinario, 0);
-    required(schema.estadoUsuario);
+    required(schema.usuario, { message: 'Usuario es requerido' });
+    required(schema.rutUsuario, { message: 'RUT es requerido' });
+    validate(schema.rutUsuario, (field) => {
+      const value = field.value();
+      if (!value) {
+        return [];
+      }
+      return validateRut(cleanRut(value)) ? [] : [{ kind: 'rut', message: 'RUT no es válido' }];
+    });
+    required(schema.nombres, { message: 'Nombres es requerido' });
+    required(schema.apellidoPaterno, { message: 'Apellido Paterno es requerido' });
+    required(schema.apellidoMaterno, { message: 'Apellido Materno es requerido' });
+    required(schema.email, { message: 'Email es requerido' });
+    email(schema.email, { message: 'Email no es válido' });
+    required(schema.telefono, { message: 'Teléfono es requerido' });
+    required(schema.direccion, { message: 'Dirección es requerido' });
+    required(schema.region, { message: 'Región es requerido' });
+    required(schema.comuna, { message: 'Comuna es requerido' });
+    required(schema.tipoUsuario, { message: 'Tipo Usuario es requerido' });
+    required(schema.veterinaria!.tipoVeterinario, { message: 'Tipo Veterinario es requerido' });
+    required(schema.veterinaria!.rolVeterinario, { message: 'Rol Veterinario es requerido' });
+    min(schema.veterinaria!.porcentajeComisionVeterinario, 0, {
+      message: 'Porcentaje Comisión Veterinario debe ser mayor o igual a 0',
+    });
+    required(schema.estadoUsuario, { message: 'Estado es requerido' });
   });
-
-  get tipoVeterinario() {
-    return this.usuarioForm.veterinaria!.tipoVeterinario;
-  }
-
-  get rolVeterinario() {
-    return this.usuarioForm.veterinaria!.rolVeterinario;
-  }
-
-  get porcentajeComisionVeterinario() {
-    return this.usuarioForm.veterinaria!.porcentajeComisionVeterinario;
-  }
-
-  readonly usuarioErrorMessage = computed(() =>
-    this.getFieldErrorMessage(this.usuarioForm.usuario, 'Usuario'),
-  );
-
-  readonly rutUsuarioErrorMessage = computed(() =>
-    this.getFieldErrorMessage(this.usuarioForm.rutUsuario, 'RUT'),
-  );
-
-  readonly nombresErrorMessage = computed(() =>
-    this.getFieldErrorMessage(this.usuarioForm.nombres, 'Nombres'),
-  );
-
-  readonly apellidoPaternoErrorMessage = computed(() =>
-    this.getFieldErrorMessage(this.usuarioForm.apellidoPaterno, 'Apellido Paterno'),
-  );
-
-  readonly apellidoMaternoErrorMessage = computed(() =>
-    this.getFieldErrorMessage(this.usuarioForm.apellidoMaterno, 'Apellido Materno'),
-  );
-
-  readonly emailErrorMessage = computed(() =>
-    this.getFieldErrorMessage(this.usuarioForm.email, 'Email'),
-  );
-
-  readonly telefonoErrorMessage = computed(() =>
-    this.getFieldErrorMessage(this.usuarioForm.telefono, 'Teléfono'),
-  );
-
-  readonly direccionErrorMessage = computed(() =>
-    this.getFieldErrorMessage(this.usuarioForm.direccion, 'Dirección'),
-  );
-
-  readonly regionErrorMessage = computed(() =>
-    this.getFieldErrorMessage(this.usuarioForm.region, 'Región'),
-  );
-
-  readonly comunaErrorMessage = computed(() =>
-    this.getFieldErrorMessage(this.usuarioForm.comuna, 'Comuna'),
-  );
-
-  readonly tipoUsuarioErrorMessage = computed(() =>
-    this.getFieldErrorMessage(this.usuarioForm.tipoUsuario, 'Tipo Usuario'),
-  );
-
-  readonly tipoVeterinarioErrorMessage = computed(() =>
-    this.getFieldErrorMessage(this.tipoVeterinario, 'Tipo Veterinario'),
-  );
-
-  readonly rolVeterinarioErrorMessage = computed(() =>
-    this.getFieldErrorMessage(this.rolVeterinario, 'Rol Veterinario'),
-  );
-
-  readonly porcentajeComisionVeterinarioErrorMessage = computed(() =>
-    this.getFieldErrorMessage(this.porcentajeComisionVeterinario, '% Comisión Veterinario'),
-  );
-
-  readonly estadoUsuarioErrorMessage = computed(() =>
-    this.getFieldErrorMessage(this.usuarioForm.estadoUsuario, 'Estado'),
-  );
-
-  getFieldErrorMessage(field: any, label: string) {
-    const errors = field().errors();
-    if (!errors?.length) {
-      return '';
-    }
-
-    if (errors.some((err: any) => err.kind === 'required')) {
-      return `${label} es obligatorio`;
-    }
-
-    if (errors.some((err: any) => err.kind === 'email')) {
-      return 'Email no es válido';
-    }
-
-    if (errors.some((err: any) => err.kind === 'min')) {
-      return label.includes('Comisión')
-        ? 'Porcentaje de comisión es obligatorio y debe ser mayor o igual a 0'
-        : `${label} debe ser mayor o igual a 0`;
-    }
-
-    return `${label} no es válido`;
-  }
 
   readonly isFormInvalid = computed(() => !this.usuarioForm().valid());
 
@@ -191,6 +106,15 @@ export class UsuariosFormComponent {
           ...(this.data.usuario.veterinaria ?? {}),
         },
       });
+    }
+  }
+
+  formatRutField(): void {
+    const rutField = this.usuarioForm.rutUsuario();
+    const currentRut = rutField.value()?.trim() ?? '';
+    const formattedRut = currentRut ? formatRut(currentRut, RutFormat.DOTS_DASH) : '';
+    if (formattedRut !== currentRut) {
+      rutField.value.set(formattedRut);
     }
   }
 

@@ -15,15 +15,25 @@
         title="Usuario"
       />
       @if (usuarioForm.usuario().touched() && !usuarioForm.usuario().valid()) {
-        <mat-error>{{ usuarioErrorMessage() }}</mat-error>
+        @for (error of usuarioForm.usuario().errors(); track error) {
+          <mat-error>{{ error.message }}</mat-error>
+        }
       }
     </mat-form-field>
 
     <mat-form-field>
       <mat-label class="labelI">RUT</mat-label>
-      <input matInput [formField]="usuarioForm.rutUsuario" placeholder="RUT" title="RUT" />
+      <input
+        matInput
+        [formField]="usuarioForm.rutUsuario"
+        placeholder="RUT"
+        title="RUT"
+        (blur)="formatRutField()"
+      />
       @if (usuarioForm.rutUsuario().touched() && !usuarioForm.rutUsuario().valid()) {
-        <mat-error>{{ rutUsuarioErrorMessage() }}</mat-error>
+        @for (error of usuarioForm.rutUsuario().errors(); track error) {
+          <mat-error>{{ error.message }}</mat-error>
+        }
       }
     </mat-form-field>
 
@@ -31,7 +41,9 @@
       <mat-label class="labelI">Nombres</mat-label>
       <input matInput [formField]="usuarioForm.nombres" placeholder="Nombres" title="Nombres" />
       @if (usuarioForm.nombres().touched() && !usuarioForm.nombres().valid()) {
-        <mat-error>{{ nombresErrorMessage() }}</mat-error>
+        @for (error of usuarioForm.nombres().errors(); track error) {
+          <mat-error>{{ error.message }}</mat-error>
+        }
       }
     </mat-form-field>
 
@@ -44,7 +56,9 @@
         title="Apellido Paterno"
       />
       @if (usuarioForm.apellidoPaterno().touched() && !usuarioForm.apellidoPaterno().valid()) {
-        <mat-error>{{ apellidoPaternoErrorMessage() }}</mat-error>
+        @for (error of usuarioForm.apellidoPaterno().errors(); track error) {
+          <mat-error>{{ error.message }}</mat-error>
+        }
       }
     </mat-form-field>
 
@@ -57,7 +71,9 @@
         title="Apellido Materno"
       />
       @if (usuarioForm.apellidoMaterno().touched() && !usuarioForm.apellidoMaterno().valid()) {
-        <mat-error>{{ apellidoMaternoErrorMessage() }}</mat-error>
+        @for (error of usuarioForm.apellidoMaterno().errors(); track error) {
+          <mat-error>{{ error.message }}</mat-error>
+        }
       }
     </mat-form-field>
 
@@ -71,7 +87,9 @@
         title="Email"
       />
       @if (usuarioForm.email().touched() && !usuarioForm.email().valid()) {
-        <mat-error>{{ emailErrorMessage() }}</mat-error>
+        @for (error of usuarioForm.email().errors(); track error) {
+          <mat-error>{{ error.message }}</mat-error>
+        }
       }
     </mat-form-field>
 
@@ -79,7 +97,9 @@
       <mat-label class="labelI">Teléfono</mat-label>
       <input matInput [formField]="usuarioForm.telefono" placeholder="Teléfono" title="Teléfono" />
       @if (usuarioForm.telefono().touched() && !usuarioForm.telefono().valid()) {
-        <mat-error>{{ telefonoErrorMessage() }}</mat-error>
+        @for (error of usuarioForm.telefono().errors(); track error) {
+          <mat-error>{{ error.message }}</mat-error>
+        }
       }
     </mat-form-field>
 
@@ -92,7 +112,9 @@
         title="Dirección"
       />
       @if (usuarioForm.direccion().touched() && !usuarioForm.direccion().valid()) {
-        <mat-error>{{ direccionErrorMessage() }}</mat-error>
+        @for (error of usuarioForm.direccion().errors(); track error) {
+          <mat-error>{{ error.message }}</mat-error>
+        }
       }
     </mat-form-field>
 
@@ -100,7 +122,9 @@
       <mat-label class="labelI">Región</mat-label>
       <input matInput [formField]="usuarioForm.region" placeholder="Región" title="Región" />
       @if (usuarioForm.region().touched() && !usuarioForm.region().valid()) {
-        <mat-error>{{ regionErrorMessage() }}</mat-error>
+        @for (error of usuarioForm.region().errors(); track error) {
+          <mat-error>{{ error.message }}</mat-error>
+        }
       }
     </mat-form-field>
 
@@ -108,7 +132,9 @@
       <mat-label class="labelI">Comuna</mat-label>
       <input matInput [formField]="usuarioForm.comuna" placeholder="Comuna" title="Comuna" />
       @if (usuarioForm.comuna().touched() && !usuarioForm.comuna().valid()) {
-        <mat-error>{{ comunaErrorMessage() }}</mat-error>
+        @for (error of usuarioForm.comuna().errors(); track error) {
+          <mat-error>{{ error.message }}</mat-error>
+        }
       }
     </mat-form-field>
 
@@ -121,14 +147,16 @@
         title="Tipo Usuario"
       />
       @if (usuarioForm.tipoUsuario().touched() && !usuarioForm.tipoUsuario().valid()) {
-        <mat-error>{{ tipoUsuarioErrorMessage() }}</mat-error>
+        @for (error of usuarioForm.tipoUsuario().errors(); track error) {
+          <mat-error>{{ error.message }}</mat-error>
+        }
       }
     </mat-form-field>
 
     <mat-form-field>
       <mat-label class="labelI">Tipo Veterinario</mat-label>
       <mat-select
-        [formField]="tipoVeterinario"
+        [formField]="usuarioForm.veterinaria!.tipoVeterinario"
         placeholder="Dr., Dra., Tec. Vet., etc."
         title="Tipo Veterinario"
       >
@@ -137,23 +165,33 @@
         <mat-option value="Tec. Vet.">Tec. Vet.</mat-option>
         <mat-option value="Asistente Vet.">Asistente Vet.</mat-option>
       </mat-select>
-      @if (tipoVeterinario().touched() && !tipoVeterinario().valid()) {
-        <mat-error>{{ tipoVeterinarioErrorMessage() }}</mat-error>
+      @if (
+        usuarioForm.veterinaria!.tipoVeterinario().touched() &&
+        !usuarioForm.veterinaria!.tipoVeterinario().valid()
+      ) {
+        @for (error of usuarioForm.veterinaria!.tipoVeterinario().errors(); track error) {
+          <mat-error>{{ error.message }}</mat-error>
+        }
       }
     </mat-form-field>
 
     <mat-form-field>
       <mat-label class="labelI">Rol Veterinario</mat-label>
       <mat-select
-        [formField]="rolVeterinario"
+        [formField]="usuarioForm.veterinaria!.rolVeterinario"
         placeholder="administrador, veterinario"
         title="Rol Veterinario"
       >
         <mat-option value="administrador">Administrador</mat-option>
         <mat-option value="veterinario">Veterinario</mat-option>
       </mat-select>
-      @if (rolVeterinario().touched() && !rolVeterinario().valid()) {
-        <mat-error>{{ rolVeterinarioErrorMessage() }}</mat-error>
+      @if (
+        usuarioForm.veterinaria!.rolVeterinario().touched() &&
+        !usuarioForm.veterinaria!.rolVeterinario().valid()
+      ) {
+        @for (error of usuarioForm.veterinaria!.rolVeterinario().errors(); track error) {
+          <mat-error>{{ error.message }}</mat-error>
+        }
       }
     </mat-form-field>
 
@@ -162,13 +200,21 @@
       <input
         matInput
         type="number"
-        [formField]="porcentajeComisionVeterinario"
+        [formField]="usuarioForm.veterinaria!.porcentajeComisionVeterinario"
         step="0.01"
         placeholder="0"
         title="Porcentaje Comisión Veterinario"
       />
-      @if (porcentajeComisionVeterinario().touched() && !porcentajeComisionVeterinario().valid()) {
-        <mat-error>{{ porcentajeComisionVeterinarioErrorMessage() }}</mat-error>
+      @if (
+        usuarioForm.veterinaria!.porcentajeComisionVeterinario().touched() &&
+        !usuarioForm.veterinaria!.porcentajeComisionVeterinario().valid()
+      ) {
+        @for (
+          error of usuarioForm.veterinaria!.porcentajeComisionVeterinario().errors();
+          track error
+        ) {
+          <mat-error>{{ error.message }}</mat-error>
+        }
       }
     </mat-form-field>
 
@@ -180,19 +226,21 @@
         <mat-option value="Suspendido">Suspendido</mat-option>
       </mat-select>
       @if (usuarioForm.estadoUsuario().touched() && !usuarioForm.estadoUsuario().valid()) {
-        <mat-error>{{ estadoUsuarioErrorMessage() }}</mat-error>
+        @for (error of usuarioForm.estadoUsuario().errors(); track error) {
+          <mat-error>{{ error.message }}</mat-error>
+        }
       }
     </mat-form-field>
   </mat-dialog-content>
 
   <mat-dialog-actions class="row g-3 w-100 m-0 px-4 pb-4">
     <div class="col-12 col-md-6">
+      <button mat-stroked-button type="button" (click)="cancelar()">Cancelar</button>
+    </div>
+    <div class="col-12 col-md-6">
       <button mat-raised-button color="primary" type="submit" [disabled]="isFormInvalid()">
         Guardar
       </button>
-    </div>
-    <div class="col-12 col-md-6">
-      <button mat-stroked-button type="button" (click)="cancelar()">Cancelar</button>
     </div>
   </mat-dialog-actions>
 </form>
