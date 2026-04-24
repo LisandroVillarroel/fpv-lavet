@@ -1,4 +1,5 @@
 import { Component, computed, inject, signal } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
 import { A11yModule } from '@angular/cdk/a11y';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -37,13 +38,25 @@ import {
 export class UsuariosFormComponent {
   private readonly usuarioService = inject(UsuarioService);
   private readonly dialogRef = inject(MatDialogRef<UsuariosFormComponent>);
-  readonly data = inject(MAT_DIALOG_DATA) as any;
+  readonly data = inject(MAT_DIALOG_DATA) as {
+    modo: 'agregar' | 'editar';
+    usuario?: any;
+    empresaId?: string;
+  };
+  readonly empresaId = this.data.empresaId ?? '';
 
   private readonly defaultVeterinaria: IVeterinariaFormulario = {
     tipoVeterinario: '',
     rolVeterinario: '',
     porcentajeComisionVeterinario: 0,
   };
+
+  readonly tiposVeterinario = toSignal(
+    this.usuarioService.obtenerTiposVeterinario(this.empresaId),
+    {
+      initialValue: [],
+    },
+  );
 
   modo: 'agregar' | 'editar';
   error = signal<string | null>(null);

@@ -160,10 +160,9 @@
         placeholder="Dr., Dra., Tec. Vet., etc."
         title="Tipo Veterinario"
       >
-        <mat-option value="Dr.">Dr.</mat-option>
-        <mat-option value="Dra.">Dra.</mat-option>
-        <mat-option value="Tec. Vet.">Tec. Vet.</mat-option>
-        <mat-option value="Asistente Vet.">Asistente Vet.</mat-option>
+        @for (tipo of tiposVeterinario(); track tipo.sigla) {
+          <mat-option [value]="tipo.sigla">{{ tipo.descripcion }}</mat-option>
+        }
       </mat-select>
       @if (
         usuarioForm.veterinaria!.tipoVeterinario().touched() &&

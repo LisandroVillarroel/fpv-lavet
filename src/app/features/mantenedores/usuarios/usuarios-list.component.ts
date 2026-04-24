@@ -124,7 +124,7 @@ export default class UsuariosListComponent implements OnInit, AfterViewInit {
       enterAnimationDuration,
       exitAnimationDuration,
       panelClass: 'full-screen-modal',
-      data: { modo: 'agregar' },
+      data: { modo: 'agregar', empresaId: this.empresaId },
     });
     dialogRef.afterClosed().subscribe((result) => {
       if (result) this.trigger.update((v) => v + 1);
@@ -134,7 +134,7 @@ export default class UsuariosListComponent implements OnInit, AfterViewInit {
   editar(usuario: IUsuario): void {
     const dialogRef = this.dialog.open(UsuariosFormComponent, {
       width: '700px',
-      data: { modo: 'editar', usuario },
+      data: { modo: 'editar', usuario, empresaId: this.empresaId },
       disableClose: true,
       autoFocus: false,
     });
