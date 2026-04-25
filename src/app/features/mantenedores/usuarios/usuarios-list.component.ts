@@ -29,7 +29,7 @@ import { UsuariosViewComponent } from '@features/mantenedores/usuarios/usuarios-
 import { TituloComponente } from '@shared/ui/tituloComponente';
 import { StorageService } from '@core/guards/storage.service';
 import { loginInterface } from '@core/auth/loginInterface';
-import { IUsuario } from '@features/mantenedores/usuarios/usuariosInterface';
+import { IUsuario, IUsuarioEmpresa } from '@features/mantenedores/usuarios/usuariosInterface';
 import { combineLatest } from 'rxjs';
 import { map, switchAll } from 'rxjs';
 
@@ -74,15 +74,7 @@ export default class UsuariosListComponent implements OnInit, AfterViewInit {
   trigger = signal(0);
   usuariosSignal = toSignal(
     combineLatest([toObservable(this.trigger)]).pipe(
-      map(() => {
-        const obs = this.#usuarioService.obtenerUsuarios(this.empresaId);
-        obs.subscribe({
-          next: (data) => console.log('[usuariosSignal] datos recibidos:', data),
-          error: (err) => console.error('[usuariosSignal] error:', err),
-        });
-        // Solo devolver el array de usuarios
-        return obs.pipe(map((res: any) => res.data ?? []));
-      }),
+      map(() => this.#usuarioService.obtenerUsuarios(this.empresaId)),
       switchAll(),
     ),
     { initialValue: [] },
@@ -124,7 +116,12 @@ export default class UsuariosListComponent implements OnInit, AfterViewInit {
       enterAnimationDuration,
       exitAnimationDuration,
       panelClass: 'full-screen-modal',
-      data: { modo: 'agregar', empresaId: this.empresaId },
+      data: {
+        modo: 'agregar',
+        empresaId: this.empresaId,
+        usuarioLogueado: this._storage()?.user,
+        empresa: this._storage()?.user?.empresa,
+      },
     });
     dialogRef.afterClosed().subscribe((result) => {
       if (result) this.trigger.update((v) => v + 1);
@@ -134,7 +131,13 @@ export default class UsuariosListComponent implements OnInit, AfterViewInit {
   editar(usuario: IUsuario): void {
     const dialogRef = this.dialog.open(UsuariosFormComponent, {
       width: '700px',
-      data: { modo: 'editar', usuario, empresaId: this.empresaId },
+      data: {
+        modo: 'editar',
+        usuario,
+        empresaId: this.empresaId,
+        usuarioLogueado: this._storage()?.user,
+        empresa: this._storage()?.user?.empresa,
+      },
       disableClose: true,
       autoFocus: false,
     });

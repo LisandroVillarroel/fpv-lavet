@@ -3,7 +3,13 @@
 </h2>
 -->
 <app-TituloComponentePopup [titulo]="modo === 'agregar' ? 'Agregar Usuario' : 'Editar Usuario'" />
-<form (ngSubmit)="guardar()">
+@if (success()) {
+  <div class="api-success-message" role="status">{{ success() }}</div>
+}
+@if (error()) {
+  <div class="api-error-message" role="alert">{{ error() }}</div>
+}
+<form (submit)="guardar($event)">
   <mat-dialog-content class="formulario-form-dialog">
     <mat-form-field>
       <mat-label class="labelI">Usuario</mat-label>
@@ -16,6 +22,22 @@
       />
       @if (usuarioForm.usuario().touched() && !usuarioForm.usuario().valid()) {
         @for (error of usuarioForm.usuario().errors(); track error) {
+          <mat-error>{{ error.message }}</mat-error>
+        }
+      }
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label class="labelI">Contraseña</mat-label>
+      <input
+        matInput
+        type="password"
+        [formField]="usuarioForm.contrasena"
+        placeholder="Contraseña"
+        title="Contraseña"
+      />
+      @if (usuarioForm.contrasena().touched() && !usuarioForm.contrasena().valid()) {
+        @for (error of usuarioForm.contrasena().errors(); track error) {
           <mat-error>{{ error.message }}</mat-error>
         }
       }
@@ -118,9 +140,19 @@
       }
     </mat-form-field>
 
-    <mat-form-field>
+    <mat-form-field class="inputSelect">
       <mat-label class="labelI">Región</mat-label>
-      <input matInput [formField]="usuarioForm.region" placeholder="Región" title="Región" />
+      <mat-select
+        class="small-font-select"
+        panelClass="small-font-select-panel"
+        [formField]="usuarioForm.region"
+        placeholder="Región"
+        title="Región"
+      >
+        @for (region of regiones(); track region) {
+          <mat-option [value]="region">{{ region }}</mat-option>
+        }
+      </mat-select>
       @if (usuarioForm.region().touched() && !usuarioForm.region().valid()) {
         @for (error of usuarioForm.region().errors(); track error) {
           <mat-error>{{ error.message }}</mat-error>
@@ -130,7 +162,14 @@
 
     <mat-form-field>
       <mat-label class="labelI">Comuna</mat-label>
-      <input matInput [formField]="usuarioForm.comuna" placeholder="Comuna" title="Comuna" />
+      <mat-select [formField]="usuarioForm.comuna" placeholder="Comuna" title="Comuna">
+        @if (comunas().length === 0) {
+          <mat-option value="" disabled> Selecciona una región primero </mat-option>
+        }
+        @for (comuna of comunas(); track comuna.sigla) {
+          <mat-option [value]="comuna.descripcion">{{ comuna.descripcion }}</mat-option>
+        }
+      </mat-select>
       @if (usuarioForm.comuna().touched() && !usuarioForm.comuna().valid()) {
         @for (error of usuarioForm.comuna().errors(); track error) {
           <mat-error>{{ error.message }}</mat-error>
@@ -237,7 +276,13 @@
       <button mat-stroked-button type="button" (click)="cancelar()">Cancelar</button>
     </div>
     <div class="col-12 col-md-6">
-      <button mat-raised-button color="primary" type="submit" [disabled]="isFormInvalid()">
+      <button
+        mat-raised-button
+        color="primary"
+        type="button"
+        (click)="guardar()"
+        [disabled]="isFormInvalid()"
+      >
         Guardar
       </button>
     </div>

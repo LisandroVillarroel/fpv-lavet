@@ -1,4 +1,4 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, computed, effect, inject, signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
 import { A11yModule } from '@angular/cdk/a11y';
@@ -7,6 +7,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSelectModule } from '@angular/material/select';
 import { MatOptionModule } from '@angular/material/core';
+import { FormsModule } from '@angular/forms';
 
 import { FormField, form, required, email, min, validate } from '@angular/forms/signals';
 
@@ -31,6 +32,7 @@ import {
     MatButtonModule,
     MatSelectModule,
     MatOptionModule,
+    FormsModule,
     FormField,
     TituloComponentePopup,
   ],
@@ -42,6 +44,14 @@ export class UsuariosFormComponent {
     modo: 'agregar' | 'editar';
     usuario?: any;
     empresaId?: string;
+    usuarioLogueado?: { _id?: string };
+    empresa?: {
+      empresaId: string;
+      rutEmpresa: string;
+      razonSocial: string;
+      nombreFantasia: string;
+      tipoEmpresa?: 'Laboratorio' | 'Veterinaria' | 'Usuario';
+    };
   };
   readonly empresaId = this.data.empresaId ?? '';
 
@@ -58,8 +68,31 @@ export class UsuariosFormComponent {
     },
   );
 
+  readonly regionesComunas = toSignal(this.usuarioService.obtenerRegionesComunas(), {
+    initialValue: [],
+  });
+
+  readonly regiones = computed(() =>
+    Array.from(new Set(this.regionesComunas().map((item) => item.region))).sort((a, b) =>
+      a.localeCompare(b, 'es', { sensitivity: 'base' }),
+    ),
+  );
+
+  readonly comunas = computed(() => {
+    const regionSeleccionada = this.usuarioForm.region().value();
+    return (
+      this.regionesComunas()
+        .find((item) => item.region === regionSeleccionada)
+        ?.comuna.slice()
+        .sort((a, b) =>
+          a.descripcion.localeCompare(b.descripcion, 'es', { sensitivity: 'base' }),
+        ) ?? []
+    );
+  });
+
   modo: 'agregar' | 'editar';
   error = signal<string | null>(null);
+  success = signal<string | null>(null);
 
   usuarioModel = signal<IUsuarioFormulario>({
     usuario: '',
@@ -80,6 +113,13 @@ export class UsuariosFormComponent {
 
   usuarioForm = form(this.usuarioModel, (schema) => {
     required(schema.usuario, { message: 'Usuario es requerido' });
+    validate(schema.contrasena, (field) => {
+      const value = field.value();
+      if (this.modo === 'editar') {
+        return [];
+      }
+      return value ? [] : [{ kind: 'required', message: 'Contraseña es requerida' }];
+    });
     required(schema.rutUsuario, { message: 'RUT es requerido' });
     validate(schema.rutUsuario, (field) => {
       const value = field.value();
@@ -120,6 +160,20 @@ export class UsuariosFormComponent {
         },
       });
     }
+
+    effect(() => {
+      const region = this.usuarioForm.region().value();
+      const comunaActual = this.usuarioForm.comuna().value();
+      const comunasDisponibles = this.comunas();
+
+      if (
+        region &&
+        comunaActual &&
+        !comunasDisponibles.some((item) => item.descripcion === comunaActual)
+      ) {
+        this.usuarioForm.comuna().value.set('');
+      }
+    });
   }
 
   formatRutField(): void {
@@ -131,19 +185,48 @@ export class UsuariosFormComponent {
     }
   }
 
-  guardar(): void {
+  guardar(event?: Event): void {
+    event?.preventDefault();
+
     if (!this.usuarioForm().valid()) {
       return;
     }
 
-    this.error.set(null);
     const usuario = this.usuarioModel();
-    this.usuarioService.agregarModificarUsuario(usuario).subscribe({
+    if (this.modo === 'agregar' && !usuario.contrasena) {
+      this.error.set('Contraseña es requerida para crear un usuario');
+      return;
+    }
+
+    const usuarioLogueadoId = this.data.usuarioLogueado?._id ?? '';
+
+    const payload: any = {
+      ...usuario,
+      estado: usuario.estadoUsuario,
+      empresa: this.data.empresa,
+    };
+
+    if (this.modo === 'agregar') {
+      payload.usuarioCrea_id = usuarioLogueadoId;
+    }
+
+    if (this.modo === 'editar') {
+      if (!payload.contrasena) {
+        delete payload.contrasena;
+      }
+      payload.usuarioModifica_id = usuarioLogueadoId;
+    }
+
+    this.error.set(null);
+    this.success.set(null);
+    this.usuarioService.agregarModificarUsuario(payload).subscribe({
       next: () => {
         this.dialogRef.close(true);
       },
-      error: (_err: unknown) => {
-        this.error.set(`Error al ${this.modo === 'agregar' ? 'agregar' : 'modificar'} usuario`);
+      error: (err: unknown) => {
+        const message = err instanceof Error ? err.message : 'Error desconocido';
+        this.error.set(message);
+        this.success.set(null);
       },
     });
   }
