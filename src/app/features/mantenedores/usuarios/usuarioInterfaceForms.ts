@@ -2,6 +2,7 @@ export interface IUsuarioFormulario {
   _id?: string;
   usuario: string;
   contrasena: string;
+  confirmarContrasena: string;
   rutUsuario: string;
   nombres: string;
   apellidoPaterno: string;

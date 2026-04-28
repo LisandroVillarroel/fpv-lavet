@@ -54,6 +54,8 @@ export class UsuariosFormComponent {
     };
   };
   readonly empresaId = this.data.empresaId ?? '';
+  fotoFile = signal<File | null>(null);
+  fotoPreviewUrl = signal<string | null>(this.data.usuario?.fotoUrl ?? null);
 
   private readonly defaultVeterinaria: IVeterinariaFormulario = {
     tipoVeterinario: '',
@@ -97,6 +99,7 @@ export class UsuariosFormComponent {
   usuarioModel = signal<IUsuarioFormulario>({
     usuario: '',
     contrasena: '',
+    confirmarContrasena: '',
     rutUsuario: '',
     nombres: '',
     apellidoPaterno: '',
@@ -128,6 +131,19 @@ export class UsuariosFormComponent {
       }
       return validateRut(cleanRut(value)) ? [] : [{ kind: 'rut', message: 'RUT no es válido' }];
     });
+    validate(schema.confirmarContrasena, (field) => {
+      const value = field.value();
+      const passwordValue = this.usuarioForm.contrasena().value();
+      if (this.modo === 'editar' && !passwordValue) {
+        return [];
+      }
+      if (!value) {
+        return [{ kind: 'required', message: 'Confirmar contraseña es requerida' }];
+      }
+      return value === passwordValue
+        ? []
+        : [{ kind: 'mismatch', message: 'Las contraseñas no coinciden' }];
+    });
     required(schema.nombres, { message: 'Nombres es requerido' });
     required(schema.apellidoPaterno, { message: 'Apellido Paterno es requerido' });
     required(schema.apellidoMaterno, { message: 'Apellido Materno es requerido' });
@@ -158,7 +174,10 @@ export class UsuariosFormComponent {
           ...this.defaultVeterinaria,
           ...(this.data.usuario.veterinaria ?? {}),
         },
+        contrasena: '',
+        confirmarContrasena: '',
       });
+      this.fotoPreviewUrl.set(this.data.usuario.fotoUrl ?? null);
     }
 
     effect(() => {
@@ -185,7 +204,48 @@ export class UsuariosFormComponent {
     }
   }
 
-  guardar(event?: Event): void {
+  onDragOver(event: DragEvent): void {
+    event.preventDefault();
+  }
+
+  onFileDropped(event: DragEvent): void {
+    event.preventDefault();
+    const file = event.dataTransfer?.files?.[0];
+    if (file) {
+      this.setFotoFile(file);
+    }
+  }
+
+  onFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0] ?? null;
+    if (file) {
+      this.setFotoFile(file);
+    }
+  }
+
+  setFotoFile(file: File): void {
+    if (!file.type.startsWith('image/')) {
+      this.error.set('Solo se permiten imágenes');
+      return;
+    }
+    this.fotoFile.set(file);
+    this.fotoPreviewUrl.set(URL.createObjectURL(file));
+  }
+
+  private readFileAsBase64(file: File): Promise<string> {
+    return new Promise<string>((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => {
+        const result = reader.result?.toString() ?? '';
+        resolve(result);
+      };
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+  }
+
+  async guardar(event?: Event): Promise<void> {
     event?.preventDefault();
 
     if (!this.usuarioForm().valid()) {
@@ -204,7 +264,15 @@ export class UsuariosFormComponent {
       ...usuario,
       estado: usuario.estadoUsuario,
       empresa: this.data.empresa,
+      fotoUrl: this.data.usuario?.fotoUrl,
     };
+
+    const selectedPhoto = this.fotoFile();
+    if (selectedPhoto) {
+      payload.fotoBase64 = await this.readFileAsBase64(selectedPhoto);
+    }
+
+    delete payload.confirmarContrasena;
 
     if (this.modo === 'agregar') {
       payload.usuarioCrea_id = usuarioLogueadoId;

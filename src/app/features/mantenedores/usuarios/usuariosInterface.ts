@@ -15,6 +15,7 @@ export interface IUsuario {
   comuna: string;
   MenuItem?: MenuItem[];
   tipoUsuario: 'Laboratorio' | 'Veterinaria' | 'Propietario';
+  fotoUrl?: string;
   veterinaria?: IVeterinaria;
   empresa?: IUsuarioEmpresa;
   estadoUsuario: 'Activo' | 'Bloqueado' | 'Suspendido';

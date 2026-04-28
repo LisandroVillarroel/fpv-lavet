@@ -44,6 +44,24 @@
     </mat-form-field>
 
     <mat-form-field>
+      <mat-label class="labelI">Confirmar Contraseña</mat-label>
+      <input
+        matInput
+        type="password"
+        [formField]="usuarioForm.confirmarContrasena"
+        placeholder="Confirmar Contraseña"
+        title="Confirmar Contraseña"
+      />
+      @if (
+        usuarioForm.confirmarContrasena().touched() && !usuarioForm.confirmarContrasena().valid()
+      ) {
+        @for (error of usuarioForm.confirmarContrasena().errors(); track error) {
+          <mat-error>{{ error.message }}</mat-error>
+        }
+      }
+    </mat-form-field>
+
+    <mat-form-field>
       <mat-label class="labelI">RUT</mat-label>
       <input
         matInput
@@ -178,21 +196,6 @@
     </mat-form-field>
 
     <mat-form-field>
-      <mat-label class="labelI">Tipo Usuario</mat-label>
-      <input
-        matInput
-        [formField]="usuarioForm.tipoUsuario"
-        placeholder="Tipo Usuario"
-        title="Tipo Usuario"
-      />
-      @if (usuarioForm.tipoUsuario().touched() && !usuarioForm.tipoUsuario().valid()) {
-        @for (error of usuarioForm.tipoUsuario().errors(); track error) {
-          <mat-error>{{ error.message }}</mat-error>
-        }
-      }
-    </mat-form-field>
-
-    <mat-form-field>
       <mat-label class="labelI">Tipo Veterinario</mat-label>
       <mat-select
         [formField]="usuarioForm.veterinaria!.tipoVeterinario"
@@ -269,6 +272,38 @@
         }
       }
     </mat-form-field>
+
+    <div class="file-upload-container">
+      <label
+        class="file-drop-zone"
+        for="userPhotoInput"
+        (dragover)="onDragOver($event)"
+        (drop)="onFileDropped($event)"
+      >
+        <div class="file-drop-content">
+          <div>
+            <strong>Foto de usuario</strong>
+            <p>Arrastra una imagen o selecciona un archivo</p>
+          </div>
+          <button mat-stroked-button type="button" (click)="fileInput.click()">
+            Seleccionar archivo
+          </button>
+        </div>
+      </label>
+      <input
+        #fileInput
+        id="userPhotoInput"
+        type="file"
+        accept="image/*"
+        hidden
+        (change)="onFileSelected($event)"
+      />
+      @if (fotoPreviewUrl()) {
+        <div class="photo-preview">
+          <img [src]="fotoPreviewUrl()" alt="Foto usuario" />
+        </div>
+      }
+    </div>
   </mat-dialog-content>
 
   <mat-dialog-actions class="row g-3 w-100 m-0 px-4 pb-4">

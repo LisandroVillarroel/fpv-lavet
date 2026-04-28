@@ -1,0 +1,48 @@
+.file-upload-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.file-drop-zone {
+  display: block;
+  padding: 1rem;
+  border: 2px dashed rgba(0, 0, 0, 0.25);
+  border-radius: 0.75rem;
+  background: rgba(0, 0, 0, 0.02);
+  cursor: pointer;
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+
+.file-drop-zone:hover,
+.file-drop-zone:focus-within {
+  border-color: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.04);
+}
+
+.file-drop-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
+.file-drop-content p {
+  margin: 0.25rem 0 0;
+  font-size: 0.9rem;
+  color: rgba(0, 0, 0, 0.65);
+}
+
+.photo-preview {
+  display: flex;
+  justify-content: center;
+}
+
+.photo-preview img {
+  max-width: 180px;
+  max-height: 180px;
+  border-radius: 0.75rem;
+  object-fit: cover;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
