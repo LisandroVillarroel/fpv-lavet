@@ -1,17 +1,159 @@
-<h2 mat-dialog-title class="dialog-title">Consulta Usuario</h2>
-<div mat-dialog-content class="usuario-view-dialog">
-  <mat-card appearance="outlined">
-    <mat-card-title>{{ usuario()?.nombres }} {{ usuario()?.apellidoPaterno }}</mat-card-title>
-    <mat-card-content>
-      <p><strong>Usuario:</strong> {{ usuario()?.usuario }}</p>
-      <p><strong>RUT:</strong> {{ usuario()?.rutUsuario }}</p>
-      <p><strong>Email:</strong> {{ usuario()?.email }}</p>
-      <p><strong>Teléfono:</strong> {{ usuario()?.telefono }}</p>
-      <p><strong>Dirección:</strong> {{ usuario()?.direccion }}</p>
-      <p><strong>Región:</strong> {{ usuario()?.region }}</p>
-      <p><strong>Comuna:</strong> {{ usuario()?.comuna }}</p>
-      <p><strong>Cargo:</strong> {{ usuario()?.veterinaria?.tipoVeterinario }}</p>
-      <p><strong>Estado:</strong> {{ usuario()?.estadoUsuario }}</p>
-    </mat-card-content>
-  </mat-card>
+<app-TituloComponentePopup class="popup-detalle-titulo" [titulo]="'Consulta Usuario'" />
+
+<div mat-dialog-content class="usuario-view-dialog detalle-popup-dialog">
+  <section class="usuario-view-hero detalle-popup-hero">
+    <div class="usuario-view-photo detalle-popup-photo">
+      @if (usuario()?.fotoUrl) {
+        <img
+          [src]="usuario()?.fotoUrl"
+          [alt]="nombreCompleto() || 'Usuario'"
+          title="Foto de usuario"
+        />
+      } @else {
+        <div class="usuario-view-photo-fallback detalle-popup-photo-fallback">
+          {{ (usuario()?.nombres?.[0] ?? usuario()?.usuario?.[0] ?? '?').toUpperCase() }}
+        </div>
+      }
+    </div>
+
+    <div class="usuario-view-summary detalle-popup-summary">
+      <p class="summary-eyebrow">Ficha de usuario</p>
+      <h2>{{ nombreCompleto() || displayValue(usuario()?.usuario) }}</h2>
+      <div class="summary-chips">
+        <span class="chip">{{ displayValue(usuario()?.estadoUsuario) }}</span>
+        <span class="chip">{{ displayValue(usuario()?.veterinaria?.tipoVeterinario) }}</span>
+        <span class="chip">{{ displayValue(usuario()?.veterinaria?.rolVeterinario) }}</span>
+      </div>
+      <p class="summary-subtitle">{{ displayValue(usuario()?.email) }}</p>
+    </div>
+  </section>
+
+  <div class="usuario-view-grid detalle-popup-grid">
+    <mat-card appearance="outlined" class="detail-card detalle-popup-card">
+      <mat-card-content>
+        <h3>Identificación</h3>
+        <div class="detail-grid detalle-popup-detail-grid">
+          <div class="detail-item detalle-popup-detail-item">
+            <span class="detail-label detalle-popup-detail-label">Usuario</span>
+            <span class="detail-value detalle-popup-detail-value">{{
+              displayValue(usuario()?.usuario)
+            }}</span>
+          </div>
+          <div class="detail-item detalle-popup-detail-item">
+            <span class="detail-label detalle-popup-detail-label">RUT</span>
+            <span class="detail-value detalle-popup-detail-value">{{
+              displayValue(usuario()?.rutUsuario)
+            }}</span>
+          </div>
+          <div class="detail-item detalle-popup-detail-item">
+            <span class="detail-label detalle-popup-detail-label">Nombres</span>
+            <span class="detail-value detalle-popup-detail-value">{{
+              displayValue(usuario()?.nombres)
+            }}</span>
+          </div>
+          <div class="detail-item detalle-popup-detail-item">
+            <span class="detail-label detalle-popup-detail-label">Apellido paterno</span>
+            <span class="detail-value detalle-popup-detail-value">{{
+              displayValue(usuario()?.apellidoPaterno)
+            }}</span>
+          </div>
+          <div class="detail-item detalle-popup-detail-item">
+            <span class="detail-label detalle-popup-detail-label">Apellido materno</span>
+            <span class="detail-value detalle-popup-detail-value">{{
+              displayValue(usuario()?.apellidoMaterno)
+            }}</span>
+          </div>
+          <div class="detail-item detalle-popup-detail-item">
+            <span class="detail-label detalle-popup-detail-label">Estado usuario</span>
+            <span class="detail-value detalle-popup-detail-value">{{
+              displayValue(usuario()?.estadoUsuario)
+            }}</span>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card appearance="outlined" class="detail-card detalle-popup-card">
+      <mat-card-content>
+        <h3>Contacto y ubicación</h3>
+        <div class="detail-grid detalle-popup-detail-grid">
+          <div class="detail-item detalle-popup-detail-item">
+            <span class="detail-label detalle-popup-detail-label">Email</span>
+            <span class="detail-value detalle-popup-detail-value">{{
+              displayValue(usuario()?.email)
+            }}</span>
+          </div>
+          <div class="detail-item detalle-popup-detail-item">
+            <span class="detail-label detalle-popup-detail-label">Teléfono</span>
+            <span class="detail-value detalle-popup-detail-value">{{
+              displayValue(usuario()?.telefono)
+            }}</span>
+          </div>
+          <div
+            class="detail-item detail-item-full detalle-popup-detail-item detalle-popup-detail-item-full"
+          >
+            <span class="detail-label detalle-popup-detail-label">Dirección</span>
+            <span class="detail-value detalle-popup-detail-value">{{
+              displayValue(usuario()?.direccion)
+            }}</span>
+          </div>
+          <div class="detail-item detalle-popup-detail-item">
+            <span class="detail-label detalle-popup-detail-label">Región</span>
+            <span class="detail-value detalle-popup-detail-value">{{
+              displayValue(usuario()?.region)
+            }}</span>
+          </div>
+          <div class="detail-item detalle-popup-detail-item">
+            <span class="detail-label detalle-popup-detail-label">Comuna</span>
+            <span class="detail-value detalle-popup-detail-value">{{
+              displayValue(usuario()?.comuna)
+            }}</span>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card
+      appearance="outlined"
+      class="detail-card detail-card-wide detalle-popup-card detalle-popup-card-wide"
+    >
+      <mat-card-content>
+        <h3>Perfil profesional</h3>
+        <div class="detail-grid detalle-popup-detail-grid">
+          <div class="detail-item detalle-popup-detail-item">
+            <span class="detail-label detalle-popup-detail-label">Tipo veterinario</span>
+            <span class="detail-value detalle-popup-detail-value">{{
+              displayValue(usuario()?.veterinaria?.tipoVeterinario)
+            }}</span>
+          </div>
+          <div class="detail-item detalle-popup-detail-item">
+            <span class="detail-label detalle-popup-detail-label">Rol veterinario</span>
+            <span class="detail-value detalle-popup-detail-value">{{
+              displayValue(usuario()?.veterinaria?.rolVeterinario)
+            }}</span>
+          </div>
+          <div class="detail-item detalle-popup-detail-item">
+            <span class="detail-label detalle-popup-detail-label">% comisión</span>
+            <span class="detail-value detalle-popup-detail-value">
+              {{ displayValue(usuario()?.veterinaria?.porcentajeComisionVeterinario) }}
+            </span>
+          </div>
+          <div class="detail-item detalle-popup-detail-item">
+            <span class="detail-label detalle-popup-detail-label">Tipo usuario</span>
+            <span class="detail-value detalle-popup-detail-value">{{
+              displayValue(usuario()?.tipoUsuario)
+            }}</span>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
 </div>
+
+<mat-dialog-actions class="usuario-view-actions row g-3 w-100 m-0 px-4 pb-4 justify-content-center">
+  <div class="col-12 col-md-6">
+    <button mat-raised-button color="primary" mat-dialog-close class="usuario-view-close-button">
+      Cerrar
+    </button>
+  </div>
+</mat-dialog-actions>

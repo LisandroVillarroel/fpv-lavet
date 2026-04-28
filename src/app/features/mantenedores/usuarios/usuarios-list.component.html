@@ -78,7 +78,12 @@
         </th>
 
         <td mat-cell *matCellDef="let row; let i = index" class="col-opciones opciones-cell">
-          <button matTooltip="Modificar" mat-icon-button class="tabla" (click)="editar(row)">
+          <button
+            matTooltip="Modificar"
+            mat-icon-button
+            class="tabla"
+            (click)="editar(row, '800ms', '500ms')"
+          >
             <mat-icon>edit</mat-icon>
           </button>
 

@@ -7,6 +7,7 @@ export interface loginInterface {
   user: {
     _id?: string;
     usuario?: string;
+    fotoUrl?: string;
     contrasena?: string;
     temaColorSistema?: string;
     rutUsuario: string;

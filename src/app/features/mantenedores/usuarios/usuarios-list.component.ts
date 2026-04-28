@@ -128,9 +128,16 @@ export default class UsuariosListComponent implements OnInit, AfterViewInit {
     });
   }
 
-  editar(usuario: IUsuario): void {
+  editar(usuario: IUsuario, enterAnimationDuration: string, exitAnimationDuration: string): void {
     const dialogRef = this.dialog.open(UsuariosFormComponent, {
-      width: '700px',
+      maxWidth: '98vw',
+      maxHeight: '98vh',
+      height: '95%',
+      width: '80%',
+      position: { top: '2%' },
+      enterAnimationDuration,
+      exitAnimationDuration,
+      panelClass: 'full-screen-modal',
       data: {
         modo: 'editar',
         usuario,
@@ -148,7 +155,8 @@ export default class UsuariosListComponent implements OnInit, AfterViewInit {
 
   consultar(usuario: IUsuario): void {
     this.dialog.open(UsuariosViewComponent, {
-      width: '700px',
+      width: '920px',
+      maxWidth: '95vw',
       data: { usuario },
       disableClose: false,
       autoFocus: false,

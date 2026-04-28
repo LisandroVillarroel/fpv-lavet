@@ -95,6 +95,7 @@ export class AuthTokenService {
     const {
       _id,
       usuario,
+      fotoUrl,
       temaColorSistema,
       rutUsuario,
       nombres,
@@ -114,6 +115,7 @@ export class AuthTokenService {
     return {
       _id,
       usuario,
+      fotoUrl,
       temaColorSistema,
       rutUsuario,
       nombres,

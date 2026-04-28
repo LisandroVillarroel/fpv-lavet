@@ -11,55 +11,57 @@
 }
 <form (submit)="guardar($event)">
   <mat-dialog-content class="formulario-form-dialog">
-    <mat-form-field>
-      <mat-label class="labelI">Usuario</mat-label>
-      <input
-        cdkFocusInitial
-        matInput
-        [formField]="usuarioForm.usuario"
-        placeholder="Usuario"
-        title="Usuario"
-      />
-      @if (usuarioForm.usuario().touched() && !usuarioForm.usuario().valid()) {
-        @for (error of usuarioForm.usuario().errors(); track error) {
-          <mat-error>{{ error.message }}</mat-error>
+    @if (modo === 'agregar') {
+      <mat-form-field>
+        <mat-label class="labelI">Usuario</mat-label>
+        <input
+          cdkFocusInitial
+          matInput
+          [formField]="usuarioForm.usuario"
+          placeholder="Usuario"
+          title="Usuario"
+        />
+        @if (usuarioForm.usuario().touched() && !usuarioForm.usuario().valid()) {
+          @for (error of usuarioForm.usuario().errors(); track error) {
+            <mat-error>{{ error.message }}</mat-error>
+          }
         }
-      }
-    </mat-form-field>
+      </mat-form-field>
 
-    <mat-form-field>
-      <mat-label class="labelI">Contraseña</mat-label>
-      <input
-        matInput
-        type="password"
-        [formField]="usuarioForm.contrasena"
-        placeholder="Contraseña"
-        title="Contraseña"
-      />
-      @if (usuarioForm.contrasena().touched() && !usuarioForm.contrasena().valid()) {
-        @for (error of usuarioForm.contrasena().errors(); track error) {
-          <mat-error>{{ error.message }}</mat-error>
+      <mat-form-field>
+        <mat-label class="labelI">Contraseña</mat-label>
+        <input
+          matInput
+          type="password"
+          [formField]="usuarioForm.contrasena"
+          placeholder="Contraseña"
+          title="Contraseña"
+        />
+        @if (usuarioForm.contrasena().touched() && !usuarioForm.contrasena().valid()) {
+          @for (error of usuarioForm.contrasena().errors(); track error) {
+            <mat-error>{{ error.message }}</mat-error>
+          }
         }
-      }
-    </mat-form-field>
+      </mat-form-field>
 
-    <mat-form-field>
-      <mat-label class="labelI">Confirmar Contraseña</mat-label>
-      <input
-        matInput
-        type="password"
-        [formField]="usuarioForm.confirmarContrasena"
-        placeholder="Confirmar Contraseña"
-        title="Confirmar Contraseña"
-      />
-      @if (
-        usuarioForm.confirmarContrasena().touched() && !usuarioForm.confirmarContrasena().valid()
-      ) {
-        @for (error of usuarioForm.confirmarContrasena().errors(); track error) {
-          <mat-error>{{ error.message }}</mat-error>
+      <mat-form-field>
+        <mat-label class="labelI">Confirmar Contraseña</mat-label>
+        <input
+          matInput
+          type="password"
+          [formField]="usuarioForm.confirmarContrasena"
+          placeholder="Confirmar Contraseña"
+          title="Confirmar Contraseña"
+        />
+        @if (
+          usuarioForm.confirmarContrasena().touched() && !usuarioForm.confirmarContrasena().valid()
+        ) {
+          @for (error of usuarioForm.confirmarContrasena().errors(); track error) {
+            <mat-error>{{ error.message }}</mat-error>
+          }
         }
-      }
-    </mat-form-field>
+      </mat-form-field>
+    }
 
     <mat-form-field>
       <mat-label class="labelI">RUT</mat-label>

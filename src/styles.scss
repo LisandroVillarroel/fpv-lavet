@@ -1,4 +1,5 @@
 @use '@angular/material' as mat;
+@use './styles/detalle-popup';
 
 // Incluye los estilos base de Angular Material (solo una vez).
 @include mat.core();

@@ -80,11 +80,27 @@ export class UsuariosFormComponent {
     ),
   );
 
+  private normalizeText(value?: string | null): string {
+    return (value ?? '').trim().toLocaleLowerCase('es');
+  }
+
+  private findMatchingComuna(
+    comunaActual: string,
+    comunasDisponibles: Array<{ sigla: string; descripcion: string }>,
+  ): { sigla: string; descripcion: string } | undefined {
+    const comunaNormalizada = this.normalizeText(comunaActual);
+    return comunasDisponibles.find(
+      (item) =>
+        this.normalizeText(item.descripcion) === comunaNormalizada ||
+        this.normalizeText(item.sigla) === comunaNormalizada,
+    );
+  }
+
   readonly comunas = computed(() => {
     const regionSeleccionada = this.usuarioForm.region().value();
     return (
       this.regionesComunas()
-        .find((item) => item.region === regionSeleccionada)
+        .find((item) => this.normalizeText(item.region) === this.normalizeText(regionSeleccionada))
         ?.comuna.slice()
         .sort((a, b) =>
           a.descripcion.localeCompare(b.descripcion, 'es', { sensitivity: 'base' }),
@@ -114,8 +130,40 @@ export class UsuariosFormComponent {
     estadoUsuario: 'Activo',
   });
 
+  private normalizeUsuarioFormulario(usuario?: any): IUsuarioFormulario {
+    return {
+      _id: usuario?._id,
+      usuario: usuario?.usuario ?? '',
+      contrasena: '',
+      confirmarContrasena: '',
+      rutUsuario: usuario?.rutUsuario ?? '',
+      nombres: usuario?.nombres ?? '',
+      apellidoPaterno: usuario?.apellidoPaterno ?? '',
+      apellidoMaterno: usuario?.apellidoMaterno ?? '',
+      email: usuario?.email ?? '',
+      telefono: usuario?.telefono ?? '',
+      direccion: usuario?.direccion ?? '',
+      region: usuario?.region ?? '',
+      comuna: usuario?.comuna ?? '',
+      tipoUsuario: usuario?.tipoUsuario ?? 'Veterinaria',
+      veterinaria: {
+        ...this.defaultVeterinaria,
+        ...(usuario?.veterinaria ?? {}),
+        tipoVeterinario: usuario?.veterinaria?.tipoVeterinario ?? '',
+        rolVeterinario: usuario?.veterinaria?.rolVeterinario ?? '',
+        porcentajeComisionVeterinario: usuario?.veterinaria?.porcentajeComisionVeterinario ?? 0,
+      },
+      estadoUsuario: usuario?.estadoUsuario ?? 'Activo',
+    };
+  }
+
   usuarioForm = form(this.usuarioModel, (schema) => {
-    required(schema.usuario, { message: 'Usuario es requerido' });
+    validate(schema.usuario, (field) => {
+      if (this.modo === 'editar') {
+        return [];
+      }
+      return field.value() ? [] : [{ kind: 'required', message: 'Usuario es requerido' }];
+    });
     validate(schema.contrasena, (field) => {
       const value = field.value();
       if (this.modo === 'editar') {
@@ -168,28 +216,38 @@ export class UsuariosFormComponent {
     this.modo = this.data.modo;
 
     if (this.modo === 'editar' && this.data.usuario) {
-      this.usuarioModel.set({
-        ...this.data.usuario,
-        veterinaria: {
-          ...this.defaultVeterinaria,
-          ...(this.data.usuario.veterinaria ?? {}),
-        },
-        contrasena: '',
-        confirmarContrasena: '',
-      });
+      this.usuarioModel.set(this.normalizeUsuarioFormulario(this.data.usuario));
       this.fotoPreviewUrl.set(this.data.usuario.fotoUrl ?? null);
     }
 
     effect(() => {
       const region = this.usuarioForm.region().value();
       const comunaActual = this.usuarioForm.comuna().value();
+      const regionesComunasDisponibles = this.regionesComunas();
       const comunasDisponibles = this.comunas();
 
-      if (
-        region &&
-        comunaActual &&
-        !comunasDisponibles.some((item) => item.descripcion === comunaActual)
-      ) {
+      if (!regionesComunasDisponibles.length) {
+        return;
+      }
+
+      const regionCoincidente = regionesComunasDisponibles.find(
+        (item) => this.normalizeText(item.region) === this.normalizeText(region),
+      );
+
+      if (region && !regionCoincidente) {
+        return;
+      }
+
+      const comunaCoincidente = comunaActual
+        ? this.findMatchingComuna(comunaActual, comunasDisponibles)
+        : undefined;
+
+      if (comunaActual && comunaCoincidente && comunaCoincidente.descripcion !== comunaActual) {
+        this.usuarioForm.comuna().value.set(comunaCoincidente.descripcion);
+        return;
+      }
+
+      if (region && comunaActual && !comunaCoincidente) {
         this.usuarioForm.comuna().value.set('');
       }
     });
@@ -262,7 +320,7 @@ export class UsuariosFormComponent {
 
     const payload: any = {
       ...usuario,
-      estado: usuario.estadoUsuario,
+      estado: 'Activo',
       empresa: this.data.empresa,
       fotoUrl: this.data.usuario?.fotoUrl,
     };

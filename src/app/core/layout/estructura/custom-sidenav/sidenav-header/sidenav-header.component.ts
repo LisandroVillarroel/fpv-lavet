@@ -1,4 +1,4 @@
-import { Component, computed, inject, input, signal } from '@angular/core';
+import { Component, computed, inject, input } from '@angular/core';
 import { NgOptimizedImage } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -115,17 +115,20 @@ import { AuthTokenService } from '@core/services/auth-token.service';
       border-radius: 9999px;
       overflow: hidden;
       margin: 0 auto;
+      padding: 4px;
+      background: var(--mat-sys-surface-container-high);
+      border: 1px solid var(--mat-sys-outline-variant);
     }
 
     .avatar-img {
-      object-fit: cover;
+      object-fit: contain;
       object-position: center;
     }
   `,
 })
 export default class SidenavHeaderComponent {
   collapsed = input(false);
-  public marcaDeTiempo = Date.now();
+  readonly #placeholderImage = './person-placeholder.png';
 
   readonly #authToken = inject(AuthTokenService);
   readonly session = this.#authToken.session;
@@ -139,15 +142,5 @@ export default class SidenavHeaderComponent {
   rolUsuario = computed(
     () => this.session()?.user?.veterinaria?.rolVeterinario || 'Rol no definido',
   );
-  imagenUsuario = signal('./person-placeholder.png');
-  /*imagenUsuario = signal(
-    this._storage()?.usuarioLogin.nombreFoto != ''
-      ? environment.apiUrlImagenes +
-          '/imagenes/fotos/' +
-          this._storage()?.usuarioLogin.nombreFoto +
-          '?t=' +
-          this.marcaDeTiempo
-      : './person-placeholder.png'
-  );
-  */
+  imagenUsuario = computed(() => this.session()?.user?.fotoUrl || this.#placeholderImage);
 }
