@@ -11,6 +11,8 @@ type ApiResponse<T> = {
   mensaje: string;
 };
 
+type PasswordChangeResponse = ApiResponse<null>;
+
 @Injectable({ providedIn: 'root' })
 export class UserService {
   private readonly _http = inject(HttpClient);
@@ -26,6 +28,19 @@ export class UserService {
     return this._http.put<ApiResponse<IUsuario>>(
       `${environment.apiBaseUrl}/usuario/${userId}/tema-color`,
       { temaColorSistema },
+    );
+  }
+
+  changePassword(
+    contrasenaActual: string,
+    nuevaContrasena: string,
+  ): Observable<PasswordChangeResponse> {
+    return this._http.post<PasswordChangeResponse>(
+      `${environment.apiBaseUrl}/auth/change-password`,
+      {
+        contrasenaActual,
+        nuevaContrasena,
+      },
     );
   }
 }

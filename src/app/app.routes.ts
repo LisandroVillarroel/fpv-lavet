@@ -22,6 +22,13 @@ export const routes: Routes = [
         path: 'mantenedores/usuarios',
         loadComponent: () => import('@features/mantenedores/usuarios/usuarios-list.component'),
       },
+      {
+        path: 'datoPersonal/cambioContrasena',
+        loadComponent: () =>
+          import('@features/dato-personal/cambio-contrasena/cambio-contrasena.component').then(
+            (m) => m.CambioContrasenaComponent,
+          ),
+      },
     ],
   },
 

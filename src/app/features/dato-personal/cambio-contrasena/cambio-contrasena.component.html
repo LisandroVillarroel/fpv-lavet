@@ -1,0 +1,101 @@
+<section class="cambio-contrasena-page">
+  <div class="cambio-contrasena-title">Cambio de Contraseña</div>
+
+  <mat-card class="cambio-contrasena-card" appearance="outlined">
+    <mat-card-content>
+      <div class="cambio-contrasena-copy">
+        <div class="cambio-contrasena-copy-topline">
+          <div class="cambio-contrasena-copy-user">
+            {{ nombreUsuario() || 'Usuario autenticado' }}
+          </div>
+          <div class="cambio-contrasena-copy-badge">Seguridad de acceso</div>
+        </div>
+        <h2>Actualizar contraseña</h2>
+        <p>
+          Usa tu clave actual para definir una nueva contraseña segura y mantener protegida tu
+          sesión.
+        </p>
+      </div>
+
+      @if (successMessage()) {
+        <div class="form-message success" role="status">{{ successMessage() }}</div>
+      }
+
+      @if (errorMessage()) {
+        <div class="form-message error" role="alert">{{ errorMessage() }}</div>
+      }
+
+      <form (ngSubmit)="submit()" class="cambio-contrasena-form">
+        <mat-form-field appearance="outline">
+          <mat-label>Contraseña actual</mat-label>
+          <input
+            matInput
+            type="password"
+            [formField]="passwordForm.contrasenaActual"
+            title="Contraseña actual"
+            placeholder="Ingresa tu contraseña actual"
+          />
+          @if (
+            passwordForm.contrasenaActual().touched() && !passwordForm.contrasenaActual().valid()
+          ) {
+            @for (error of passwordForm.contrasenaActual().errors(); track error) {
+              <mat-error>{{ error.message }}</mat-error>
+            }
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Nueva contraseña</mat-label>
+          <input
+            matInput
+            type="password"
+            [formField]="passwordForm.nuevaContrasena"
+            title="Nueva contraseña"
+            placeholder="Ingresa la nueva contraseña"
+          />
+          @if (
+            passwordForm.nuevaContrasena().touched() && !passwordForm.nuevaContrasena().valid()
+          ) {
+            @for (error of passwordForm.nuevaContrasena().errors(); track error) {
+              <mat-error>{{ error.message }}</mat-error>
+            }
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Confirmar nueva contraseña</mat-label>
+          <input
+            matInput
+            type="password"
+            [formField]="passwordForm.confirmarContrasena"
+            title="Confirmar nueva contraseña"
+            placeholder="Repite la nueva contraseña"
+          />
+          @if (
+            passwordForm.confirmarContrasena().touched() &&
+            !passwordForm.confirmarContrasena().valid()
+          ) {
+            @for (error of passwordForm.confirmarContrasena().errors(); track error) {
+              <mat-error>{{ error.message }}</mat-error>
+            }
+          }
+        </mat-form-field>
+
+        <div class="cambio-contrasena-helper">
+          Usa una contraseña con al menos 6 caracteres y evita repetir claves anteriores.
+        </div>
+
+        <div class="cambio-contrasena-actions">
+          <button
+            mat-raised-button
+            color="primary"
+            type="submit"
+            [disabled]="isSaving() || isFormInvalid()"
+          >
+            {{ isSaving() ? 'Guardando...' : 'Actualizar contraseña' }}
+          </button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</section>
