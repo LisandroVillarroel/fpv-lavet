@@ -7,10 +7,12 @@ import { AuthTokenService } from '@core/services/auth-token.service';
 import { NotificacioAlertnService } from '@shared/servicios/notificacionAlert';
 
 const SESSION_EXPIRED_MESSAGE = 'La sesión expiró. Por favor inicia sesión nuevamente.';
+const UNEXPECTED_ERROR_MESSAGE = 'Ocurrió un problema Inesperado.';
 
 export const tokenExpirationInterceptor: HttpInterceptorFn = (req, next) => {
   const tokenService = inject(AuthTokenService);
   const notificacion = inject(NotificacioAlertnService);
+
   const handleSessionExpired = () => {
     if (!tokenService.beginExpiredSessionRedirect()) {
       return;
@@ -34,9 +36,31 @@ export const tokenExpirationInterceptor: HttpInterceptorFn = (req, next) => {
     catchError((error: unknown) => {
       if (error instanceof HttpErrorResponse && (error.status === 401 || error.status === 403)) {
         handleSessionExpired();
+        return throwError(() => error);
       }
 
-      return throwError(() => error);
+      if (error instanceof HttpErrorResponse) {
+        if (error.status === 0) {
+          notificacion.error('ERROR', UNEXPECTED_ERROR_MESSAGE);
+        }
+
+        return throwError(
+          () =>
+            new HttpErrorResponse({
+              headers: error.headers,
+              status: error.status,
+              statusText: error.statusText,
+              url: error.url ?? undefined,
+              redirected: error.redirected,
+              error: {
+                ...(typeof error.error === 'object' && error.error !== null ? error.error : {}),
+                mensaje: UNEXPECTED_ERROR_MESSAGE,
+              },
+            }),
+        );
+      }
+
+      return throwError(() => new Error(UNEXPECTED_ERROR_MESSAGE));
     }),
   );
 };
