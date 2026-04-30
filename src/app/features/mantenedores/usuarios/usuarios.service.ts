@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpEvent, HttpParams } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
-import { map, mergeMap } from 'rxjs/operators';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { environment } from '@envs/environment';
 
 import { IUsuario, respuesta } from '@features/mantenedores/usuarios/usuariosInterface';
@@ -20,25 +20,13 @@ export class UsuarioService {
   agregarUsuario(usuario: IUsuario): Observable<IUsuario> {
     return this._http
       .post<ApiResponse<IUsuario>>(`${environment.apiBaseUrl}/usuario`, usuario)
-      .pipe(
-        mergeMap((response) =>
-          response.error
-            ? throwError(() => new Error(response.mensaje || 'Error al crear usuario'))
-            : [response.data],
-        ),
-      );
+      .pipe(map((response) => response.data));
   }
 
   modificarUsuario(id: string, usuario: IUsuario): Observable<IUsuario> {
     return this._http
       .put<ApiResponse<IUsuario>>(`${environment.apiBaseUrl}/usuario/${id}`, usuario)
-      .pipe(
-        mergeMap((response) =>
-          response.error
-            ? throwError(() => new Error(response.mensaje || 'Error al modificar usuario'))
-            : [response.data],
-        ),
-      );
+      .pipe(map((response) => response.data));
   }
 
   agregarModificarUsuario(usuario: IUsuario): Observable<IUsuario> {
@@ -49,13 +37,7 @@ export class UsuarioService {
     console.log('Obteniendo usuarios para empresaId:', empresaId);
     return this._http
       .get<ApiResponse<IUsuario[]>>(`${environment.apiBaseUrl}/usuario/empresa/${empresaId}`)
-      .pipe(
-        mergeMap((response) =>
-          response.error
-            ? throwError(() => new Error(response.mensaje || 'Error al obtener usuarios'))
-            : [response.data ?? []],
-        ),
-      );
+      .pipe(map((response) => response.data ?? []));
   }
 
   obtenerTiposVeterinario(

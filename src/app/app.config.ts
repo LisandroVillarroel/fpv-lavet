@@ -9,6 +9,7 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
 import { provideHttpClient, withFetch, withInterceptors } from '@angular/common/http';
 
 import { routes } from '@app/app.routes';
+import { apiResponseErrorInterceptor } from '@core/interceptors/api-response-error.interceptor';
 import { authInterceptor } from '@core/interceptors/auth.interceptor';
 import { tokenExpirationInterceptor } from '@core/interceptors/token-expiration.interceptor';
 import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
@@ -22,7 +23,12 @@ export const appConfig: ApplicationConfig = {
     provideAnimationsAsync(),
     provideHttpClient(
       withFetch(),
-      withInterceptors([tokenExpirationInterceptor, authInterceptor, cargaProgresoInterceptor]),
+      withInterceptors([
+        apiResponseErrorInterceptor,
+        tokenExpirationInterceptor,
+        authInterceptor,
+        cargaProgresoInterceptor,
+      ]),
     ),
     {
       provide: MAT_FORM_FIELD_DEFAULT_OPTIONS,

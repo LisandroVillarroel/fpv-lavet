@@ -3,12 +3,6 @@
 </h2>
 -->
 <app-TituloComponentePopup [titulo]="modo === 'agregar' ? 'Agregar Usuario' : 'Editar Usuario'" />
-@if (success()) {
-  <div class="api-success-message" role="status">{{ success() }}</div>
-}
-@if (error()) {
-  <div class="api-error-message" role="alert">{{ error() }}</div>
-}
 <form (submit)="guardar($event)">
   <mat-dialog-content class="formulario-form-dialog">
     @if (modo === 'agregar') {
