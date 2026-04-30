@@ -165,11 +165,16 @@ export class UsuariosFormComponent {
       return field.value() ? [] : [{ kind: 'required', message: 'Usuario es requerido' }];
     });
     validate(schema.contrasena, (field) => {
-      const value = field.value();
+      const value = (field.value() ?? '').trim();
       if (this.modo === 'editar') {
         return [];
       }
-      return value ? [] : [{ kind: 'required', message: 'Contraseña es requerida' }];
+      if (!value) {
+        return [{ kind: 'required', message: 'La contraseña es obligatoria' }];
+      }
+      return value.length >= 6
+        ? []
+        : [{ kind: 'minlength', message: 'La contraseña debe tener al menos 6 caracteres' }];
     });
     required(schema.rutUsuario, { message: 'RUT es requerido' });
     validate(schema.rutUsuario, (field) => {
@@ -180,15 +185,15 @@ export class UsuariosFormComponent {
       return validateRut(cleanRut(value)) ? [] : [{ kind: 'rut', message: 'RUT no es válido' }];
     });
     validate(schema.confirmarContrasena, (field) => {
-      const value = field.value();
-      const passwordValue = this.usuarioForm.contrasena().value();
+      const confirmationValue = (field.value() ?? '').trim();
+      const passwordValue = (this.usuarioForm.contrasena().value() ?? '').trim();
       if (this.modo === 'editar' && !passwordValue) {
         return [];
       }
-      if (!value) {
-        return [{ kind: 'required', message: 'Confirmar contraseña es requerida' }];
+      if (!confirmationValue) {
+        return [{ kind: 'required', message: 'La confirmación es obligatoria' }];
       }
-      return value === passwordValue
+      return confirmationValue === passwordValue
         ? []
         : [{ kind: 'mismatch', message: 'Las contraseñas no coinciden' }];
     });

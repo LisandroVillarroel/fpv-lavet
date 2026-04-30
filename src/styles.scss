@@ -645,3 +645,12 @@ mat-button-toggle-group.contrast {
 .mat-mdc-dialog-container .fallback-bar {
   display: none !important;
 }
+
+/* Mostrar SweetAlert por encima de los dialogos de Angular Material */
+.swal2-container {
+  z-index: 2000 !important;
+}
+
+.swal2-popup {
+  z-index: 2001 !important;
+}
