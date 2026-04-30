@@ -12,18 +12,21 @@ import { FormsModule } from '@angular/forms';
 import { FormField, form, required, email, min, validate } from '@angular/forms/signals';
 
 import { cleanRut, formatRut, RutFormat, validateRut } from '@fdograph/rut-utilities';
+
+import TituloComponentePopup from '@app/shared/ui/tituloComponentePopup';
 import { UsuarioService } from '@features/mantenedores/usuarios/usuarios.service';
-import TituloComponentePopup from '@shared/ui/tituloComponentePopup';
+
 import {
   IUsuarioFormulario,
   IVeterinariaFormulario,
 } from '@features/mantenedores/usuarios/usuarioInterfaceForms';
+import { emailCompletoValidator } from '@app/shared/utiles/validacionesGlobales';
 
 @Component({
   selector: 'app-usuarios-form',
   standalone: true,
-  templateUrl: './usuarios-form.component.html',
-  styleUrls: ['./usuarios-form.component.scss'],
+  templateUrl: './usuarios-form.html',
+  styleUrls: ['./usuarios-form.scss'],
   imports: [
     A11yModule,
     MatDialogModule,
@@ -37,9 +40,9 @@ import {
     TituloComponentePopup,
   ],
 })
-export class UsuariosFormComponent {
+export class UsuariosForm {
   private readonly usuarioService = inject(UsuarioService);
-  private readonly dialogRef = inject(MatDialogRef<UsuariosFormComponent>);
+  private readonly dialogRef = inject(MatDialogRef<UsuariosForm>);
   readonly data = inject(MAT_DIALOG_DATA) as {
     modo: 'agregar' | 'editar';
     usuario?: any;
@@ -202,6 +205,7 @@ export class UsuariosFormComponent {
     required(schema.apellidoMaterno, { message: 'Apellido Materno es requerido' });
     required(schema.email, { message: 'Email es requerido' });
     email(schema.email, { message: 'Email no es válido' });
+    validate(schema.email, (field) => emailCompletoValidator(field.value() ?? ''));
     required(schema.telefono, { message: 'Teléfono es requerido' });
     required(schema.direccion, { message: 'Dirección es requerido' });
     required(schema.region, { message: 'Región es requerido' });

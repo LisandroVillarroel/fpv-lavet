@@ -126,7 +126,7 @@ import { AuthTokenService } from '@core/services/auth-token.service';
     }
   `,
 })
-export default class SidenavHeaderComponent {
+export default class SidenavHeader {
   collapsed = input(false);
   readonly #placeholderImage = './person-placeholder.png';
 

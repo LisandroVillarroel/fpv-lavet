@@ -8,10 +8,10 @@ import { AuthTokenService } from '@core/services/auth-token.service';
   selector: 'app-access-denied',
   standalone: true,
   imports: [MatCardModule, MatButtonModule],
-  templateUrl: './access-denied.component.html',
-  styleUrl: './access-denied.component.scss',
+  templateUrl: './access-denied.html',
+  styleUrl: './access-denied.scss',
 })
-export class AccessDeniedComponent {
+export class AccessDenied {
   constructor(private readonly authTokenService: AuthTokenService) {}
 
   goToPortal(): void {

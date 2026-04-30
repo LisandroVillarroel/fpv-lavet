@@ -8,9 +8,9 @@ import { MatChipsModule } from '@angular/material/chips';
   selector: 'app-dashboard',
   standalone: true,
   imports: [DatePipe, MatCardModule, MatIconModule, MatChipsModule],
-  templateUrl: './dashboard.component.html',
-  styleUrl: './dashboard.component.scss',
+  templateUrl: './dashboard.html',
+  styleUrl: './dashboard.scss',
 })
-export default class DashboardComponent {
+export default class Dashboard {
   now = Date.now();
 }

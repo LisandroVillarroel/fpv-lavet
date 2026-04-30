@@ -16,17 +16,17 @@ export const routes: Routes = [
     children: [
       {
         path: 'dashboard',
-        loadComponent: () => import('@features/dashboard/dashboard.component'),
+        loadComponent: () => import('@features/dashboard/dashboard'),
       },
       {
         path: 'mantenedores/usuarios',
-        loadComponent: () => import('@features/mantenedores/usuarios/usuarios-list.component'),
+        loadComponent: () => import('@features/mantenedores/usuarios/usuarios-list'),
       },
       {
         path: 'datoPersonal/cambioContrasena',
         loadComponent: () =>
-          import('@features/dato-personal/cambio-contrasena/cambio-contrasena.component').then(
-            (m) => m.CambioContrasenaComponent,
+          import('@features/dato-personal/cambio-contrasena/cambio-contrasena').then(
+            (m) => m.CambioContrasena,
           ),
       },
     ],
@@ -36,15 +36,13 @@ export const routes: Routes = [
     path: 'dashboard',
     canActivate: [authGuard],
     loadComponent: () =>
-      import('@features/dashboard/dashboard.component').then((m) => m.DashboardComponent),
+      import('@features/dashboard/dashboard').then((m) => m.Dashboard),
   },
   */
   {
     path: 'sin-acceso',
     loadComponent: () =>
-      import('@features/access/access-denied/access-denied.component').then(
-        (m) => m.AccessDeniedComponent,
-      ),
+      import('@features/access/access-denied/access-denied').then((m) => m.AccessDenied),
   },
   {
     path: '**',

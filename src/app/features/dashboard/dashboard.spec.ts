@@ -2,17 +2,17 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { of } from 'rxjs';
 import { vi } from 'vitest';
 
-import DashboardComponent from './dashboard.component';
+import Dashboard from './dashboard';
 import { AuthTokenService } from '@core/services/auth-token.service';
 import { UserService } from '@core/services/user.service';
 
-describe('DashboardComponent', () => {
-  let component: DashboardComponent;
-  let fixture: ComponentFixture<DashboardComponent>;
+describe('Dashboard', () => {
+  let component: Dashboard;
+  let fixture: ComponentFixture<Dashboard>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [DashboardComponent],
+      imports: [Dashboard],
       providers: [
         {
           provide: AuthTokenService,
@@ -33,7 +33,7 @@ describe('DashboardComponent', () => {
       ],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(DashboardComponent);
+    fixture = TestBed.createComponent(Dashboard);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

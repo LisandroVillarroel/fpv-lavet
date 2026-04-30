@@ -23,21 +23,23 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
-import { UsuarioService } from '@features/mantenedores/usuarios/usuarios.service';
-import { UsuariosFormComponent } from '@features/mantenedores/usuarios/usuarios-form/usuarios-form.component';
-import { UsuariosViewComponent } from '@features/mantenedores/usuarios/usuarios-view/usuarios-view.component';
+import { UsuariosForm } from '@features/mantenedores/usuarios/usuarios-form/usuarios-form';
+import { UsuariosView } from '@features/mantenedores/usuarios/usuarios-view/usuarios-view';
+
 import { TituloComponente } from '@shared/ui/tituloComponente';
 import { StorageService } from '@core/guards/storage.service';
 import { loginInterface } from '@core/auth/loginInterface';
-import { IUsuario, IUsuarioEmpresa } from '@features/mantenedores/usuarios/usuariosInterface';
+
 import { combineLatest } from 'rxjs';
 import { map, switchAll } from 'rxjs';
+import { IUsuario } from './usuariosInterface';
+import { UsuarioService } from './usuarios.service';
 
 @Component({
   selector: 'app-usuarios-list',
   standalone: true,
-  templateUrl: './usuarios-list.component.html',
-  styleUrls: ['./usuarios-list.component.scss'],
+  templateUrl: './usuarios-list.html',
+  styleUrls: ['./usuarios-list.scss'],
   imports: [
     MatDialogModule,
     MatTableModule,
@@ -58,7 +60,7 @@ import { map, switchAll } from 'rxjs';
     TituloComponente,
   ],
 })
-export default class UsuariosListComponent implements OnInit, AfterViewInit {
+export default class UsuariosList implements OnInit, AfterViewInit {
   readonly #storage = inject(StorageService);
   #usuarioService = inject(UsuarioService);
   _storage = signal(this.#storage.get<loginInterface>('sesion-lavet'));
@@ -107,7 +109,7 @@ export default class UsuariosListComponent implements OnInit, AfterViewInit {
   }
 
   agregar(enterAnimationDuration: string, exitAnimationDuration: string): void {
-    const dialogRef = this.dialog.open(UsuariosFormComponent, {
+    const dialogRef = this.dialog.open(UsuariosForm, {
       maxWidth: '98vw',
       maxHeight: '98vh',
       height: '95%',
@@ -129,7 +131,7 @@ export default class UsuariosListComponent implements OnInit, AfterViewInit {
   }
 
   editar(usuario: IUsuario, enterAnimationDuration: string, exitAnimationDuration: string): void {
-    const dialogRef = this.dialog.open(UsuariosFormComponent, {
+    const dialogRef = this.dialog.open(UsuariosForm, {
       maxWidth: '98vw',
       maxHeight: '98vh',
       height: '95%',
@@ -154,7 +156,7 @@ export default class UsuariosListComponent implements OnInit, AfterViewInit {
   }
 
   consultar(usuario: IUsuario): void {
-    this.dialog.open(UsuariosViewComponent, {
+    this.dialog.open(UsuariosView, {
       width: '920px',
       maxWidth: '95vw',
       data: { usuario },

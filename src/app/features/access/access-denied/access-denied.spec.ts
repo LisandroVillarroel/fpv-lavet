@@ -1,16 +1,16 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { vi } from 'vitest';
 
-import { AccessDeniedComponent } from './access-denied.component';
+import { AccessDenied } from './access-denied';
 import { AuthTokenService } from '@core/services/auth-token.service';
 
-describe('AccessDeniedComponent', () => {
-  let component: AccessDeniedComponent;
-  let fixture: ComponentFixture<AccessDeniedComponent>;
+describe('AccessDenied', () => {
+  let component: AccessDenied;
+  let fixture: ComponentFixture<AccessDenied>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [AccessDeniedComponent],
+      imports: [AccessDenied],
       providers: [
         {
           provide: AuthTokenService,
@@ -21,7 +21,7 @@ describe('AccessDeniedComponent', () => {
       ],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(AccessDeniedComponent);
+    fixture = TestBed.createComponent(AccessDenied);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

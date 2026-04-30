@@ -5,7 +5,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { Progreso } from '@core/guards/progreso';
 import Cabecera from '@core/layout/estructura/cabecera/cabecera';
-import CustomSidenavComponent from '@core/layout/estructura/custom-sidenav/custom-sidenav.component';
+import CustomSidenavComponent from '@core/layout/estructura/custom-sidenav/custom-sidenav';
 
 @Component({
   selector: 'app-layout',

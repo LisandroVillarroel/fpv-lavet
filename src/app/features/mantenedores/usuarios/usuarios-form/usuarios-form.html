@@ -6,6 +6,7 @@
 <form (submit)="guardar($event)">
   <mat-dialog-content class="formulario-form-dialog">
     @if (modo === 'agregar') {
+      <h6 class="form-section-title">Credenciales de acceso</h6>
       <mat-form-field>
         <mat-label class="labelI">Usuario</mat-label>
         <input
@@ -57,6 +58,7 @@
       </mat-form-field>
     }
 
+    <h6 class="form-section-title">Datos personales</h6>
     <mat-form-field>
       <mat-label class="labelI">RUT</mat-label>
       <input
@@ -191,6 +193,7 @@
       }
     </mat-form-field>
 
+    <h6 class="form-section-title">Datos de veterinaria</h6>
     <mat-form-field>
       <mat-label class="labelI">Tipo Veterinario</mat-label>
       <mat-select
@@ -255,6 +258,7 @@
       }
     </mat-form-field>
 
+    <h6 class="form-section-title">Estado</h6>
     <mat-form-field>
       <mat-label class="labelI">Estado</mat-label>
       <mat-select [formField]="usuarioForm.estadoUsuario" placeholder="Estado" title="Estado">
@@ -269,6 +273,7 @@
       }
     </mat-form-field>
 
+    <h6 class="form-section-title">Foto de usuario</h6>
     <div class="file-upload-container">
       <label
         class="file-drop-zone"

@@ -4,11 +4,12 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
 import { RouterModule } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
-import { MenuItemComponent } from './menu-item/menu-item.component';
+import { MenuItemComponent } from './menu-item/menu-item';
 
-import SidenavHeaderComponent from './sidenav-header/sidenav-header.component';
+
 import { MenuItem } from '@shared/interfaces/usuario.interface';
 import { AuthTokenService } from '@core/services/auth-token.service';
+import SidenavHeader from "./sidenav-header/sidenav-header";
 
 @Component({
   selector: 'app-custom-sidenav',
@@ -36,7 +37,8 @@ import { AuthTokenService } from '@core/services/auth-token.service';
     RouterModule,
     MatIconModule,
     MenuItemComponent,
-    SidenavHeaderComponent,
+    SidenavHeader,
+    SidenavHeader,
   ],
 })
 export default class CustomSidenavComponent {

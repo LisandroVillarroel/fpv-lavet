@@ -29,10 +29,10 @@ type CambioContrasenaFormModel = {
     MatInputModule,
     MatButtonModule,
   ],
-  templateUrl: './cambio-contrasena.component.html',
-  styleUrl: './cambio-contrasena.component.scss',
+  templateUrl: './cambio-contrasena.html',
+  styleUrl: './cambio-contrasena.scss',
 })
-export class CambioContrasenaComponent {
+export class CambioContrasena {
   readonly #userService = inject(UserService);
   readonly #authToken = inject(AuthTokenService);
 
