@@ -20,6 +20,7 @@ export class App implements OnInit {
     this.authToken.initializeFromRoute();
     setTimeout(() => {
       const session = this.authToken.getStorage();
+      console.log('[APP] Sesión restaurada en ngOnInit:', session);
       if (session?.tokens?.accessToken && !session.user) {
         this.userService
           .getProfile()

@@ -23,7 +23,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
-import { UsuariosForm } from '@features/mantenedores/usuarios/usuarios-form/usuarios-form';
+
 import { UsuariosView } from '@features/mantenedores/usuarios/usuarios-view/usuarios-view';
 
 import { TituloComponente } from '@shared/ui/tituloComponente';
@@ -34,6 +34,7 @@ import { combineLatest } from 'rxjs';
 import { map, switchAll } from 'rxjs';
 import { IUsuario } from './usuariosInterface';
 import { UsuarioService } from './usuarios.service';
+import { UsuariosForm } from './usuarios-form/agrega-modifica/usuarios-form';
 
 @Component({
   selector: 'app-usuarios-list',

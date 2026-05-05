@@ -1,7 +1,7 @@
 import { HttpInterceptorFn, HttpEventType } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { Progreso } from '@core/guards/progreso';
-import { delayWhen, finalize, of, timer, tap } from 'rxjs';
+import { delayWhen, finalize, of, timer, tap, timeout, catchError, throwError } from 'rxjs';
 
 export const cargaProgresoInterceptor: HttpInterceptorFn = (req, next) => {
   const progresoCarga = inject(Progreso);
@@ -21,19 +21,32 @@ export const cargaProgresoInterceptor: HttpInterceptorFn = (req, next) => {
 
   if (shouldShowGlobal && !isUploadFormData) {
     progresoCarga.animateTo(30, 200);
-    simulationTimeouts.push(setTimeout(() => {
-      if (progresoCarga.isCargando()) {
-        progresoCarga.animateTo(60, 300);
-      }
-    }, 200));
-    simulationTimeouts.push(setTimeout(() => {
-      if (progresoCarga.isCargando()) {
-        progresoCarga.animateTo(80, 400);
-      }
-    }, 500));
+    simulationTimeouts.push(
+      setTimeout(() => {
+        if (progresoCarga.isCargando()) {
+          progresoCarga.animateTo(60, 300);
+        }
+      }, 200),
+    );
+    simulationTimeouts.push(
+      setTimeout(() => {
+        if (progresoCarga.isCargando()) {
+          progresoCarga.animateTo(80, 400);
+        }
+      }, 500),
+    );
   }
 
+  // Timeout global de 20 segundos para evitar bloqueos eternos
+  const GLOBAL_TIMEOUT_MS = 20000;
   return next(req).pipe(
+    timeout({
+      each: GLOBAL_TIMEOUT_MS,
+      with: () => {
+        // Opcional: puedes mostrar un mensaje de error global aquí si lo deseas
+        return throwError(() => new Error('La petición ha superado el tiempo máximo de espera.'));
+      },
+    }),
     tap((event) => {
       if (event && (event as any).type === HttpEventType.UploadProgress) {
         const e = event as any;
@@ -55,6 +68,12 @@ export const cargaProgresoInterceptor: HttpInterceptorFn = (req, next) => {
       const elapsedTime = Date.now() - startTime;
       const remainingTime = minDelayMs - elapsedTime;
       return remainingTime > 0 ? timer(remainingTime) : of(null);
+    }),
+    catchError((err) => {
+      // Siempre finalizar la carga global aunque haya error por timeout u otro
+      simulationTimeouts.forEach((timeoutId) => clearTimeout(timeoutId));
+      progresoCarga.finalizarCargaGlobal(resetDelayMs);
+      return throwError(() => err);
     }),
     finalize(() => {
       simulationTimeouts.forEach((timeoutId) => clearTimeout(timeoutId));

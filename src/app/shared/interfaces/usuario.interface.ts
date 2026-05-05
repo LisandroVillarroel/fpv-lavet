@@ -1,10 +1,10 @@
-export interface IUsuarioEntidad {
-  idEmpresa: string;
+export interface IUsuarioEmpresa {
+  empresaId: string;
   rutEmpresa: string;
   razonSocial: string;
   nombreFantasia: string;
-  menu_Id: string;
   tipoEmpresa?: 'Laboratorio' | 'Veterinaria' | 'Usuario';
+  MenuItem?: MenuItem[];
 }
 
 export interface MenuItem {
@@ -30,7 +30,7 @@ export interface IUsuario {
   telefono?: string;
   email?: string;
   direccion?: string;
-  usuarioEntidad?: IUsuarioEntidad;
+  empresa?: IUsuarioEmpresa;
   tipoUsuario?: 'Laboratorio' | 'Veterinaria' | 'Usuario';
   veterinaria?: IVeterinaria;
   MenuItem?: MenuItem[];
