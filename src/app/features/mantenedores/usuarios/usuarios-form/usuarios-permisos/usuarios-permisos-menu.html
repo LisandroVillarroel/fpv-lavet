@@ -1,0 +1,32 @@
+<mat-dialog-content class="formulario-form-dialog scrollable-content">
+  <mat-tree #tree [dataSource]="dataSource" [childrenAccessor]="childrenAccessor">
+    <!-- Nodo hoja -->
+    <mat-tree-node *matTreeNodeDef="let node" matTreeNodePadding>
+      <button mat-icon-button type="button" disabled title="Sin acción"></button>
+      <mat-checkbox class="permisos-checkbox">{{ node.despliegaNombre }}</mat-checkbox>
+    </mat-tree-node>
+    <!-- Nodo expandible -->
+    <mat-tree-node *matTreeNodeDef="let node; when: hasChild" matTreeNodePadding matTreeNodeToggle>
+      <button
+        mat-icon-button
+        type="button"
+        matTreeNodeToggle
+        [attr.aria-label]="'Toggle ' + node.despliegaNombre"
+        [title]="'Expandir/Colapsar ' + node.despliegaNombre"
+      >
+        <mat-icon>
+          {{ tree.isExpanded(node) ? 'expand_more' : 'chevron_right' }}
+        </mat-icon>
+      </button>
+      <mat-checkbox class="permisos-checkbox">{{ node.despliegaNombre }}</mat-checkbox>
+    </mat-tree-node>
+  </mat-tree>
+</mat-dialog-content>
+<mat-dialog-actions class="row g-3 w-100 m-0 px-4 pb-4 dialog-actions-fixed">
+  <div class="col-12 col-md-6">
+    <button mat-stroked-button type="button" (click)="cancelar()">Cancelar</button>
+  </div>
+  <div class="col-12 col-md-6">
+    <button mat-raised-button color="primary" type="button" (click)="guardar()">Guardar</button>
+  </div>
+</mat-dialog-actions>

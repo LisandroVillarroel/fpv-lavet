@@ -1,4 +1,13 @@
-import { Component, computed, effect, inject, signal } from '@angular/core';
+import {
+  Component,
+  computed,
+  effect,
+  inject,
+  input,
+  signal,
+  Output,
+  EventEmitter,
+} from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
 import { A11yModule } from '@angular/cdk/a11y';
@@ -13,13 +22,13 @@ import { FormField, form, required, email, min, validate } from '@angular/forms/
 
 import { cleanRut, formatRut, RutFormat, validateRut } from '@fdograph/rut-utilities';
 
-import TituloComponentePopup from '@app/shared/ui/tituloComponentePopup';
 import { UsuarioService } from '@features/mantenedores/usuarios/usuarios.service';
 
 import {
   IUsuarioFormulario,
   IVeterinariaFormulario,
 } from '@features/mantenedores/usuarios/usuarioInterfaceForms';
+import { IUsuario } from '@features/mantenedores/usuarios/usuariosInterface';
 import { emailCompletoValidator } from '@app/shared/utiles/validacionesGlobales';
 
 @Component({
@@ -37,15 +46,13 @@ import { emailCompletoValidator } from '@app/shared/utiles/validacionesGlobales'
     MatOptionModule,
     FormsModule,
     FormField,
-    TituloComponentePopup,
   ],
 })
 export class UsuariosForm {
-  private readonly usuarioService = inject(UsuarioService);
-  private readonly dialogRef = inject(MatDialogRef<UsuariosForm>);
-  readonly data = inject(MAT_DIALOG_DATA) as {
+  @Output() formCompleted = new EventEmitter<any>();
+  data = input<{
     modo: 'agregar' | 'editar';
-    usuario?: any;
+    usuario?: IUsuario;
     empresaId?: string;
     usuarioLogueado?: { _id?: string };
     empresa?: {
@@ -55,10 +62,15 @@ export class UsuariosForm {
       nombreFantasia: string;
       tipoEmpresa?: 'Laboratorio' | 'Veterinaria' | 'Usuario';
     };
-  };
-  readonly empresaId = this.data.empresaId ?? '';
+  }>();
+
+  private readonly dialogRef = inject(MatDialogRef<UsuariosForm>);
+
+  private readonly usuarioService = inject(UsuarioService);
+
+  readonly empresaId = this.data()?.empresa?.empresaId ?? '';
   fotoFile = signal<File | null>(null);
-  fotoPreviewUrl = signal<string | null>(this.data.usuario?.fotoUrl ?? null);
+  fotoPreviewUrl = signal<string | null>(null);
 
   private readonly defaultVeterinaria: IVeterinariaFormulario = {
     tipoVeterinario: '',
@@ -111,7 +123,7 @@ export class UsuariosForm {
     );
   });
 
-  modo: 'agregar' | 'editar';
+  // modo: 'agregar' | 'editar'; // Eliminada por duplicidad
   error = signal<string | null>(null);
   success = signal<string | null>(null);
 
@@ -221,13 +233,18 @@ export class UsuariosForm {
 
   readonly isFormInvalid = computed(() => !this.usuarioForm().valid());
 
-  constructor() {
-    this.modo = this.data.modo;
+  modo: 'agregar' | 'editar' = 'agregar';
 
-    if (this.modo === 'editar' && this.data.usuario) {
-      this.usuarioModel.set(this.normalizeUsuarioFormulario(this.data.usuario));
-      this.fotoPreviewUrl.set(this.data.usuario.fotoUrl ?? null);
-    }
+  constructor() {
+    effect(() => {
+      const data = this.data();
+      if (!data) return;
+      this.modo = data.modo ?? 'agregar';
+      if (this.modo === 'editar' && data.usuario) {
+        this.usuarioModel.set(this.normalizeUsuarioFormulario(data.usuario));
+        this.fotoPreviewUrl.set(data.usuario?.fotoUrl ?? null);
+      }
+    });
 
     effect(() => {
       const region = this.usuarioForm.region().value();
@@ -325,13 +342,13 @@ export class UsuariosForm {
       return;
     }
 
-    const usuarioLogueadoId = this.data.usuarioLogueado?._id ?? '';
+    const usuarioLogueadoId = this.data()!.usuarioLogueado?._id ?? '';
 
     const payload: any = {
       ...usuario,
       estado: 'Activo',
-      empresa: this.data.empresa,
-      fotoUrl: this.data.usuario?.fotoUrl,
+      empresa: this.data()!.empresa,
+      fotoUrl: this.data()!.usuario?.fotoUrl,
     };
 
     const selectedPhoto = this.fotoFile();
@@ -355,8 +372,8 @@ export class UsuariosForm {
     this.error.set(null);
     this.success.set(null);
     this.usuarioService.agregarModificarUsuario(payload).subscribe({
-      next: () => {
-        this.dialogRef.close(true);
+      next: (res) => {
+        this.formCompleted.emit(res || payload);
       },
       error: (err: unknown) => {
         const message = err instanceof Error ? err.message : 'Error desconocido';

@@ -34,7 +34,7 @@ import { combineLatest } from 'rxjs';
 import { map, switchAll } from 'rxjs';
 import { IUsuario } from './usuariosInterface';
 import { UsuarioService } from './usuarios.service';
-import { UsuariosForm } from './usuarios-form/agrega-modifica/usuarios-form';
+import UsuariosStepper from './usuarios-form/usuarios-stepper';
 
 @Component({
   selector: 'app-usuarios-list',
@@ -110,7 +110,7 @@ export default class UsuariosList implements OnInit, AfterViewInit {
   }
 
   agregar(enterAnimationDuration: string, exitAnimationDuration: string): void {
-    const dialogRef = this.dialog.open(UsuariosForm, {
+    const dialogRef = this.dialog.open(UsuariosStepper, {
       maxWidth: '98vw',
       maxHeight: '98vh',
       height: '95%',
@@ -132,7 +132,7 @@ export default class UsuariosList implements OnInit, AfterViewInit {
   }
 
   editar(usuario: IUsuario, enterAnimationDuration: string, exitAnimationDuration: string): void {
-    const dialogRef = this.dialog.open(UsuariosForm, {
+    const dialogRef = this.dialog.open(UsuariosStepper, {
       maxWidth: '98vw',
       maxHeight: '98vh',
       height: '95%',
@@ -143,7 +143,7 @@ export default class UsuariosList implements OnInit, AfterViewInit {
       panelClass: 'full-screen-modal',
       data: {
         modo: 'editar',
-        usuario,
+        usuario: usuario,
         empresaId: this.empresaId,
         usuarioLogueado: this._storage()?.user,
         empresa: this._storage()?.user?.empresa,
