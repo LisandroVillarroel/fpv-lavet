@@ -126,6 +126,11 @@ export default class UsuariosList implements OnInit, AfterViewInit {
         empresa: this._storage()?.user?.empresa,
       },
     });
+    if (dialogRef.componentInstance?.usuarioGuardado) {
+      dialogRef.componentInstance.usuarioGuardado.subscribe(() => {
+        this.trigger.update((v) => v + 1);
+      });
+    }
     dialogRef.afterClosed().subscribe((result) => {
       if (result) this.trigger.update((v) => v + 1);
     });
@@ -151,6 +156,11 @@ export default class UsuariosList implements OnInit, AfterViewInit {
       disableClose: true,
       autoFocus: false,
     });
+    if (dialogRef.componentInstance?.usuarioGuardado) {
+      dialogRef.componentInstance.usuarioGuardado.subscribe(() => {
+        this.trigger.update((v) => v + 1);
+      });
+    }
     dialogRef.afterClosed().subscribe((result) => {
       if (result) this.trigger.update((v) => v + 1);
     });

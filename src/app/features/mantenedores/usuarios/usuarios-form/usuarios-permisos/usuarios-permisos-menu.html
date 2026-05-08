@@ -3,7 +3,14 @@
     <!-- Nodo hoja -->
     <mat-tree-node *matTreeNodeDef="let node" matTreeNodePadding>
       <button mat-icon-button type="button" disabled title="Sin acción"></button>
-      <mat-checkbox class="permisos-checkbox">{{ node.despliegaNombre }}</mat-checkbox>
+      <mat-checkbox
+        class="permisos-checkbox"
+        [checked]="isChecked(node)"
+        [indeterminate]="isIndeterminate(node)"
+        (change)="toggleNodeSelection(node, $event.checked)"
+      >
+        {{ node.despliegaNombre }}
+      </mat-checkbox>
     </mat-tree-node>
     <!-- Nodo expandible -->
     <mat-tree-node *matTreeNodeDef="let node; when: hasChild" matTreeNodePadding matTreeNodeToggle>
@@ -18,7 +25,14 @@
           {{ tree.isExpanded(node) ? 'expand_more' : 'chevron_right' }}
         </mat-icon>
       </button>
-      <mat-checkbox class="permisos-checkbox">{{ node.despliegaNombre }}</mat-checkbox>
+      <mat-checkbox
+        class="permisos-checkbox"
+        [checked]="isChecked(node)"
+        [indeterminate]="isIndeterminate(node)"
+        (change)="toggleNodeSelection(node, $event.checked)"
+      >
+        {{ node.despliegaNombre }}
+      </mat-checkbox>
     </mat-tree-node>
   </mat-tree>
 </mat-dialog-content>

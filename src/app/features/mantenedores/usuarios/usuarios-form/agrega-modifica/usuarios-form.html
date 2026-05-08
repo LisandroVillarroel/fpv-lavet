@@ -3,7 +3,7 @@
 </h2>
 -->
 
-<form (submit)="guardar($event)">
+<form (submit)="grabaUsuario($event)">
   <mat-dialog-content class="formulario-form-dialog scrollable-content">
     @if (modo === 'agregar') {
       <h6 class="form-section-title">Credenciales de acceso</h6>
@@ -316,7 +316,7 @@
         mat-raised-button
         color="primary"
         type="button"
-        (click)="guardar()"
+        (click)="grabaUsuario()"
         [disabled]="isFormInvalid()"
       >
         Guardar

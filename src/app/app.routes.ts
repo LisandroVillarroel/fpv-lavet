@@ -23,6 +23,10 @@ export const routes: Routes = [
         loadComponent: () => import('@features/mantenedores/usuarios/usuarios-list'),
       },
       {
+        path: 'mantenedores/especie',
+        loadComponent: () => import('@features/mantenedores/especies/especies-list'),
+      },
+      {
         path: 'datoPersonal/cambioContrasena',
         loadComponent: () =>
           import('@features/dato-personal/cambio-contrasena/cambio-contrasena').then(

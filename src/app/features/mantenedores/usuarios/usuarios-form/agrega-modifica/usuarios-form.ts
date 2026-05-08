@@ -30,6 +30,7 @@ import {
 } from '@features/mantenedores/usuarios/usuarioInterfaceForms';
 import { IUsuario } from '@features/mantenedores/usuarios/usuariosInterface';
 import { emailCompletoValidator } from '@app/shared/utiles/validacionesGlobales';
+import { NotificacioAlertnService } from '@app/shared/servicios/notificacionAlert';
 
 @Component({
   selector: 'app-usuarios-form',
@@ -47,9 +48,12 @@ import { emailCompletoValidator } from '@app/shared/utiles/validacionesGlobales'
     FormsModule,
     FormField,
   ],
+  outputs: ['formCompleted', 'cancelarForm', 'avanzarPermisos'],
 })
 export class UsuariosForm {
-  @Output() formCompleted = new EventEmitter<any>();
+  formCompleted = new EventEmitter<any>();
+  cancelarForm = new EventEmitter<void>();
+  avanzarPermisos = new EventEmitter<void>();
   data = input<{
     modo: 'agregar' | 'editar';
     usuario?: IUsuario;
@@ -63,6 +67,8 @@ export class UsuariosForm {
       tipoEmpresa?: 'Laboratorio' | 'Veterinaria' | 'Usuario';
     };
   }>();
+
+  notificacion = inject(NotificacioAlertnService);
 
   private readonly dialogRef = inject(MatDialogRef<UsuariosForm>);
 
@@ -329,7 +335,8 @@ export class UsuariosForm {
     });
   }
 
-  async guardar(event?: Event): Promise<void> {
+  // Método único para grabar usuario (insertar o editar)
+  async grabaUsuario(event?: Event): Promise<void> {
     event?.preventDefault();
 
     if (!this.usuarioForm().valid()) {
@@ -371,9 +378,12 @@ export class UsuariosForm {
 
     this.error.set(null);
     this.success.set(null);
+
     this.usuarioService.agregarModificarUsuario(payload).subscribe({
-      next: (res) => {
+      next: async (res) => {
         this.formCompleted.emit(res || payload);
+        await this.notificacion.confirmacion('Usuario', 'Guardado exitosamente');
+        this.avanzarPermisos.emit();
       },
       error: (err: unknown) => {
         const message = err instanceof Error ? err.message : 'Error desconocido';
@@ -384,6 +394,6 @@ export class UsuariosForm {
   }
 
   cancelar() {
-    this.dialogRef.close();
+    this.cancelarForm.emit();
   }
 }

@@ -1,0 +1,31 @@
+<form (ngSubmit)="guardar()" class="formulario-especie">
+  <mat-form-field appearance="outline" class="w-100">
+    <mat-label>Nombre</mat-label>
+    <input
+      matInput
+      [ngModel]="especieModel().nombre"
+      (ngModelChange)="onNombreChange($event)"
+      name="nombre"
+      required
+      placeholder="Nombre de la especie"
+    />
+    @if (especieForm.nombre().touched() && !especieForm.nombre().valid()) {
+      @for (error of especieForm.nombre().errors(); track error) {
+        <mat-error>{{ error.message }}</mat-error>
+      }
+    }
+  </mat-form-field>
+
+  <div class="acciones-form-especie">
+    <button mat-stroked-button type="button" (click)="cancelar()" class="btn-full">Cancelar</button>
+    <button
+      mat-raised-button
+      color="primary"
+      type="submit"
+      [disabled]="isFormInvalid()"
+      class="btn-full"
+    >
+      Guardar
+    </button>
+  </div>
+</form>

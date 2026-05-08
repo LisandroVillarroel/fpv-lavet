@@ -71,10 +71,13 @@ export class NotificacioAlertnService {
    * Mostrar una notificación de éxito
    */
   success(titulo: string, mensaje: string) {
+    const dialogPane = this.getActiveDialogPane();
     this.notificationMixin.fire({
       icon: 'success',
       title: titulo,
       text: mensaje,
+      target: dialogPane ?? this.getAlertTarget(),
+      backdrop: dialogPane ? false : true,
     });
   }
 
@@ -104,6 +107,7 @@ export class NotificacioAlertnService {
    */
   warning(titulo: string, mensaje?: string) {
     const themeColors = this.getThemeColors();
+    const dialogPane = this.getActiveDialogPane();
     return this.notificationMixin.fire({
       icon: 'warning',
       title: titulo,
@@ -111,6 +115,8 @@ export class NotificacioAlertnService {
       background: themeColors.background,
       color: themeColors.color,
       confirmButtonColor: themeColors.confirmButtonColor,
+      target: dialogPane ?? this.getAlertTarget(),
+      backdrop: dialogPane ? false : true,
     });
   }
 
@@ -119,6 +125,7 @@ export class NotificacioAlertnService {
    */
   info(titulo: string, mensaje: string) {
     const themeColors = this.getThemeColors();
+    const dialogPane = this.getActiveDialogPane();
     this.notificationMixin.fire({
       icon: 'info',
       title: titulo,
@@ -126,6 +133,8 @@ export class NotificacioAlertnService {
       background: themeColors.background,
       color: themeColors.color,
       confirmButtonColor: themeColors.confirmButtonColor,
+      target: dialogPane ?? this.getAlertTarget(),
+      backdrop: dialogPane ? false : true,
     });
   }
 
@@ -136,6 +145,7 @@ export class NotificacioAlertnService {
     textoCancelar: string = 'Cancelar',
   ): Promise<boolean> {
     const themeColors = this.getThemeColors();
+    // Siempre usar el body como target y backdrop true para máxima compatibilidad
     const result = await this.notificationMixinSeleccion.fire({
       icon: 'warning',
       title: titulo,
@@ -146,6 +156,8 @@ export class NotificacioAlertnService {
       cancelButtonText: textoCancelar,
       background: themeColors.background,
       color: themeColors.color,
+      target: this.document.body,
+      backdrop: true,
     });
     return result.isConfirmed;
   }
@@ -156,6 +168,7 @@ export class NotificacioAlertnService {
     textoAceptar: string = 'OK',
   ): Promise<boolean> {
     const themeColors = this.getThemeColors();
+    const dialogPane = this.getActiveDialogPane();
     const result = await this.notificationMixinSeleccion.fire({
       icon: 'success',
       title: titulo,
@@ -165,6 +178,8 @@ export class NotificacioAlertnService {
       showCancelButton: false,
       background: themeColors.background,
       color: themeColors.color,
+      target: dialogPane ?? this.getAlertTarget(),
+      backdrop: dialogPane ? false : true,
     });
     return result.isConfirmed;
   }
