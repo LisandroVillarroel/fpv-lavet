@@ -1,0 +1,186 @@
+<app-TituloComponentePopup [titulo]="titulo()" />
+
+<mat-dialog-content class="formulario-form-dialog menu-form-dialog scrollable-content">
+  <section class="menu-form-section">
+    <div class="menu-form-grid">
+      <mat-form-field appearance="outline">
+        <mat-label>Nombre del menú</mat-label>
+        <mat-select
+          [ngModel]="menuModel().nombreMenu"
+          (ngModelChange)="menuModel.update((menu) => ({ ...menu, nombreMenu: $event }))"
+        >
+          @for (nombre of nombresMenu; track nombre) {
+            <mat-option [value]="nombre">{{ nombre }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Estado</mat-label>
+        <mat-select
+          [ngModel]="menuModel().estado"
+          (ngModelChange)="menuModel.update((menu) => ({ ...menu, estado: $event }))"
+        >
+          @for (estado of estadosMenu; track estado) {
+            <mat-option [value]="estado">{{ estado }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <div class="menu-form-toolbar">
+      <h3>Items del menú</h3>
+      <button
+        mat-stroked-button
+        color="primary"
+        type="button"
+        class="menu-form-toolbar__button"
+        (click)="agregarItemRaiz()"
+      >
+        <mat-icon>add</mat-icon>
+        Agregar item raíz
+      </button>
+    </div>
+
+    @if (hasInvalidItems()) {
+      <p class="menu-form-error">
+        Cada item debe tener al menos nombre visible e ícono antes de guardar.
+      </p>
+    }
+
+    @if (!menuModel().menuItem.length) {
+      <div class="menu-form-empty">
+        No hay items creados. Agrega un item raíz para comenzar a construir el árbol.
+      </div>
+    } @else {
+      <div class="menu-tree-editor">
+        @for (item of menuModel().menuItem; track trackMenuNode($index, item)) {
+          <ng-container
+            *ngTemplateOutlet="
+              menuNodeTemplate;
+              context: { $implicit: item, path: rootPath($index), level: 0 }
+            "
+          />
+        }
+      </div>
+    }
+  </section>
+
+  <ng-template #menuNodeTemplate let-item let-path="path" let-level="level">
+    <div class="menu-node" [style.--menu-level]="level" [class.menu-node--child]="level > 0">
+      <div class="menu-node__row">
+        <div class="menu-node__lead">
+          @if (hasChildren(item)) {
+            <button
+              mat-icon-button
+              type="button"
+              class="menu-node__toggle"
+              matTooltip="Expandir o contraer"
+              (click)="toggleExpanded(path)"
+            >
+              <mat-icon>{{ isExpanded(path) ? 'expand_more' : 'chevron_right' }}</mat-icon>
+            </button>
+          } @else {
+            <span class="menu-node__spacer"></span>
+          }
+
+          <span class="menu-node__badge">{{ path.join('.') }}</span>
+          <span class="menu-node__kind">{{ level === 0 ? 'Raíz' : 'Subitem' }}</span>
+        </div>
+
+        <div class="menu-node__content">
+          <mat-form-field appearance="outline">
+            <mat-label>Nombre visible</mat-label>
+            <input
+              matInput
+              [ngModel]="item.despliegaNombre"
+              (ngModelChange)="actualizarCampo(path, 'despliegaNombre', $event)"
+              placeholder="Ej: Administración"
+            />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Ícono</mat-label>
+            <input
+              matInput
+              [ngModel]="item.iconoNombre"
+              (ngModelChange)="actualizarCampo(path, 'iconoNombre', $event)"
+              placeholder="Ej: settings"
+            />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Ruta</mat-label>
+            <input
+              matInput
+              [ngModel]="item.route ?? ''"
+              (ngModelChange)="actualizarCampo(path, 'route', $event)"
+              placeholder="Ej: menu"
+            />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Tipo permiso</mat-label>
+            <input
+              matInput
+              [ngModel]="item.tipoPermiso ?? ''"
+              (ngModelChange)="actualizarCampo(path, 'tipoPermiso', $event)"
+              placeholder="Opcional"
+            />
+          </mat-form-field>
+        </div>
+
+        <div class="menu-node__actions">
+          <button
+            mat-icon-button
+            type="button"
+            class="menu-node__icon-button"
+            matTooltip="Agregar hijo"
+            (click)="agregarHijo(path)"
+          >
+            <mat-icon>playlist_add</mat-icon>
+          </button>
+          <button
+            mat-icon-button
+            type="button"
+            class="menu-node__icon-button"
+            matTooltip="Eliminar item"
+            (click)="eliminarItem(path)"
+          >
+            <mat-icon>delete</mat-icon>
+          </button>
+        </div>
+      </div>
+
+      @if (item.children?.length && isExpanded(path)) {
+        <div class="menu-node__children">
+          @for (child of item.children; track trackMenuNode($index, child)) {
+            <ng-container
+              *ngTemplateOutlet="
+                menuNodeTemplate;
+                context: { $implicit: child, path: childPath(path, $index), level: level + 1 }
+              "
+            />
+          }
+        </div>
+      }
+    </div>
+  </ng-template>
+</mat-dialog-content>
+
+<mat-dialog-actions class="row g-3 w-100 m-0 px-4 pb-4 dialog-actions-fixed">
+  <div class="col-12 col-md-6">
+    <button mat-stroked-button type="button" (click)="cancelar()">Cancelar</button>
+  </div>
+  <div class="col-12 col-md-6">
+    <button
+      mat-raised-button
+      color="primary"
+      type="button"
+      (click)="guardar()"
+      [disabled]="isFormInvalid() || guardando()"
+    >
+      Guardar
+    </button>
+  </div>
+</mat-dialog-actions>

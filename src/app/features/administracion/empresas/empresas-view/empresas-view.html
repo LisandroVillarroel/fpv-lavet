@@ -1,0 +1,171 @@
+<app-TituloComponentePopup class="popup-detalle-titulo" [titulo]="'Consulta Empresa'" />
+
+<div mat-dialog-content class="usuario-view-dialog detalle-popup-dialog">
+  @if (isLoading()) {
+    <div class="empresas-view-loading">
+      <mat-progress-spinner diameter="44" mode="indeterminate"></mat-progress-spinner>
+      <p>Cargando empresa...</p>
+    </div>
+  }
+
+  <section class="usuario-view-hero detalle-popup-hero">
+    <div class="usuario-view-summary detalle-popup-summary empresa-summary-full">
+      <p class="summary-eyebrow">Ficha de empresa</p>
+      <h2>{{ titulo() }}</h2>
+      <div class="summary-chips">
+        <span class="chip">{{ displayValue(empresa()?.estadoEmpresa) }}</span>
+        <span class="chip">{{ displayValue(empresa()?.tipoEmpresa) }}</span>
+      </div>
+      <p class="summary-subtitle">{{ displayValue(empresa()?.emailEmpresa) }}</p>
+    </div>
+  </section>
+
+  <div class="usuario-view-grid detalle-popup-grid">
+    <mat-card appearance="outlined" class="detail-card detalle-popup-card">
+      <mat-card-content>
+        <h3>Empresa</h3>
+        <div class="detail-grid detalle-popup-detail-grid">
+          <div class="detail-item detalle-popup-detail-item">
+            <span class="detail-label detalle-popup-detail-label">RUT empresa</span>
+            <span class="detail-value detalle-popup-detail-value">{{
+              displayValue(empresa()?.rutEmpresa)
+            }}</span>
+          </div>
+          <div class="detail-item detalle-popup-detail-item">
+            <span class="detail-label detalle-popup-detail-label">Razón social</span>
+            <span class="detail-value detalle-popup-detail-value">{{
+              displayValue(empresa()?.razonSocial)
+            }}</span>
+          </div>
+          <div class="detail-item detalle-popup-detail-item">
+            <span class="detail-label detalle-popup-detail-label">Nombre fantasía</span>
+            <span class="detail-value detalle-popup-detail-value">{{
+              displayValue(empresa()?.nombreFantasia)
+            }}</span>
+          </div>
+          <div class="detail-item detalle-popup-detail-item">
+            <span class="detail-label detalle-popup-detail-label">Tipo empresa</span>
+            <span class="detail-value detalle-popup-detail-value">{{
+              displayValue(empresa()?.tipoEmpresa)
+            }}</span>
+          </div>
+          <div class="detail-item detalle-popup-detail-item">
+            <span class="detail-label detalle-popup-detail-label">Estado</span>
+            <span class="detail-value detalle-popup-detail-value">{{
+              displayValue(empresa()?.estadoEmpresa)
+            }}</span>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card appearance="outlined" class="detail-card detalle-popup-card">
+      <mat-card-content>
+        <h3>Contacto y ubicación</h3>
+        <div class="detail-grid detalle-popup-detail-grid">
+          <div
+            class="detail-item detail-item-full detalle-popup-detail-item detalle-popup-detail-item-full"
+          >
+            <span class="detail-label detalle-popup-detail-label">Dirección</span>
+            <span class="detail-value detalle-popup-detail-value">{{
+              displayValue(empresa()?.direccion)
+            }}</span>
+          </div>
+          <div class="detail-item detalle-popup-detail-item">
+            <span class="detail-label detalle-popup-detail-label">Región</span>
+            <span class="detail-value detalle-popup-detail-value">{{
+              displayValue(empresa()?.region)
+            }}</span>
+          </div>
+          <div class="detail-item detalle-popup-detail-item">
+            <span class="detail-label detalle-popup-detail-label">Comuna</span>
+            <span class="detail-value detalle-popup-detail-value">{{
+              displayValue(empresa()?.comuna)
+            }}</span>
+          </div>
+          <div class="detail-item detalle-popup-detail-item">
+            <span class="detail-label detalle-popup-detail-label">Teléfono empresa</span>
+            <span class="detail-value detalle-popup-detail-value">{{
+              displayValue(empresa()?.telefono)
+            }}</span>
+          </div>
+          <div class="detail-item detalle-popup-detail-item">
+            <span class="detail-label detalle-popup-detail-label">Email empresa</span>
+            <span class="detail-value detalle-popup-detail-value">{{
+              displayValue(empresa()?.emailEmpresa)
+            }}</span>
+          </div>
+          <div class="detail-item detalle-popup-detail-item">
+            <span class="detail-label detalle-popup-detail-label">Nombre contacto</span>
+            <span class="detail-value detalle-popup-detail-value">{{
+              displayValue(empresa()?.contacto?.nombreContacto)
+            }}</span>
+          </div>
+          <div class="detail-item detalle-popup-detail-item">
+            <span class="detail-label detalle-popup-detail-label">Email contacto</span>
+            <span class="detail-value detalle-popup-detail-value">{{
+              displayValue(empresa()?.contacto?.emailContacto)
+            }}</span>
+          </div>
+          <div class="detail-item detalle-popup-detail-item">
+            <span class="detail-label detalle-popup-detail-label">Teléfono contacto</span>
+            <span class="detail-value detalle-popup-detail-value">{{
+              displayValue(empresa()?.contacto?.telefonoContacto)
+            }}</span>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card
+      appearance="outlined"
+      class="detail-card detail-card-wide detalle-popup-card detalle-popup-card-wide"
+    >
+      <mat-card-content>
+        <h3>Menú empresa</h3>
+
+        @if (!empresa()?.MenuItem?.length) {
+          <p class="empresa-menu-empty">No hay menú configurado para esta empresa.</p>
+        } @else {
+          <mat-tree
+            #tree
+            [dataSource]="empresa()?.MenuItem ?? []"
+            [childrenAccessor]="childrenAccessor"
+          >
+            <mat-tree-node *matTreeNodeDef="let node" matTreeNodePadding>
+              <button mat-icon-button type="button" disabled title="Sin acción"></button>
+              <span class="empresa-menu-label">{{ node.despliegaNombre }}</span>
+            </mat-tree-node>
+
+            <mat-tree-node
+              *matTreeNodeDef="let node; when: hasChild"
+              matTreeNodePadding
+              matTreeNodeToggle
+            >
+              <button
+                mat-icon-button
+                type="button"
+                matTreeNodeToggle
+                [attr.aria-label]="'Toggle ' + node.despliegaNombre"
+                [title]="'Expandir/Colapsar ' + node.despliegaNombre"
+              >
+                <mat-icon>
+                  {{ tree.isExpanded(node) ? 'expand_more' : 'chevron_right' }}
+                </mat-icon>
+              </button>
+              <span class="empresa-menu-label">{{ node.despliegaNombre }}</span>
+            </mat-tree-node>
+          </mat-tree>
+        }
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>
+
+<mat-dialog-actions class="usuario-view-actions row g-3 w-100 m-0 px-4 pb-4 justify-content-center">
+  <div class="col-12 col-md-6">
+    <button mat-raised-button color="primary" mat-dialog-close class="usuario-view-close-button">
+      Cerrar
+    </button>
+  </div>
+</mat-dialog-actions>

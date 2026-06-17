@@ -31,7 +31,10 @@ export const apiResponseErrorInterceptor: HttpInterceptorFn = (req, next) => {
         return of(event);
       }
 
-      if (body.codigo === 200) {
+      const isSuccessfulApiResponse =
+        body.error !== true && body.codigo >= 200 && body.codigo < 300;
+
+      if (isSuccessfulApiResponse) {
         return of(event);
       }
 

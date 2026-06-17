@@ -1,0 +1,206 @@
+<form (submit)="grabaCliente($event)">
+  <mat-dialog-content class="formulario-form-dialog scrollable-content">
+    @if (modo === 'agregar') {
+      <h6 class="form-section-title">Credenciales de acceso</h6>
+      <mat-form-field>
+        <mat-label class="labelI">Usuario</mat-label>
+        <input
+          cdkFocusInitial
+          matInput
+          [formField]="clienteForm.usuario"
+          placeholder="Usuario"
+          title="Usuario"
+        />
+        @if (clienteForm.usuario().touched() && !clienteForm.usuario().valid()) {
+          @for (error of clienteForm.usuario().errors(); track error) {
+            <mat-error>{{ error.message }}</mat-error>
+          }
+        }
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label class="labelI">Contraseña</mat-label>
+        <input
+          matInput
+          type="password"
+          [formField]="clienteForm.contrasena"
+          placeholder="Contraseña"
+          title="Contraseña"
+        />
+        @if (clienteForm.contrasena().touched() && !clienteForm.contrasena().valid()) {
+          @for (error of clienteForm.contrasena().errors(); track error) {
+            <mat-error>{{ error.message }}</mat-error>
+          }
+        }
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label class="labelI">Confirmar Contraseña</mat-label>
+        <input
+          matInput
+          type="password"
+          [formField]="clienteForm.confirmarContrasena"
+          placeholder="Confirmar Contraseña"
+          title="Confirmar Contraseña"
+        />
+        @if (
+          clienteForm.confirmarContrasena().touched() && !clienteForm.confirmarContrasena().valid()
+        ) {
+          @for (error of clienteForm.confirmarContrasena().errors(); track error) {
+            <mat-error>{{ error.message }}</mat-error>
+          }
+        }
+      </mat-form-field>
+    }
+
+    <h6 class="form-section-title">Datos personales</h6>
+    <mat-form-field>
+      <mat-label class="labelI">RUT</mat-label>
+      <input
+        matInput
+        [formField]="clienteForm.rutUsuario"
+        placeholder="RUT"
+        title="RUT"
+        (blur)="formatRutField()"
+      />
+      @if (clienteForm.rutUsuario().touched() && !clienteForm.rutUsuario().valid()) {
+        @for (error of clienteForm.rutUsuario().errors(); track error) {
+          <mat-error>{{ error.message }}</mat-error>
+        }
+      }
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label class="labelI">Nombres</mat-label>
+      <input matInput [formField]="clienteForm.nombres" placeholder="Nombres" title="Nombres" />
+      @if (clienteForm.nombres().touched() && !clienteForm.nombres().valid()) {
+        @for (error of clienteForm.nombres().errors(); track error) {
+          <mat-error>{{ error.message }}</mat-error>
+        }
+      }
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label class="labelI">Apellido Paterno</mat-label>
+      <input
+        matInput
+        [formField]="clienteForm.apellidoPaterno"
+        placeholder="Apellido Paterno"
+        title="Apellido Paterno"
+      />
+      @if (clienteForm.apellidoPaterno().touched() && !clienteForm.apellidoPaterno().valid()) {
+        @for (error of clienteForm.apellidoPaterno().errors(); track error) {
+          <mat-error>{{ error.message }}</mat-error>
+        }
+      }
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label class="labelI">Apellido Materno</mat-label>
+      <input
+        matInput
+        [formField]="clienteForm.apellidoMaterno"
+        placeholder="Apellido Materno"
+        title="Apellido Materno"
+      />
+      @if (clienteForm.apellidoMaterno().touched() && !clienteForm.apellidoMaterno().valid()) {
+        @for (error of clienteForm.apellidoMaterno().errors(); track error) {
+          <mat-error>{{ error.message }}</mat-error>
+        }
+      }
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label class="labelI">Email</mat-label>
+      <input
+        matInput
+        type="email"
+        [formField]="clienteForm.email"
+        placeholder="Email"
+        title="Email"
+      />
+      @if (clienteForm.email().touched() && !clienteForm.email().valid()) {
+        @for (error of clienteForm.email().errors(); track error) {
+          <mat-error>{{ error.message }}</mat-error>
+        }
+      }
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label class="labelI">Teléfono</mat-label>
+      <input matInput [formField]="clienteForm.telefono" placeholder="Teléfono" title="Teléfono" />
+      @if (clienteForm.telefono().touched() && !clienteForm.telefono().valid()) {
+        @for (error of clienteForm.telefono().errors(); track error) {
+          <mat-error>{{ error.message }}</mat-error>
+        }
+      }
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label class="labelI">Dirección</mat-label>
+      <input
+        matInput
+        [formField]="clienteForm.direccion"
+        placeholder="Dirección"
+        title="Dirección"
+      />
+      @if (clienteForm.direccion().touched() && !clienteForm.direccion().valid()) {
+        @for (error of clienteForm.direccion().errors(); track error) {
+          <mat-error>{{ error.message }}</mat-error>
+        }
+      }
+    </mat-form-field>
+
+    <mat-form-field class="inputSelect">
+      <mat-label class="labelI">Región</mat-label>
+      <mat-select [formField]="clienteForm.region" placeholder="Región" title="Región">
+        @for (region of regiones(); track region) {
+          <mat-option [value]="region">{{ region }}</mat-option>
+        }
+      </mat-select>
+      @if (clienteForm.region().touched() && !clienteForm.region().valid()) {
+        @for (error of clienteForm.region().errors(); track error) {
+          <mat-error>{{ error.message }}</mat-error>
+        }
+      }
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label class="labelI">Comuna</mat-label>
+      <mat-select [formField]="clienteForm.comuna" placeholder="Comuna" title="Comuna">
+        @if (comunas().length === 0) {
+          <mat-option value="" disabled>Selecciona una región primero</mat-option>
+        }
+        @for (comuna of comunas(); track comuna.sigla) {
+          <mat-option [value]="comuna.descripcion">{{ comuna.descripcion }}</mat-option>
+        }
+      </mat-select>
+      @if (clienteForm.comuna().touched() && !clienteForm.comuna().valid()) {
+        @for (error of clienteForm.comuna().errors(); track error) {
+          <mat-error>{{ error.message }}</mat-error>
+        }
+      }
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label class="labelI">Estado</mat-label>
+      <mat-select [formField]="clienteForm.estadoUsuario" placeholder="Estado" title="Estado">
+        <mat-option value="Activo">Activo</mat-option>
+        <mat-option value="Bloqueado">Bloqueado</mat-option>
+        <mat-option value="Suspendido">Suspendido</mat-option>
+      </mat-select>
+      @if (clienteForm.estadoUsuario().touched() && !clienteForm.estadoUsuario().valid()) {
+        @for (error of clienteForm.estadoUsuario().errors(); track error) {
+          <mat-error>{{ error.message }}</mat-error>
+        }
+      }
+    </mat-form-field>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end" class="dialog-actions-fixed">
+    <button mat-button type="button" (click)="cancelar()">Cancelar</button>
+    <button mat-raised-button color="primary" type="submit" [disabled]="isFormInvalid()">
+      Guardar
+    </button>
+  </mat-dialog-actions>
+</form>

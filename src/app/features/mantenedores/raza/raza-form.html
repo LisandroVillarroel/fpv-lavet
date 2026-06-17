@@ -1,0 +1,50 @@
+<form (ngSubmit)="guardar()" class="formulario-raza">
+  <mat-form-field appearance="outline" class="w-100">
+    <mat-label>Nombre</mat-label>
+    <input
+      matInput
+      [ngModel]="razaModel().nombre"
+      (ngModelChange)="onNombreChange($event)"
+      name="nombre"
+      required
+      placeholder="Nombre de la raza"
+    />
+    @if (razaForm.nombre().touched() && !razaForm.nombre().valid()) {
+      @for (error of razaForm.nombre().errors(); track error) {
+        <mat-error>{{ error.message }}</mat-error>
+      }
+    }
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="w-100">
+    <mat-label>Especie</mat-label>
+    <mat-select
+      [ngModel]="razaModel().especieNombre"
+      (ngModelChange)="onEspecieChange($event)"
+      name="especieNombre"
+      required
+    >
+      @for (especie of especies(); track especie._id ?? especie.nombre) {
+        <mat-option [value]="especie.nombre">{{ especie.nombre }}</mat-option>
+      }
+    </mat-select>
+    @if (razaForm.especieNombre().touched() && !razaForm.especieNombre().valid()) {
+      @for (error of razaForm.especieNombre().errors(); track error) {
+        <mat-error>{{ error.message }}</mat-error>
+      }
+    }
+  </mat-form-field>
+
+  <div class="acciones-form-raza">
+    <button mat-stroked-button type="button" (click)="cancelar()" class="btn-full">Cancelar</button>
+    <button
+      mat-raised-button
+      color="primary"
+      type="submit"
+      [disabled]="isFormInvalid() || guardando()"
+      class="btn-full"
+    >
+      Guardar
+    </button>
+  </div>
+</form>

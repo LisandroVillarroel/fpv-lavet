@@ -1,0 +1,269 @@
+<section class="datos-personales-page">
+  <div class="datos-personales-title">Datos Personales</div>
+
+  <mat-card class="datos-personales-card" appearance="outlined">
+    <mat-card-content>
+      <div class="datos-personales-copy">
+        <div class="datos-personales-copy-topline">
+          <div class="datos-personales-copy-user">
+            {{ nombreUsuario() || 'Usuario autenticado' }}
+          </div>
+          <div class="datos-personales-copy-badge">Perfil personal</div>
+        </div>
+        <h2>Actualizar datos del usuario</h2>
+        <p>
+          Modifica tus datos personales y profesionales. Esta pantalla no incluye permisos de menú
+          ni cambio de contraseña.
+        </p>
+      </div>
+
+      @if (successMessage()) {
+        <div class="form-message success" role="status">{{ successMessage() }}</div>
+      }
+
+      @if (errorMessage()) {
+        <div class="form-message error" role="alert">{{ errorMessage() }}</div>
+      }
+
+      <form (ngSubmit)="submit($event)" class="datos-personales-form">
+        <h6 class="form-section-title">Datos personales</h6>
+        <div class="form-grid">
+          <mat-form-field>
+            <mat-label>RUT</mat-label>
+            <input
+              matInput
+              [formField]="profileForm.rutUsuario"
+              placeholder="RUT"
+              title="RUT"
+              (blur)="formatRutField()"
+            />
+            @if (profileForm.rutUsuario().touched() && !profileForm.rutUsuario().valid()) {
+              @for (error of profileForm.rutUsuario().errors(); track error) {
+                <mat-error>{{ error.message }}</mat-error>
+              }
+            }
+          </mat-form-field>
+
+          <mat-form-field>
+            <mat-label>Nombres</mat-label>
+            <input matInput [formField]="profileForm.nombres" placeholder="Nombres" />
+            @if (profileForm.nombres().touched() && !profileForm.nombres().valid()) {
+              @for (error of profileForm.nombres().errors(); track error) {
+                <mat-error>{{ error.message }}</mat-error>
+              }
+            }
+          </mat-form-field>
+
+          <mat-form-field>
+            <mat-label>Apellido Paterno</mat-label>
+            <input
+              matInput
+              [formField]="profileForm.apellidoPaterno"
+              placeholder="Apellido Paterno"
+            />
+            @if (
+              profileForm.apellidoPaterno().touched() && !profileForm.apellidoPaterno().valid()
+            ) {
+              @for (error of profileForm.apellidoPaterno().errors(); track error) {
+                <mat-error>{{ error.message }}</mat-error>
+              }
+            }
+          </mat-form-field>
+
+          <mat-form-field>
+            <mat-label>Apellido Materno</mat-label>
+            <input
+              matInput
+              [formField]="profileForm.apellidoMaterno"
+              placeholder="Apellido Materno"
+            />
+            @if (
+              profileForm.apellidoMaterno().touched() && !profileForm.apellidoMaterno().valid()
+            ) {
+              @for (error of profileForm.apellidoMaterno().errors(); track error) {
+                <mat-error>{{ error.message }}</mat-error>
+              }
+            }
+          </mat-form-field>
+
+          <mat-form-field>
+            <mat-label>Email</mat-label>
+            <input matInput type="email" [formField]="profileForm.email" placeholder="Email" />
+            @if (profileForm.email().touched() && !profileForm.email().valid()) {
+              @for (error of profileForm.email().errors(); track error) {
+                <mat-error>{{ error.message }}</mat-error>
+              }
+            }
+          </mat-form-field>
+
+          <mat-form-field>
+            <mat-label>Teléfono</mat-label>
+            <input matInput [formField]="profileForm.telefono" placeholder="Teléfono" />
+            @if (profileForm.telefono().touched() && !profileForm.telefono().valid()) {
+              @for (error of profileForm.telefono().errors(); track error) {
+                <mat-error>{{ error.message }}</mat-error>
+              }
+            }
+          </mat-form-field>
+
+          <mat-form-field>
+            <mat-label>Dirección</mat-label>
+            <input matInput [formField]="profileForm.direccion" placeholder="Dirección" />
+            @if (profileForm.direccion().touched() && !profileForm.direccion().valid()) {
+              @for (error of profileForm.direccion().errors(); track error) {
+                <mat-error>{{ error.message }}</mat-error>
+              }
+            }
+          </mat-form-field>
+
+          <mat-form-field>
+            <mat-label>Región</mat-label>
+            <mat-select [formField]="profileForm.region" placeholder="Región">
+              @for (region of regiones(); track region) {
+                <mat-option [value]="region">{{ region }}</mat-option>
+              }
+            </mat-select>
+            @if (profileForm.region().touched() && !profileForm.region().valid()) {
+              @for (error of profileForm.region().errors(); track error) {
+                <mat-error>{{ error.message }}</mat-error>
+              }
+            }
+          </mat-form-field>
+
+          <mat-form-field>
+            <mat-label>Comuna</mat-label>
+            <mat-select [formField]="profileForm.comuna" placeholder="Comuna">
+              @if (comunas().length === 0) {
+                <mat-option value="" disabled>Selecciona una región primero</mat-option>
+              }
+              @for (comuna of comunas(); track comuna.sigla) {
+                <mat-option [value]="comuna.descripcion">{{ comuna.descripcion }}</mat-option>
+              }
+            </mat-select>
+            @if (profileForm.comuna().touched() && !profileForm.comuna().valid()) {
+              @for (error of profileForm.comuna().errors(); track error) {
+                <mat-error>{{ error.message }}</mat-error>
+              }
+            }
+          </mat-form-field>
+        </div>
+
+        <h6 class="form-section-title">Datos de veterinaria</h6>
+        <div class="form-grid">
+          <mat-form-field>
+            <mat-label>Tipo Veterinario</mat-label>
+            <mat-select [formField]="profileForm.veterinaria!.tipoVeterinario">
+              @for (tipo of tiposVeterinario(); track tipo.sigla) {
+                <mat-option [value]="tipo.sigla">{{ tipo.descripcion }}</mat-option>
+              }
+            </mat-select>
+            @if (
+              profileForm.veterinaria!.tipoVeterinario().touched() &&
+              !profileForm.veterinaria!.tipoVeterinario().valid()
+            ) {
+              @for (error of profileForm.veterinaria!.tipoVeterinario().errors(); track error) {
+                <mat-error>{{ error.message }}</mat-error>
+              }
+            }
+          </mat-form-field>
+
+          <mat-form-field>
+            <mat-label>Rol Veterinario</mat-label>
+            <mat-select [formField]="profileForm.veterinaria!.rolVeterinario">
+              <mat-option value="administrador">Administrador</mat-option>
+              <mat-option value="veterinario">Veterinario</mat-option>
+            </mat-select>
+            @if (
+              profileForm.veterinaria!.rolVeterinario().touched() &&
+              !profileForm.veterinaria!.rolVeterinario().valid()
+            ) {
+              @for (error of profileForm.veterinaria!.rolVeterinario().errors(); track error) {
+                <mat-error>{{ error.message }}</mat-error>
+              }
+            }
+          </mat-form-field>
+
+          <mat-form-field>
+            <mat-label>% Comisión Veterinario</mat-label>
+            <input
+              matInput
+              type="number"
+              [formField]="profileForm.veterinaria!.porcentajeComisionVeterinario"
+              step="0.01"
+              placeholder="0"
+            />
+            @if (
+              profileForm.veterinaria!.porcentajeComisionVeterinario().touched() &&
+              !profileForm.veterinaria!.porcentajeComisionVeterinario().valid()
+            ) {
+              @for (
+                error of profileForm.veterinaria!.porcentajeComisionVeterinario().errors();
+                track error
+              ) {
+                <mat-error>{{ error.message }}</mat-error>
+              }
+            }
+          </mat-form-field>
+
+          <mat-form-field>
+            <mat-label>Estado</mat-label>
+            <mat-select [formField]="profileForm.estadoUsuario">
+              <mat-option value="Activo">Activo</mat-option>
+              <mat-option value="Bloqueado">Bloqueado</mat-option>
+              <mat-option value="Suspendido">Suspendido</mat-option>
+            </mat-select>
+            @if (profileForm.estadoUsuario().touched() && !profileForm.estadoUsuario().valid()) {
+              @for (error of profileForm.estadoUsuario().errors(); track error) {
+                <mat-error>{{ error.message }}</mat-error>
+              }
+            }
+          </mat-form-field>
+        </div>
+
+        <h6 class="form-section-title">Foto de usuario</h6>
+        <div class="file-upload-container">
+          <label
+            class="file-drop-zone"
+            for="userPhotoInput"
+            (dragover)="onDragOver($event)"
+            (drop)="onFileDropped($event)"
+          >
+            <div class="file-drop-content">
+              <div>
+                <strong>Foto de usuario</strong>
+                <p>Arrastra una imagen o selecciona un archivo</p>
+              </div>
+              <button mat-stroked-button type="button" (click)="fileInput.click()">
+                Seleccionar archivo
+              </button>
+            </div>
+          </label>
+          <input
+            #fileInput
+            id="userPhotoInput"
+            type="file"
+            accept="image/*"
+            hidden
+            (change)="onFileSelected($event)"
+          />
+          @if (fotoPreviewUrl()) {
+            <div class="photo-preview">
+              <img [src]="fotoPreviewUrl()" alt="Foto usuario" />
+            </div>
+          }
+        </div>
+
+        <div class="datos-personales-actions">
+          <button
+            mat-raised-button
+            color="primary"
+            type="submit"
+            [disabled]="isSaving() || isFormInvalid()"
+          >
+            {{ isSaving() ? 'Guardando...' : 'Guardar cambios' }}
+          </button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</section>

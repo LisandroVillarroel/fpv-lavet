@@ -1,0 +1,118 @@
+<form (ngSubmit)="guardar()" class="formulario-examen">
+  <mat-form-field appearance="outline" class="w-100">
+    <mat-label>Código examen</mat-label>
+    <input
+      matInput
+      type="number"
+      [ngModel]="examenModel().codigoExamen"
+      (ngModelChange)="onCodigoExamenChange($event)"
+      name="codigoExamen"
+      required
+      placeholder="Código del examen"
+    />
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="w-100">
+    <mat-label>Código interno</mat-label>
+    <input
+      matInput
+      type="number"
+      [ngModel]="examenModel().codigoInterno"
+      (ngModelChange)="onCodigoInternoChange($event)"
+      name="codigoInterno"
+      required
+      placeholder="Código interno"
+    />
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="w-100">
+    <mat-label>Nombre</mat-label>
+    <input
+      matInput
+      [ngModel]="examenModel().nombre"
+      (ngModelChange)="onNombreChange($event)"
+      name="nombre"
+      required
+      placeholder="Nombre del examen"
+    />
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="w-100">
+    <mat-label>Sigla</mat-label>
+    <input
+      matInput
+      [ngModel]="examenModel().sigla"
+      (ngModelChange)="onSiglaChange($event)"
+      name="sigla"
+      required
+      placeholder="Sigla del examen"
+    />
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="w-100">
+    <mat-label>Precio</mat-label>
+    <span matTextPrefix>$&nbsp;</span>
+    <input
+      matInput
+      type="text"
+      inputmode="numeric"
+      [ngModel]="examenModel().precio === 0 ? '' : examenModel().precio"
+      (ngModelChange)="onPrecioChange($event)"
+      name="precio"
+      required
+      placeholder="25.000"
+    />
+    <mat-hint align="end">{{ formatearPrecio(examenModel().precio) }}</mat-hint>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="w-100">
+    <mat-label>Tiempo preparación</mat-label>
+    <input
+      matInput
+      list="tiempos-preparacion-sugeridos"
+      [ngModel]="examenModel().tiempoPreparacion"
+      (ngModelChange)="onTiempoPreparacionChange($event)"
+      name="tiempoPreparacion"
+      required
+      placeholder="Ejemplo: 12 horas"
+    />
+    <mat-hint>Usa valores como 30 minutos, 1 hora o 24 horas</mat-hint>
+  </mat-form-field>
+  <datalist id="tiempos-preparacion-sugeridos">
+    @for (tiempo of tiemposPreparacionSugeridos; track tiempo) {
+      <option [value]="tiempo"></option>
+    }
+  </datalist>
+
+  <mat-form-field appearance="outline" class="w-100">
+    <mat-label>Categoría</mat-label>
+    <mat-select
+      [ngModel]="obtenerCategoriaId(examenModel().categoria)"
+      (ngModelChange)="onCategoriaChange($event)"
+      name="categoria"
+      required
+    >
+      @for (categoria of categorias(); track categoria._id ?? categoria.nombre) {
+        <mat-option [value]="categoria._id">{{ categoria.nombre }}</mat-option>
+      }
+    </mat-select>
+    @if (examenForm.categoria().touched() && !examenForm.categoria().valid()) {
+      @for (error of examenForm.categoria().errors(); track error) {
+        <mat-error>{{ error.message }}</mat-error>
+      }
+    }
+  </mat-form-field>
+
+  <div class="acciones-form-examen">
+    <button mat-stroked-button type="button" (click)="cancelar()" class="btn-full">Cancelar</button>
+    <button
+      mat-raised-button
+      color="primary"
+      type="submit"
+      [disabled]="isFormInvalid() || guardando()"
+      class="btn-full"
+    >
+      Guardar
+    </button>
+  </div>
+</form>

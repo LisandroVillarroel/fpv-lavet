@@ -38,7 +38,7 @@ export interface IUsuarioEmpresa {
   rutEmpresa: string;
   razonSocial: string;
   nombreFantasia: string;
-  tipoEmpresa?: 'Laboratorio' | 'Veterinaria' | 'Usuario';
+  tipoEmpresa?: 'Laboratorio' | 'Veterinaria' | 'Administración';
 }
 
 export interface IVeterinaria {

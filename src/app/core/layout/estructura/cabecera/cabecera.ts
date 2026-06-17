@@ -152,6 +152,10 @@ export default class Cabecera {
       return;
     }
 
+    if (this.#authToken.isTokenExpired(session?.tokens?.accessToken ?? null)) {
+      return;
+    }
+
     this.#authToken.updateStoredUser({ temaColorSistema: theme });
 
     this.#userService

@@ -1,0 +1,80 @@
+<mat-dialog-content class="formulario-form-dialog scrollable-content">
+  <section class="menu-section">
+    <div class="menu-section__header">
+      <h6 class="form-section-title">Menú empresa</h6>
+      <p class="menu-section__hint">
+        Se carga desde la tabla menus según el tipo de empresa seleccionado.
+      </p>
+      @if (empresa()?.tipoEmpresa) {
+        <p class="menu-section__type">Tipo actual: {{ empresa()?.tipoEmpresa }}</p>
+      }
+    </div>
+
+    @if (menuError()) {
+      <p class="menu-section__message menu-section__message--error">{{ menuError() }}</p>
+    } @else if (!empresa()?._id) {
+      <p class="menu-section__message">
+        Guarda primero los datos de la empresa para configurar su menú.
+      </p>
+    } @else if (menuItemsDisponibles().length === 0) {
+      <p class="menu-section__message">No hay menú configurado para este tipo de empresa.</p>
+    } @else {
+      <mat-tree #tree [dataSource]="menuItemsDisponibles()" [childrenAccessor]="childrenAccessor">
+        <mat-tree-node *matTreeNodeDef="let node" matTreeNodePadding>
+          <button mat-icon-button type="button" disabled title="Sin acción"></button>
+          <mat-checkbox
+            class="permisos-checkbox"
+            [checked]="isChecked(node)"
+            [indeterminate]="isIndeterminate(node)"
+            (change)="toggleNodeSelection(node, $event.checked)"
+          >
+            {{ node.despliegaNombre }}
+          </mat-checkbox>
+        </mat-tree-node>
+
+        <mat-tree-node
+          *matTreeNodeDef="let node; when: hasChild"
+          matTreeNodePadding
+          matTreeNodeToggle
+        >
+          <button
+            mat-icon-button
+            type="button"
+            matTreeNodeToggle
+            [attr.aria-label]="'Toggle ' + node.despliegaNombre"
+            [title]="'Expandir/Colapsar ' + node.despliegaNombre"
+          >
+            <mat-icon>
+              {{ tree.isExpanded(node) ? 'expand_more' : 'chevron_right' }}
+            </mat-icon>
+          </button>
+          <mat-checkbox
+            class="permisos-checkbox"
+            [checked]="isChecked(node)"
+            [indeterminate]="isIndeterminate(node)"
+            (change)="toggleNodeSelection(node, $event.checked)"
+          >
+            {{ node.despliegaNombre }}
+          </mat-checkbox>
+        </mat-tree-node>
+      </mat-tree>
+    }
+  </section>
+</mat-dialog-content>
+
+<mat-dialog-actions class="row g-3 w-100 m-0 px-4 pb-4 dialog-actions-fixed">
+  <div class="col-12 col-md-6">
+    <button mat-stroked-button type="button" (click)="cancelar()">Cancelar</button>
+  </div>
+  <div class="col-12 col-md-6">
+    <button
+      mat-raised-button
+      color="primary"
+      type="button"
+      (click)="guardar()"
+      [disabled]="!empresa()?._id || menuItemsDisponibles().length === 0"
+    >
+      Guardar
+    </button>
+  </div>
+</mat-dialog-actions>

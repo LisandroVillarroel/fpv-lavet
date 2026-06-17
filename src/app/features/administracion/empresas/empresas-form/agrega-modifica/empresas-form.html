@@ -1,0 +1,226 @@
+<form (submit)="grabaEmpresa($event)">
+  <mat-dialog-content class="formulario-form-dialog scrollable-content">
+    <h6 class="form-section-title">Datos de empresa</h6>
+
+    <mat-form-field>
+      <mat-label class="labelI">RUT empresa</mat-label>
+      <input
+        matInput
+        [formField]="empresaForm.rutEmpresa"
+        placeholder="RUT empresa"
+        title="RUT empresa"
+        (blur)="formatRutField()"
+      />
+      @if (empresaForm.rutEmpresa().touched() && !empresaForm.rutEmpresa().valid()) {
+        @for (error of empresaForm.rutEmpresa().errors(); track error) {
+          <mat-error>{{ error.message }}</mat-error>
+        }
+      }
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label class="labelI">Razón social</mat-label>
+      <input
+        matInput
+        [formField]="empresaForm.razonSocial"
+        placeholder="Razón social"
+        title="Razón social"
+      />
+      @if (empresaForm.razonSocial().touched() && !empresaForm.razonSocial().valid()) {
+        @for (error of empresaForm.razonSocial().errors(); track error) {
+          <mat-error>{{ error.message }}</mat-error>
+        }
+      }
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label class="labelI">Nombre fantasía</mat-label>
+      <input
+        matInput
+        [formField]="empresaForm.nombreFantasia"
+        placeholder="Nombre fantasía"
+        title="Nombre fantasía"
+      />
+      @if (empresaForm.nombreFantasia().touched() && !empresaForm.nombreFantasia().valid()) {
+        @for (error of empresaForm.nombreFantasia().errors(); track error) {
+          <mat-error>{{ error.message }}</mat-error>
+        }
+      }
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label class="labelI">Dirección</mat-label>
+      <input
+        matInput
+        [formField]="empresaForm.direccion"
+        placeholder="Dirección"
+        title="Dirección"
+      />
+      @if (empresaForm.direccion().touched() && !empresaForm.direccion().valid()) {
+        @for (error of empresaForm.direccion().errors(); track error) {
+          <mat-error>{{ error.message }}</mat-error>
+        }
+      }
+    </mat-form-field>
+
+    <mat-form-field class="inputSelect">
+      <mat-label class="labelI">Región</mat-label>
+      <mat-select [formField]="empresaForm.region" placeholder="Región" title="Región">
+        @for (region of regiones(); track region) {
+          <mat-option [value]="region">{{ region }}</mat-option>
+        }
+      </mat-select>
+      @if (empresaForm.region().touched() && !empresaForm.region().valid()) {
+        @for (error of empresaForm.region().errors(); track error) {
+          <mat-error>{{ error.message }}</mat-error>
+        }
+      }
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label class="labelI">Comuna</mat-label>
+      <mat-select [formField]="empresaForm.comuna" placeholder="Comuna" title="Comuna">
+        @if (comunas().length === 0) {
+          <mat-option value="" disabled>Selecciona una región primero</mat-option>
+        }
+        @for (comuna of comunas(); track comuna.sigla) {
+          <mat-option [value]="comuna.descripcion">{{ comuna.descripcion }}</mat-option>
+        }
+      </mat-select>
+      @if (empresaForm.comuna().touched() && !empresaForm.comuna().valid()) {
+        @for (error of empresaForm.comuna().errors(); track error) {
+          <mat-error>{{ error.message }}</mat-error>
+        }
+      }
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label class="labelI">Teléfono</mat-label>
+      <input matInput [formField]="empresaForm.telefono" placeholder="Teléfono" title="Teléfono" />
+      @if (empresaForm.telefono().touched() && !empresaForm.telefono().valid()) {
+        @for (error of empresaForm.telefono().errors(); track error) {
+          <mat-error>{{ error.message }}</mat-error>
+        }
+      }
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label class="labelI">Email empresa</mat-label>
+      <input
+        matInput
+        type="email"
+        [formField]="empresaForm.emailEmpresa"
+        placeholder="Email empresa"
+        title="Email empresa"
+      />
+      @if (empresaForm.emailEmpresa().touched() && !empresaForm.emailEmpresa().valid()) {
+        @for (error of empresaForm.emailEmpresa().errors(); track error) {
+          <mat-error>{{ error.message }}</mat-error>
+        }
+      }
+    </mat-form-field>
+
+    <h6 class="form-section-title">Contacto</h6>
+
+    <mat-form-field>
+      <mat-label class="labelI">Nombre contacto</mat-label>
+      <input
+        matInput
+        [formField]="empresaForm.contacto.nombreContacto"
+        placeholder="Nombre contacto"
+        title="Nombre contacto"
+      />
+      @if (
+        empresaForm.contacto.nombreContacto().touched() &&
+        !empresaForm.contacto.nombreContacto().valid()
+      ) {
+        @for (error of empresaForm.contacto.nombreContacto().errors(); track error) {
+          <mat-error>{{ error.message }}</mat-error>
+        }
+      }
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label class="labelI">Email contacto</mat-label>
+      <input
+        matInput
+        type="email"
+        [formField]="empresaForm.contacto.emailContacto"
+        placeholder="Email contacto"
+        title="Email contacto"
+      />
+      @if (
+        empresaForm.contacto.emailContacto().touched() &&
+        !empresaForm.contacto.emailContacto().valid()
+      ) {
+        @for (error of empresaForm.contacto.emailContacto().errors(); track error) {
+          <mat-error>{{ error.message }}</mat-error>
+        }
+      }
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label class="labelI">Teléfono contacto</mat-label>
+      <input
+        matInput
+        [formField]="empresaForm.contacto.telefonoContacto"
+        placeholder="Teléfono contacto"
+        title="Teléfono contacto"
+      />
+      @if (
+        empresaForm.contacto.telefonoContacto().touched() &&
+        !empresaForm.contacto.telefonoContacto().valid()
+      ) {
+        @for (error of empresaForm.contacto.telefonoContacto().errors(); track error) {
+          <mat-error>{{ error.message }}</mat-error>
+        }
+      }
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label class="labelI">Tipo empresa</mat-label>
+      <mat-select
+        [formField]="empresaForm.tipoEmpresa"
+        placeholder="Tipo empresa"
+        title="Tipo empresa"
+      >
+        <mat-option value="Laboratorio">Laboratorio</mat-option>
+        <mat-option value="Veterinaria">Veterinaria</mat-option>
+        <mat-option value="Administración">Administración</mat-option>
+      </mat-select>
+      @if (empresaForm.tipoEmpresa().touched() && !empresaForm.tipoEmpresa().valid()) {
+        @for (error of empresaForm.tipoEmpresa().errors(); track error) {
+          <mat-error>{{ error.message }}</mat-error>
+        }
+      }
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label class="labelI">Estado empresa</mat-label>
+      <mat-select
+        [formField]="empresaForm.estadoEmpresa"
+        placeholder="Estado empresa"
+        title="Estado empresa"
+      >
+        <mat-option value="Activo">Activo</mat-option>
+        <mat-option value="Bloqueado">Bloqueado</mat-option>
+      </mat-select>
+      @if (empresaForm.estadoEmpresa().touched() && !empresaForm.estadoEmpresa().valid()) {
+        @for (error of empresaForm.estadoEmpresa().errors(); track error) {
+          <mat-error>{{ error.message }}</mat-error>
+        }
+      }
+    </mat-form-field>
+  </mat-dialog-content>
+
+  <mat-dialog-actions class="row g-3 w-100 m-0 px-4 pb-4 dialog-actions-fixed">
+    <div class="col-12 col-md-6">
+      <button mat-button type="button" (click)="cancelar()">Cancelar</button>
+    </div>
+    <div class="col-12 col-md-6">
+      <button mat-raised-button color="primary" type="submit" [disabled]="isFormInvalid()">
+        Guardar
+      </button>
+    </div>
+  </mat-dialog-actions>
+</form>

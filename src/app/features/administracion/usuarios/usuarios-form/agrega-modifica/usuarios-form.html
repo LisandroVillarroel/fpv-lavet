@@ -1,0 +1,338 @@
+<form (submit)="grabaUsuario($event)">
+  <mat-dialog-content class="formulario-form-dialog scrollable-content">
+    @if (modo === 'agregar') {
+      <h6 class="form-section-title">Credenciales de acceso</h6>
+      <mat-form-field>
+        <mat-label class="labelI">Usuario</mat-label>
+        <input
+          cdkFocusInitial
+          matInput
+          [formField]="usuarioForm.usuario"
+          placeholder="Usuario"
+          title="Usuario"
+        />
+        @if (usuarioForm.usuario().touched() && !usuarioForm.usuario().valid()) {
+          @for (error of usuarioForm.usuario().errors(); track error) {
+            <mat-error>{{ error.message }}</mat-error>
+          }
+        }
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label class="labelI">Contraseña</mat-label>
+        <input
+          matInput
+          type="password"
+          [formField]="usuarioForm.contrasena"
+          placeholder="Contraseña"
+          title="Contraseña"
+        />
+        @if (usuarioForm.contrasena().touched() && !usuarioForm.contrasena().valid()) {
+          @for (error of usuarioForm.contrasena().errors(); track error) {
+            <mat-error>{{ error.message }}</mat-error>
+          }
+        }
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label class="labelI">Confirmar Contraseña</mat-label>
+        <input
+          matInput
+          type="password"
+          [formField]="usuarioForm.confirmarContrasena"
+          placeholder="Confirmar Contraseña"
+          title="Confirmar Contraseña"
+        />
+        @if (
+          usuarioForm.confirmarContrasena().touched() && !usuarioForm.confirmarContrasena().valid()
+        ) {
+          @for (error of usuarioForm.confirmarContrasena().errors(); track error) {
+            <mat-error>{{ error.message }}</mat-error>
+          }
+        }
+      </mat-form-field>
+    }
+
+    <h6 class="form-section-title">Empresa</h6>
+    <mat-form-field class="inputSelect">
+      <mat-label class="labelI">Empresa</mat-label>
+      <mat-select [formField]="usuarioForm.empresaId" placeholder="Empresa" title="Empresa">
+        @for (empresa of empresas(); track empresa._id) {
+          <mat-option [value]="empresa._id">
+            {{ empresa.nombreFantasia }} - {{ empresa.razonSocial }}
+          </mat-option>
+        }
+      </mat-select>
+      @if (usuarioForm.empresaId().touched() && !usuarioForm.empresaId().valid()) {
+        @for (error of usuarioForm.empresaId().errors(); track error) {
+          <mat-error>{{ error.message }}</mat-error>
+        }
+      }
+    </mat-form-field>
+
+    <h6 class="form-section-title">Datos personales</h6>
+    <mat-form-field>
+      <mat-label class="labelI">RUT</mat-label>
+      <input
+        matInput
+        [formField]="usuarioForm.rutUsuario"
+        placeholder="RUT"
+        title="RUT"
+        (blur)="formatRutField()"
+      />
+      @if (usuarioForm.rutUsuario().touched() && !usuarioForm.rutUsuario().valid()) {
+        @for (error of usuarioForm.rutUsuario().errors(); track error) {
+          <mat-error>{{ error.message }}</mat-error>
+        }
+      }
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label class="labelI">Nombres</mat-label>
+      <input matInput [formField]="usuarioForm.nombres" placeholder="Nombres" title="Nombres" />
+      @if (usuarioForm.nombres().touched() && !usuarioForm.nombres().valid()) {
+        @for (error of usuarioForm.nombres().errors(); track error) {
+          <mat-error>{{ error.message }}</mat-error>
+        }
+      }
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label class="labelI">Apellido Paterno</mat-label>
+      <input
+        matInput
+        [formField]="usuarioForm.apellidoPaterno"
+        placeholder="Apellido Paterno"
+        title="Apellido Paterno"
+      />
+      @if (usuarioForm.apellidoPaterno().touched() && !usuarioForm.apellidoPaterno().valid()) {
+        @for (error of usuarioForm.apellidoPaterno().errors(); track error) {
+          <mat-error>{{ error.message }}</mat-error>
+        }
+      }
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label class="labelI">Apellido Materno</mat-label>
+      <input
+        matInput
+        [formField]="usuarioForm.apellidoMaterno"
+        placeholder="Apellido Materno"
+        title="Apellido Materno"
+      />
+      @if (usuarioForm.apellidoMaterno().touched() && !usuarioForm.apellidoMaterno().valid()) {
+        @for (error of usuarioForm.apellidoMaterno().errors(); track error) {
+          <mat-error>{{ error.message }}</mat-error>
+        }
+      }
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label class="labelI">Email</mat-label>
+      <input
+        matInput
+        type="email"
+        [formField]="usuarioForm.email"
+        placeholder="Email"
+        title="Email"
+      />
+      @if (usuarioForm.email().touched() && !usuarioForm.email().valid()) {
+        @for (error of usuarioForm.email().errors(); track error) {
+          <mat-error>{{ error.message }}</mat-error>
+        }
+      }
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label class="labelI">Teléfono</mat-label>
+      <input matInput [formField]="usuarioForm.telefono" placeholder="Teléfono" title="Teléfono" />
+      @if (usuarioForm.telefono().touched() && !usuarioForm.telefono().valid()) {
+        @for (error of usuarioForm.telefono().errors(); track error) {
+          <mat-error>{{ error.message }}</mat-error>
+        }
+      }
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label class="labelI">Dirección</mat-label>
+      <input
+        matInput
+        [formField]="usuarioForm.direccion"
+        placeholder="Dirección"
+        title="Dirección"
+      />
+      @if (usuarioForm.direccion().touched() && !usuarioForm.direccion().valid()) {
+        @for (error of usuarioForm.direccion().errors(); track error) {
+          <mat-error>{{ error.message }}</mat-error>
+        }
+      }
+    </mat-form-field>
+
+    <mat-form-field class="inputSelect">
+      <mat-label class="labelI">Región</mat-label>
+      <mat-select
+        class="small-font-select"
+        panelClass="small-font-select-panel"
+        [formField]="usuarioForm.region"
+        placeholder="Región"
+        title="Región"
+      >
+        @for (region of regiones(); track region) {
+          <mat-option [value]="region">{{ region }}</mat-option>
+        }
+      </mat-select>
+      @if (usuarioForm.region().touched() && !usuarioForm.region().valid()) {
+        @for (error of usuarioForm.region().errors(); track error) {
+          <mat-error>{{ error.message }}</mat-error>
+        }
+      }
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label class="labelI">Comuna</mat-label>
+      <mat-select [formField]="usuarioForm.comuna" placeholder="Comuna" title="Comuna">
+        @if (comunas().length === 0) {
+          <mat-option value="" disabled> Selecciona una región primero </mat-option>
+        }
+        @for (comuna of comunas(); track comuna.sigla) {
+          <mat-option [value]="comuna.descripcion">{{ comuna.descripcion }}</mat-option>
+        }
+      </mat-select>
+      @if (usuarioForm.comuna().touched() && !usuarioForm.comuna().valid()) {
+        @for (error of usuarioForm.comuna().errors(); track error) {
+          <mat-error>{{ error.message }}</mat-error>
+        }
+      }
+    </mat-form-field>
+
+    <h6 class="form-section-title">Datos de veterinaria</h6>
+    <mat-form-field>
+      <mat-label class="labelI">Tipo Veterinario</mat-label>
+      <mat-select
+        [formField]="usuarioForm.veterinaria!.tipoVeterinario"
+        placeholder="Dr., Dra., Tec. Vet., etc."
+        title="Tipo Veterinario"
+      >
+        @for (tipo of tiposVeterinario(); track tipo.sigla) {
+          <mat-option [value]="tipo.sigla">{{ tipo.descripcion }}</mat-option>
+        }
+      </mat-select>
+      @if (
+        usuarioForm.veterinaria!.tipoVeterinario().touched() &&
+        !usuarioForm.veterinaria!.tipoVeterinario().valid()
+      ) {
+        @for (error of usuarioForm.veterinaria!.tipoVeterinario().errors(); track error) {
+          <mat-error>{{ error.message }}</mat-error>
+        }
+      }
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label class="labelI">Rol Veterinario</mat-label>
+      <mat-select
+        [formField]="usuarioForm.veterinaria!.rolVeterinario"
+        placeholder="administrador, veterinario"
+        title="Rol Veterinario"
+      >
+        <mat-option value="administrador">Administrador</mat-option>
+        <mat-option value="veterinario">Veterinario</mat-option>
+      </mat-select>
+      @if (
+        usuarioForm.veterinaria!.rolVeterinario().touched() &&
+        !usuarioForm.veterinaria!.rolVeterinario().valid()
+      ) {
+        @for (error of usuarioForm.veterinaria!.rolVeterinario().errors(); track error) {
+          <mat-error>{{ error.message }}</mat-error>
+        }
+      }
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label class="labelI">% Comisión Veterinario</mat-label>
+      <input
+        matInput
+        type="number"
+        [formField]="usuarioForm.veterinaria!.porcentajeComisionVeterinario"
+        step="0.01"
+        placeholder="0"
+        title="Porcentaje Comisión Veterinario"
+      />
+      @if (
+        usuarioForm.veterinaria!.porcentajeComisionVeterinario().touched() &&
+        !usuarioForm.veterinaria!.porcentajeComisionVeterinario().valid()
+      ) {
+        @for (
+          error of usuarioForm.veterinaria!.porcentajeComisionVeterinario().errors();
+          track error
+        ) {
+          <mat-error>{{ error.message }}</mat-error>
+        }
+      }
+    </mat-form-field>
+
+    <h6 class="form-section-title">Estado</h6>
+    <mat-form-field>
+      <mat-label class="labelI">Estado</mat-label>
+      <mat-select [formField]="usuarioForm.estadoUsuario" placeholder="Estado" title="Estado">
+        <mat-option value="Activo">Activo</mat-option>
+        <mat-option value="Bloqueado">Bloqueado</mat-option>
+        <mat-option value="Suspendido">Suspendido</mat-option>
+      </mat-select>
+      @if (usuarioForm.estadoUsuario().touched() && !usuarioForm.estadoUsuario().valid()) {
+        @for (error of usuarioForm.estadoUsuario().errors(); track error) {
+          <mat-error>{{ error.message }}</mat-error>
+        }
+      }
+    </mat-form-field>
+
+    <h6 class="form-section-title">Foto de usuario</h6>
+    <div class="file-upload-container">
+      <label
+        class="file-drop-zone"
+        for="userPhotoInput"
+        (dragover)="onDragOver($event)"
+        (drop)="onFileDropped($event)"
+      >
+        <div class="file-drop-content">
+          <div>
+            <strong>Foto de usuario</strong>
+            <p>Arrastra una imagen o selecciona un archivo</p>
+          </div>
+          <button mat-stroked-button type="button" (click)="fileInput.click()">
+            Seleccionar archivo
+          </button>
+        </div>
+      </label>
+      <input
+        #fileInput
+        id="userPhotoInput"
+        type="file"
+        accept="image/*"
+        hidden
+        (change)="onFileSelected($event)"
+      />
+      @if (fotoPreviewUrl()) {
+        <div class="photo-preview">
+          <img [src]="fotoPreviewUrl()" alt="Foto usuario" />
+        </div>
+      }
+    </div>
+  </mat-dialog-content>
+
+  <mat-dialog-actions class="row g-3 w-100 m-0 px-4 pb-4 dialog-actions-fixed">
+    <div class="col-12 col-md-6">
+      <button mat-stroked-button type="button" (click)="cancelar()">Cancelar</button>
+    </div>
+    <div class="col-12 col-md-6">
+      <button
+        mat-raised-button
+        color="primary"
+        type="button"
+        (click)="grabaUsuario()"
+        [disabled]="isFormInvalid()"
+      >
+        Guardar
+      </button>
+    </div>
+  </mat-dialog-actions>
+</form>

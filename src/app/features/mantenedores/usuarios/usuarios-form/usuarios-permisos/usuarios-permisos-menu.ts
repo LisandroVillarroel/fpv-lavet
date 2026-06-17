@@ -81,7 +81,7 @@ export class UsuariosPermisosMenuComponent implements OnInit {
       rutEmpresa: string;
       razonSocial: string;
       nombreFantasia: string;
-      tipoEmpresa?: 'Laboratorio' | 'Veterinaria' | 'Usuario';
+      tipoEmpresa?: 'Laboratorio' | 'Veterinaria' | 'Administración';
     };
   }>();
 

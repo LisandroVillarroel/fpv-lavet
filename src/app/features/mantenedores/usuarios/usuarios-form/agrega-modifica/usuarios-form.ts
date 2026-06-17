@@ -20,7 +20,7 @@ import { FormsModule } from '@angular/forms';
 
 import { FormField, form, required, email, min, validate } from '@angular/forms/signals';
 
-import { cleanRut, formatRut, RutFormat, validateRut } from '@fdograph/rut-utilities';
+import { cleanRut, formatRut, RutFormat, validateRut } from '@app/shared/utiles/rut';
 
 import { UsuarioService } from '@features/mantenedores/usuarios/usuarios.service';
 
@@ -64,7 +64,7 @@ export class UsuariosForm {
       rutEmpresa: string;
       razonSocial: string;
       nombreFantasia: string;
-      tipoEmpresa?: 'Laboratorio' | 'Veterinaria' | 'Usuario';
+      tipoEmpresa?: 'Laboratorio' | 'Veterinaria' | 'Administración';
     };
   }>();
 

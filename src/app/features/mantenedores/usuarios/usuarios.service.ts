@@ -43,6 +43,7 @@ export class UsuarioService {
   obtenerTiposVeterinario(
     idEmpresa?: string,
   ): Observable<{ sigla: string; descripcion: string }[]> {
+    console.log('Obteniendo tipos de veterinario para idEmpresa:', idEmpresa);
     const params = new HttpParams({ fromObject: idEmpresa ? { idEmpresa } : {} });
     return this._http
       .get<{

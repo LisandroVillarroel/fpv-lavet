@@ -1,0 +1,130 @@
+<app-TituloComponentePopup class="popup-detalle-titulo" [titulo]="'Consulta Cliente'" />
+
+<div mat-dialog-content class="usuario-view-dialog detalle-popup-dialog">
+  @if (isLoading()) {
+    <div class="clientes-view-loading">
+      <mat-progress-spinner diameter="44" mode="indeterminate"></mat-progress-spinner>
+      <p>Cargando cliente...</p>
+    </div>
+  }
+
+  <section class="usuario-view-hero detalle-popup-hero">
+    <div class="usuario-view-photo detalle-popup-photo">
+      @if (cliente()?.fotoUrl) {
+        <img
+          [src]="cliente()?.fotoUrl"
+          [alt]="nombreCompleto() || 'Cliente'"
+          title="Foto de cliente"
+        />
+      } @else {
+        <div class="usuario-view-photo-fallback detalle-popup-photo-fallback">
+          {{ (cliente()?.nombres?.[0] ?? cliente()?.usuario?.[0] ?? '?').toUpperCase() }}
+        </div>
+      }
+    </div>
+
+    <div class="usuario-view-summary detalle-popup-summary">
+      <p class="summary-eyebrow">Ficha de cliente</p>
+      <h2>{{ nombreCompleto() || displayValue(cliente()?.usuario) }}</h2>
+      <div class="summary-chips">
+        <span class="chip">{{ displayValue(cliente()?.estadoUsuario) }}</span>
+        <span class="chip">{{ displayValue(cliente()?.tipoUsuario) }}</span>
+      </div>
+      <p class="summary-subtitle">{{ displayValue(cliente()?.email) }}</p>
+    </div>
+  </section>
+
+  <div class="usuario-view-grid detalle-popup-grid">
+    <mat-card appearance="outlined" class="detail-card detalle-popup-card">
+      <mat-card-content>
+        <h3>Identificación</h3>
+        <div class="detail-grid detalle-popup-detail-grid">
+          <div class="detail-item detalle-popup-detail-item">
+            <span class="detail-label detalle-popup-detail-label">Usuario</span>
+            <span class="detail-value detalle-popup-detail-value">{{
+              displayValue(cliente()?.usuario)
+            }}</span>
+          </div>
+          <div class="detail-item detalle-popup-detail-item">
+            <span class="detail-label detalle-popup-detail-label">RUT</span>
+            <span class="detail-value detalle-popup-detail-value">{{
+              displayValue(cliente()?.rutUsuario)
+            }}</span>
+          </div>
+          <div class="detail-item detalle-popup-detail-item">
+            <span class="detail-label detalle-popup-detail-label">Nombres</span>
+            <span class="detail-value detalle-popup-detail-value">{{
+              displayValue(cliente()?.nombres)
+            }}</span>
+          </div>
+          <div class="detail-item detalle-popup-detail-item">
+            <span class="detail-label detalle-popup-detail-label">Apellido paterno</span>
+            <span class="detail-value detalle-popup-detail-value">{{
+              displayValue(cliente()?.apellidoPaterno)
+            }}</span>
+          </div>
+          <div class="detail-item detalle-popup-detail-item">
+            <span class="detail-label detalle-popup-detail-label">Apellido materno</span>
+            <span class="detail-value detalle-popup-detail-value">{{
+              displayValue(cliente()?.apellidoMaterno)
+            }}</span>
+          </div>
+          <div class="detail-item detalle-popup-detail-item">
+            <span class="detail-label detalle-popup-detail-label">Estado usuario</span>
+            <span class="detail-value detalle-popup-detail-value">{{
+              displayValue(cliente()?.estadoUsuario)
+            }}</span>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card appearance="outlined" class="detail-card detalle-popup-card">
+      <mat-card-content>
+        <h3>Contacto y ubicación</h3>
+        <div class="detail-grid detalle-popup-detail-grid">
+          <div class="detail-item detalle-popup-detail-item">
+            <span class="detail-label detalle-popup-detail-label">Email</span>
+            <span class="detail-value detalle-popup-detail-value">{{
+              displayValue(cliente()?.email)
+            }}</span>
+          </div>
+          <div class="detail-item detalle-popup-detail-item">
+            <span class="detail-label detalle-popup-detail-label">Teléfono</span>
+            <span class="detail-value detalle-popup-detail-value">{{
+              displayValue(cliente()?.telefono)
+            }}</span>
+          </div>
+          <div
+            class="detail-item detail-item-full detalle-popup-detail-item detalle-popup-detail-item-full"
+          >
+            <span class="detail-label detalle-popup-detail-label">Dirección</span>
+            <span class="detail-value detalle-popup-detail-value">{{
+              displayValue(cliente()?.direccion)
+            }}</span>
+          </div>
+          <div class="detail-item detalle-popup-detail-item">
+            <span class="detail-label detalle-popup-detail-label">Región</span>
+            <span class="detail-value detalle-popup-detail-value">{{
+              displayValue(cliente()?.region)
+            }}</span>
+          </div>
+          <div class="detail-item detalle-popup-detail-item">
+            <span class="detail-label detalle-popup-detail-label">Comuna</span>
+            <span class="detail-value detalle-popup-detail-value">{{
+              displayValue(cliente()?.comuna)
+            }}</span>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>
+
+<mat-dialog-actions class="usuario-view-actions row g-3 w-100 m-0 px-4 pb-4 justify-content-center">
+  <div class="col-12 col-md-6">
+    <button mat-raised-button color="primary" mat-dialog-close class="usuario-view-close-button">
+      Cerrar
+    </button>
+  </div>
+</mat-dialog-actions>

@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from '@envs/environment';
 import { IUsuario } from '@shared/interfaces/usuario.interface';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 type ApiResponse<T> = {
   error: boolean;
@@ -29,6 +30,15 @@ export class UserService {
       `${environment.apiBaseUrl}/usuario/${userId}/tema-color`,
       { temaColorSistema },
     );
+  }
+
+  updateProfile(
+    userId: string,
+    payload: Partial<IUsuario> & { fotoBase64?: string; [key: string]: unknown },
+  ): Observable<IUsuario> {
+    return this._http
+      .put<ApiResponse<IUsuario>>(`${environment.apiBaseUrl}/usuario/${userId}`, payload)
+      .pipe(map((response) => response.data));
   }
 
   changePassword(

@@ -1,6 +1,6 @@
 import { DOCUMENT } from '@angular/common';
 import { inject, Injectable } from '@angular/core';
-import Swal from 'sweetalert2';
+import Swal from 'sweetalert2/dist/sweetalert2.esm.all.js';
 
 /**
  * Notificacion sevicio usando Signal
@@ -13,8 +13,7 @@ export class NotificacioAlertnService {
   private readonly document = inject(DOCUMENT);
 
   private getAlertTarget(): HTMLElement {
-    return (this.document.querySelector('.cdk-overlay-container') ??
-      this.document.body) as HTMLElement;
+    return this.document.body as HTMLElement;
   }
 
   private getActiveDialogPane(): HTMLElement | null {

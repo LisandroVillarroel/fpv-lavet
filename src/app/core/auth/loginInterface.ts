@@ -20,7 +20,7 @@ export interface loginInterface {
     region?: string;
     comuna?: string;
     MenuItem?: MenuItem[];
-    tipoUsuario?: 'Laboratorio' | 'Veterinaria' | 'Propietario';
+    tipoUsuario?: 'Laboratorio' | 'Veterinaria' | 'Administración' | 'Propietario';
     veterinaria?: IVeterinaria;
     empresa?: IUsuarioEmpresa;
     estadoUsuario?: 'Activo' | 'Bloqueado' | 'Suspendido';
@@ -44,7 +44,7 @@ export interface IUsuarioEmpresa {
   rutEmpresa: string;
   razonSocial: string;
   nombreFantasia: string;
-  tipoEmpresa?: 'Laboratorio' | 'Veterinaria' | 'Usuario';
+  tipoEmpresa?: 'Laboratorio' | 'Veterinaria' | 'Administración';
 }
 
 export interface IVeterinaria {

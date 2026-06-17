@@ -3,7 +3,7 @@ export interface IUsuarioEmpresa {
   rutEmpresa: string;
   razonSocial: string;
   nombreFantasia: string;
-  tipoEmpresa?: 'Laboratorio' | 'Veterinaria' | 'Usuario';
+  tipoEmpresa?: 'Laboratorio' | 'Veterinaria' | 'Administración';
   MenuItem?: MenuItem[];
 }
 
@@ -31,7 +31,7 @@ export interface IUsuario {
   email?: string;
   direccion?: string;
   empresa?: IUsuarioEmpresa;
-  tipoUsuario?: 'Laboratorio' | 'Veterinaria' | 'Usuario';
+  tipoUsuario?: 'Laboratorio' | 'Veterinaria' | 'Administración' | 'Propietario';
   veterinaria?: IVeterinaria;
   MenuItem?: MenuItem[];
   usuarioCrea_id?: string;
