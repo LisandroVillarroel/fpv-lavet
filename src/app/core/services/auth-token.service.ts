@@ -154,25 +154,35 @@ export class AuthTokenService {
       return null;
     }
 
+    const tokenFromUrl = this.readTokenFromUrl();
+    if (tokenFromUrl) {
+      const sharedSession = this.readStorage();
+
+      if (sharedSession?.tokens?.accessToken === tokenFromUrl) {
+        return sharedSession;
+      }
+
+      const session: AuthSession = { user: null, tokens: { accessToken: tokenFromUrl } };
+      this.storage?.setItem(SESSION_KEY, JSON.stringify(session));
+      return session;
+    }
+
     // Lee el token de la sesión compartida
     const sharedSession = this.readStorage();
     if (sharedSession?.tokens?.accessToken) {
       return sharedSession;
     }
 
-    // Como último recurso, intenta leer de los query params (para primera carga)
-    if (this._isBrowser && this._document.defaultView?.location) {
-      const urlParams = new URLSearchParams(this._document.defaultView.location.search);
-      const tokenFromUrl = urlParams.get('token');
-      if (tokenFromUrl) {
-        // Crea una sesión nueva solo con el token
-        const session: AuthSession = { user: null, tokens: { accessToken: tokenFromUrl } };
-        this.storage?.setItem(SESSION_KEY, JSON.stringify(session));
-        return session;
-      }
+    return null;
+  }
+
+  private readTokenFromUrl(): string | null {
+    if (!this._isBrowser || !this._document.defaultView?.location) {
+      return null;
     }
 
-    return null;
+    const urlParams = new URLSearchParams(this._document.defaultView.location.search);
+    return urlParams.get('token');
   }
 
   getStorage(): AuthSession | null {
