@@ -52,6 +52,11 @@ export class ExamenForm {
   readonly categorias = toSignal(this.categoriasService.getAll(this.empresaId), {
     initialValue: [] as ICategoria[],
   });
+  readonly isAdministracion = computed(
+    () => this.storage.get<loginInterface>('sesion-lavet')?.user?.tipoUsuario === 'Administración',
+  );
+  readonly isEditing = computed(() => !!this.examenModel()._id);
+  readonly isRestrictedEdit = computed(() => this.isEditing() && !this.isAdministracion());
 
   readonly examenModel = signal<IExamen>({
     _id: this.data()?._id,

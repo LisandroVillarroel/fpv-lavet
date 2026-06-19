@@ -16,6 +16,7 @@ export interface IEmpresaFormulario {
     telefonoContacto: string;
   };
   tipoEmpresa: 'Laboratorio' | 'Veterinaria' | 'Administración';
+  copiarDatosOrigen?: boolean;
   MenuItem: MenuItem[];
   estadoEmpresa: 'Activo' | 'Bloqueado';
 }

@@ -224,7 +224,7 @@ export class UsuariosForm {
 
     effect(() => {
       const empresa = this.empresaSeleccionada();
-      if (!empresa?.tipoEmpresa || empresa.tipoEmpresa === 'Administración') {
+      if (!empresa?.tipoEmpresa) {
         return;
       }
 
@@ -297,8 +297,14 @@ export class UsuariosForm {
     };
   }
 
-  private normalizeTipoUsuario(usuario?: IUsuario): 'Laboratorio' | 'Veterinaria' | 'Propietario' {
-    if (usuario?.tipoUsuario === 'Laboratorio' || usuario?.tipoUsuario === 'Propietario') {
+  private normalizeTipoUsuario(
+    usuario?: IUsuario,
+  ): 'Laboratorio' | 'Veterinaria' | 'Administración' | 'Propietario' {
+    if (
+      usuario?.tipoUsuario === 'Laboratorio' ||
+      usuario?.tipoUsuario === 'Administración' ||
+      usuario?.tipoUsuario === 'Propietario'
+    ) {
       return usuario.tipoUsuario;
     }
 
@@ -396,10 +402,7 @@ export class UsuariosForm {
       ...usuario,
       estado: 'Activo',
       empresa: empresaPayload,
-      tipoUsuario:
-        empresaPayload.tipoEmpresa && empresaPayload.tipoEmpresa !== 'Administración'
-          ? empresaPayload.tipoEmpresa
-          : usuario.tipoUsuario,
+      tipoUsuario: empresaPayload.tipoEmpresa ?? usuario.tipoUsuario,
       fotoUrl: this.data()?.usuario?.fotoUrl,
     };
 

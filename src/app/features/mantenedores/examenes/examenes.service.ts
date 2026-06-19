@@ -7,7 +7,7 @@ import { environment } from '@envs/environment';
 import { IExamen } from './examen.interface';
 
 type ExamenApiResponse = Omit<IExamen, 'categoria'> & {
-  categoria?: string | { _id?: string } | null;
+  categoria?: string | { _id?: string; nombre?: string } | null;
 };
 
 @Injectable({ providedIn: 'root' })
@@ -49,6 +49,8 @@ export class ExamenesService {
   private normalizarExamen(examen: ExamenApiResponse): IExamen {
     return {
       ...examen,
+      categoriaNombre:
+        typeof examen.categoria === 'string' ? undefined : (examen.categoria?.nombre ?? undefined),
       categoria:
         typeof examen.categoria === 'string' ? examen.categoria : (examen.categoria?._id ?? ''),
     };

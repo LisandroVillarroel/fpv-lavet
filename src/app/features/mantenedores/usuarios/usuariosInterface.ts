@@ -14,7 +14,7 @@ export interface IUsuario {
   region: string;
   comuna: string;
   MenuItem?: MenuItem[];
-  tipoUsuario: 'Laboratorio' | 'Veterinaria' | 'Propietario';
+  tipoUsuario: 'Laboratorio' | 'Veterinaria' | 'Administración' | 'Propietario';
   fotoUrl?: string;
   veterinaria?: IVeterinaria;
   empresa?: IUsuarioEmpresa;

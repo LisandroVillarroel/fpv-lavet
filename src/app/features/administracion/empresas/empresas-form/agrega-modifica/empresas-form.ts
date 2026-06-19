@@ -4,6 +4,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
 import { FormField, email, form, required, validate } from '@angular/forms/signals';
 import { MatButtonModule } from '@angular/material/button';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatOptionModule } from '@angular/material/core';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -11,6 +12,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 
 import { NotificacioAlertnService } from '@app/shared/servicios/notificacionAlert';
+import { loginInterface } from '@core/auth/loginInterface';
+import { StorageService } from '@core/guards/storage.service';
 import { cleanRut, formatRut, RutFormat, validateRut } from '@app/shared/utiles/rut';
 import { emailCompletoValidator } from '@app/shared/utiles/validacionesGlobales';
 import { IEmpresaFormulario } from '@features/administracion/empresas/empresaInterfaceForms';
@@ -28,6 +31,7 @@ import { EmpresasService } from '@features/administracion/empresas/empresas.serv
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
+    MatCheckboxModule,
     MatSelectModule,
     MatOptionModule,
     FormsModule,
@@ -47,9 +51,14 @@ export class EmpresasForm {
 
   readonly notificacion = inject(NotificacioAlertnService);
   private readonly empresasService = inject(EmpresasService);
+  private readonly storage = inject(StorageService);
   readonly regionesComunas = toSignal(this.empresasService.obtenerRegionesComunas(), {
     initialValue: [],
   });
+  readonly empresaOrigenNombre = computed(
+    () =>
+      this.storage.get<loginInterface>('sesion-lavet')?.user?.empresa?.nombreFantasia?.trim() ?? '',
+  );
 
   readonly regiones = computed(() =>
     Array.from(new Set(this.regionesComunas().map((item) => item.region))).sort((a, b) =>
@@ -87,6 +96,7 @@ export class EmpresasForm {
       telefonoContacto: '',
     },
     tipoEmpresa: 'Laboratorio',
+    copiarDatosOrigen: false,
     MenuItem: [],
     estadoEmpresa: 'Activo',
   });
@@ -184,6 +194,7 @@ export class EmpresasForm {
         telefonoContacto: empresa?.contacto?.telefonoContacto ?? '',
       },
       tipoEmpresa: empresa?.tipoEmpresa ?? 'Laboratorio',
+      copiarDatosOrigen: false,
       MenuItem: empresa?.MenuItem ?? [],
       estadoEmpresa: empresa?.estadoEmpresa ?? 'Activo',
     };
@@ -225,6 +236,7 @@ export class EmpresasForm {
     const tipoEmpresaOriginal = this.data()?.empresa?.tipoEmpresa;
     const payload: Empresa = {
       ...empresa,
+      copiarDatosOrigen: this.modo === 'agregar' ? !!empresa.copiarDatosOrigen : undefined,
       MenuItem:
         this.modo === 'editar' && tipoEmpresaOriginal && tipoEmpresaOriginal !== empresa.tipoEmpresa
           ? []

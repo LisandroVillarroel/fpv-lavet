@@ -7,6 +7,7 @@ export interface IExamen {
   precio: number;
   tiempoPreparacion: string;
   categoria: string;
+  categoriaNombre?: string;
   empresa_Id: string;
   usuarioCrea_id: string;
   fechaHora_Crea?: Date;

@@ -57,21 +57,31 @@ export default class ExamenesList implements OnInit, AfterViewInit {
 
   readonly _storage = signal(this.#storage.get<loginInterface>('sesion-lavet'));
   readonly empresaId = this._storage()?.user?.empresa?.empresaId || '';
+  readonly isAdministracion = computed(
+    () => this._storage()?.user?.tipoUsuario === 'Administración',
+  );
   readonly categorias = toSignal(this.#categoriasService.getAll(this.empresaId), {
     initialValue: [] as ICategoria[],
   });
-  readonly displayedColumns: string[] = [
-    'index',
-    'codigoExamen',
-    'codigoInterno',
-    'nombre',
-    'sigla',
-    'precio',
-    'tiempoPreparacion',
-    'categoria',
-    'estado',
-    'opciones',
-  ];
+  readonly displayedColumns = computed(() => {
+    const columns = [
+      'index',
+      'codigoExamen',
+      'nombre',
+      'sigla',
+      'precio',
+      'tiempoPreparacion',
+      'categoria',
+      'estado',
+      'opciones',
+    ];
+
+    if (this.isAdministracion()) {
+      columns.splice(2, 0, 'codigoInterno');
+    }
+
+    return columns;
+  });
   readonly trigger = signal(0);
   readonly examenesSignal = toSignal(
     combineLatest([toObservable(this.trigger)]).pipe(
@@ -106,9 +116,11 @@ export default class ExamenesList implements OnInit, AfterViewInit {
     }
   }
 
-  getCategoriaNombre(categoriaId: string): string {
+  getCategoriaNombre(examen: IExamen): string {
     return (
-      this.categorias().find((categoria) => categoria._id === categoriaId)?.nombre ?? categoriaId
+      examen.categoriaNombre ??
+      this.categorias().find((categoria) => categoria._id === examen.categoria)?.nombre ??
+      examen.categoria
     );
   }
 

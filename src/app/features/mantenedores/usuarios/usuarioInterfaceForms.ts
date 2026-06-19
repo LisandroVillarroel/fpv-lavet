@@ -12,7 +12,7 @@ export interface IUsuarioFormulario {
   direccion: string;
   region: string;
   comuna: string;
-  tipoUsuario: 'Laboratorio' | 'Veterinaria' | 'Propietario';
+  tipoUsuario: 'Laboratorio' | 'Veterinaria' | 'Administración' | 'Propietario';
   veterinaria?: IVeterinariaFormulario;
   estadoUsuario: 'Activo' | 'Bloqueado' | 'Suspendido';
 }

@@ -18,6 +18,7 @@ export interface Empresa {
   emailEmpresa: string;
   contacto: EmpresaContacto;
   tipoEmpresa: 'Laboratorio' | 'Veterinaria' | 'Administración';
+  copiarDatosOrigen?: boolean;
   MenuItem: MenuItem[];
   estadoEmpresa: 'Activo' | 'Bloqueado';
   usuarioCrea?: string;

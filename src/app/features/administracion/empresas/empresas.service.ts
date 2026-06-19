@@ -27,7 +27,10 @@ const extractMenuItems = (response: ApiResponse<MenuResponse | null>): MenuItem[
   }
 
   const data = response.data as
-    | (MenuResponse & { MenuItem?: MenuItem[]; _doc?: { menuItem?: MenuItem[]; MenuItem?: MenuItem[] } })
+    | (MenuResponse & {
+        MenuItem?: MenuItem[];
+        _doc?: { menuItem?: MenuItem[]; MenuItem?: MenuItem[] };
+      })
     | MenuItem[]
     | null;
 
@@ -63,6 +66,13 @@ export class EmpresasService {
   private readonly http = inject(HttpClient);
   private readonly usuarioService = inject(UsuarioService);
 
+  private sanitizeEmpresaPayload(empresa: Empresa): Empresa {
+    return {
+      ...empresa,
+      copiarDatosOrigen: empresa._id ? undefined : !!empresa.copiarDatosOrigen,
+    };
+  }
+
   obtenerEmpresas(): Observable<Empresa[]> {
     return this.http
       .get<ApiResponse<Empresa[]>>(`${environment.apiBaseUrl}/empresa/consultaTotal`)
@@ -77,13 +87,17 @@ export class EmpresasService {
 
   agregarEmpresa(empresa: Empresa): Observable<Empresa> {
     return this.http
-      .post<ApiResponse<Empresa>>(`${environment.apiBaseUrl}/empresa`, empresa)
+      .post<
+        ApiResponse<Empresa>
+      >(`${environment.apiBaseUrl}/empresa`, this.sanitizeEmpresaPayload(empresa))
       .pipe(map((response) => response.data));
   }
 
   modificarEmpresa(id: string, empresa: Empresa): Observable<Empresa> {
     return this.http
-      .put<ApiResponse<Empresa>>(`${environment.apiBaseUrl}/empresa/modificar/${id}`, empresa)
+      .put<
+        ApiResponse<Empresa>
+      >(`${environment.apiBaseUrl}/empresa/modificar/${id}`, this.sanitizeEmpresaPayload(empresa))
       .pipe(map((response) => response.data));
   }
 
@@ -115,9 +129,9 @@ export class EmpresasService {
 
     console.log('Realizando solicitud HTTP para menú con tipoEmpresa:', normalizedTipoEmpresa);
     return this.http
-      .get<ApiResponse<MenuResponse | null>>(
-        `${environment.apiBaseUrl}/menu/${encodeURIComponent(normalizedTipoEmpresa)}`,
-      )
+      .get<
+        ApiResponse<MenuResponse | null>
+      >(`${environment.apiBaseUrl}/menu/${encodeURIComponent(normalizedTipoEmpresa)}`)
       .pipe(
         map((response) => {
           console.log('Respuesta cruda del menú por tipo:', response);

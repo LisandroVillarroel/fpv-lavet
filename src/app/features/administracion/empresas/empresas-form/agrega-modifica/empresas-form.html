@@ -211,6 +211,21 @@
         }
       }
     </mat-form-field>
+
+    @if (modo === 'agregar') {
+      <div class="col-span-2">
+        <mat-checkbox
+          [ngModel]="empresaModel().copiarDatosOrigen"
+          (ngModelChange)="empresaModel.update((prev) => ({ ...prev, copiarDatosOrigen: $event }))"
+          [ngModelOptions]="{ standalone: true }"
+        >
+          Copiar categorías, exámenes, especies y razas desde la empresa actual
+          @if (empresaOrigenNombre()) {
+            ({{ empresaOrigenNombre() }})
+          }
+        </mat-checkbox>
+      </div>
+    }
   </mat-dialog-content>
 
   <mat-dialog-actions class="row g-3 w-100 m-0 px-4 pb-4 dialog-actions-fixed">

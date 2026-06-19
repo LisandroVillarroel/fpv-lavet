@@ -7,23 +7,26 @@
       [ngModel]="examenModel().codigoExamen"
       (ngModelChange)="onCodigoExamenChange($event)"
       name="codigoExamen"
+      [readonly]="isRestrictedEdit()"
       required
       placeholder="Código del examen"
     />
   </mat-form-field>
 
-  <mat-form-field appearance="outline" class="w-100">
-    <mat-label>Código interno</mat-label>
-    <input
-      matInput
-      type="number"
-      [ngModel]="examenModel().codigoInterno"
-      (ngModelChange)="onCodigoInternoChange($event)"
-      name="codigoInterno"
-      required
-      placeholder="Código interno"
-    />
-  </mat-form-field>
+  @if (!isRestrictedEdit()) {
+    <mat-form-field appearance="outline" class="w-100">
+      <mat-label>Código interno</mat-label>
+      <input
+        matInput
+        type="number"
+        [ngModel]="examenModel().codigoInterno"
+        (ngModelChange)="onCodigoInternoChange($event)"
+        name="codigoInterno"
+        required
+        placeholder="Código interno"
+      />
+    </mat-form-field>
+  }
 
   <mat-form-field appearance="outline" class="w-100">
     <mat-label>Nombre</mat-label>
@@ -32,6 +35,7 @@
       [ngModel]="examenModel().nombre"
       (ngModelChange)="onNombreChange($event)"
       name="nombre"
+      [readonly]="isRestrictedEdit()"
       required
       placeholder="Nombre del examen"
     />
@@ -44,6 +48,7 @@
       [ngModel]="examenModel().sigla"
       (ngModelChange)="onSiglaChange($event)"
       name="sigla"
+      [readonly]="isRestrictedEdit()"
       required
       placeholder="Sigla del examen"
     />
@@ -84,24 +89,27 @@
     }
   </datalist>
 
-  <mat-form-field appearance="outline" class="w-100">
-    <mat-label>Categoría</mat-label>
-    <mat-select
-      [ngModel]="obtenerCategoriaId(examenModel().categoria)"
-      (ngModelChange)="onCategoriaChange($event)"
-      name="categoria"
-      required
-    >
-      @for (categoria of categorias(); track categoria._id ?? categoria.nombre) {
-        <mat-option [value]="categoria._id">{{ categoria.nombre }}</mat-option>
+  @if (!isRestrictedEdit()) {
+    <mat-form-field appearance="outline" class="w-100">
+      <mat-label>Categoría</mat-label>
+      <mat-select
+        [ngModel]="obtenerCategoriaId(examenModel().categoria)"
+        (ngModelChange)="onCategoriaChange($event)"
+        name="categoria"
+        [disabled]="isRestrictedEdit()"
+        required
+      >
+        @for (categoria of categorias(); track categoria._id ?? categoria.nombre) {
+          <mat-option [value]="categoria._id">{{ categoria.nombre }}</mat-option>
+        }
+      </mat-select>
+      @if (examenForm.categoria().touched() && !examenForm.categoria().valid()) {
+        @for (error of examenForm.categoria().errors(); track error) {
+          <mat-error>{{ error.message }}</mat-error>
+        }
       }
-    </mat-select>
-    @if (examenForm.categoria().touched() && !examenForm.categoria().valid()) {
-      @for (error of examenForm.categoria().errors(); track error) {
-        <mat-error>{{ error.message }}</mat-error>
-      }
-    }
-  </mat-form-field>
+    </mat-form-field>
+  }
 
   <div class="acciones-form-examen">
     <button mat-stroked-button type="button" (click)="cancelar()" class="btn-full">Cancelar</button>
